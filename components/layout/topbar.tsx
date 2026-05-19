@@ -1,0 +1,218 @@
+'use client'
+
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Bell, Search, Building2, ChevronDown, Check, Users, Menu, X } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
+import { DEMO_USERS, ROLE_META, type AppUser } from '@/lib/roles'
+
+const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
+  dashboard:     { title: 'Dashboard',             subtitle: "Here's your resort overview" },
+  team:          { title: 'Team Management',       subtitle: 'Animators, roles and contracts' },
+  schedule:      { title: 'Schedule',              subtitle: 'Weekly activity scheduling' },
+  activities:    { title: 'Activities',            subtitle: 'Activity catalog and programs' },
+  assignments:   { title: 'Assignments',           subtitle: 'Task management and delegation' },
+  events:        { title: 'Events',                subtitle: 'Shows, parties and performances' },
+  announcements: { title: 'Announcements',         subtitle: 'Team communications and notices' },
+  leave:         { title: 'Leave Requests',        subtitle: 'Time-off and absence requests' },
+  reports:       { title: 'Reports',               subtitle: 'Performance metrics and insights' },
+  performance:   { title: 'Performance',           subtitle: 'KPI tracking and evaluations' },
+  settings:      { title: 'Settings',              subtitle: 'Hotel configuration and preferences' },
+}
+
+interface TopbarProps {
+  activeSection: string
+  searchQuery: string
+  onSearchChange: (q: string) => void
+  hotelName: string
+  companyName: string
+  currentUser: AppUser
+  onUserChange: (user: AppUser) => void
+  onMenuOpen: () => void
+}
+
+export function Topbar({
+  activeSection, searchQuery, onSearchChange,
+  hotelName, companyName, currentUser, onUserChange, onMenuOpen,
+}: TopbarProps) {
+  const [roleMenuOpen, setRoleMenuOpen]       = useState(false)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+
+  const { title } = SECTION_TITLES[activeSection] ?? { title: 'AnimaPro', subtitle: '' }
+  const today = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+  const roleMeta = ROLE_META[currentUser.role]
+
+  const levelColor = (level: number) => ({
+    1: 'bg-rose-500/20 text-rose-300 border border-rose-500/20',
+    2: 'bg-violet-500/20 text-violet-300 border border-violet-500/20',
+    3: 'bg-blue-500/20 text-blue-300 border border-blue-500/20',
+    4: 'bg-teal-500/20 text-teal-300 border border-teal-500/20',
+    5: 'bg-green-500/20 text-green-300 border border-green-500/20',
+  }[level] ?? 'bg-muted text-muted-foreground')
+
+  const avatarGradient = (level: number) => ({
+    1: 'from-rose-500 to-rose-600',
+    2: 'from-violet-500 to-violet-600',
+    3: 'from-blue-500 to-blue-600',
+    4: 'from-teal-500 to-teal-600',
+    5: 'from-green-500 to-green-600',
+  }[level] ?? 'from-primary to-primary')
+
+  return (
+    <header className="shrink-0 relative z-10">
+
+      {/* Main topbar row */}
+      <div className="h-14 flex items-center gap-2 px-3 sm:px-5 bg-zinc-900/80 backdrop-blur-xl border-b border-white/10 shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+
+        {/* Hamburger — mobile only */}
+        <button
+          onClick={onMenuOpen}
+          className="md:hidden flex items-center justify-center w-9 h-9 rounded-xl hover:bg-white/10 active:scale-[0.98] transition-all shrink-0"
+          aria-label="Open menu"
+        >
+          <Menu className="w-5 h-5 text-white" />
+        </button>
+
+        {/* Title */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1 className="text-sm font-semibold text-white leading-none tracking-tight truncate">{title}</h1>
+            <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/5 border border-white/10">
+              <Building2 className="w-3 h-3 text-teal-500" />
+              <span className="text-[11px] text-zinc-300 truncate max-w-24">{companyName}</span>
+              <span className="text-[11px] text-white/30 mx-0.5">/</span>
+              <span className="text-[11px] font-semibold text-white truncate max-w-32">{hotelName}</span>
+            </div>
+          </div>
+          <p className="text-[11px] text-white/50 mt-0.5 hidden sm:block leading-none">{today}</p>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-1.5">
+
+          {/* Desktop search */}
+          <div className="relative hidden md:block">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
+            <Input
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={e => onSearchChange(e.target.value)}
+              className="pl-9 h-9 w-44 text-xs bg-white/5 border-white/10 rounded-xl text-white placeholder:text-white/40 focus-visible:w-60 focus-visible:bg-white/10 focus-visible:border-teal-500/40 focus-visible:ring-teal-500/10 transition-all duration-200"
+            />
+          </div>
+
+          {/* Mobile search toggle */}
+          <button
+            onClick={() => setMobileSearchOpen(v => !v)}
+            className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/10 active:scale-[0.98] transition-all"
+            aria-label="Search"
+          >
+            {mobileSearchOpen ? <X className="w-4 h-4 text-white" /> : <Search className="w-4 h-4 text-white" />}
+          </button>
+
+          {/* Notifications */}
+          <button className="relative h-9 w-9 flex items-center justify-center rounded-xl hover:bg-white/10 active:scale-[0.98] transition-all">
+            <Bell className="w-4 h-4 text-white/70" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-500 shadow-[0_1px_2px_rgba(0,0,0,0.1)]" />
+            <span className="sr-only">Notifications</span>
+          </button>
+
+          {/* User / role switcher */}
+          <div className="relative">
+            <button
+              onClick={() => setRoleMenuOpen(v => !v)}
+              className="flex items-center gap-2 pl-1.5 pr-2 sm:pr-2.5 py-1 rounded-xl border border-white/10 hover:bg-white/10 hover:border-white/20 active:scale-[0.98] transition-all"
+            >
+              <div className={cn('w-7 h-7 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.3)]', avatarGradient(roleMeta.level))}>
+                <span className="text-[10px] font-bold text-white">{currentUser.initials}</span>
+              </div>
+              <div className="hidden sm:block text-left">
+                <p className="text-xs font-semibold text-white leading-none">{currentUser.name}</p>
+                <span className={cn('inline-block text-[11px] font-bold px-2 py-0.5 rounded-full mt-0.5 leading-tight', levelColor(roleMeta.level))}>
+                  {roleMeta.label}
+                </span>
+              </div>
+              <ChevronDown className={cn('w-3.5 h-3.5 text-white/50 hidden sm:block transition-transform', roleMenuOpen && 'rotate-180')} />
+            </button>
+
+            {/* Role dropdown */}
+            <AnimatePresence>
+              {roleMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setRoleMenuOpen(false)} />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -8 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -8 }}
+                    transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                    className="absolute right-0 top-full mt-2 z-50 w-72 bg-zinc-800 border border-white/10 rounded-xl shadow-lg shadow-black/30 overflow-hidden"
+                  >
+                    <div className="px-3 py-2.5 bg-white/5 border-b border-white/10 flex items-center gap-2">
+                      <Users className="w-3.5 h-3.5 text-white/60" />
+                      <span className="text-xs font-semibold text-white/70">Switch Role / User</span>
+                      <span className="ml-auto text-[11px] text-white/40 italic">Demo only</span>
+                    </div>
+                    <div className="py-1 max-h-72 overflow-y-auto scrollbar-thin">
+                      {DEMO_USERS.map(user => {
+                        const meta = ROLE_META[user.role]
+                        const isActive = user.id === currentUser.id
+                        return (
+                          <button key={user.id}
+                            onClick={() => { onUserChange(user); setRoleMenuOpen(false) }}
+                            className={cn('w-full flex items-center gap-3 px-3 py-2.5 text-left transition-all',
+                              isActive ? 'bg-teal-500/10' : 'hover:bg-white/5'
+                            )}>
+                            <div className={cn('w-8 h-8 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 text-xs font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,0.3)]', avatarGradient(meta.level))}>
+                              {user.initials}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-semibold leading-none truncate text-white">{user.name}</p>
+                              <p className="text-[11px] text-white/60 mt-0.5 truncate">{meta.description}</p>
+                              {user.teamName && <p className="text-[11px] text-teal-400/70 mt-0.5">{user.teamName}</p>}
+                            </div>
+                            <div className="flex flex-col items-end gap-1 shrink-0">
+                              <span className={cn('text-[11px] font-bold px-2 py-0.5 rounded-full', levelColor(meta.level))}>{meta.label}</span>
+                              {isActive && <Check className="w-3 h-3 text-teal-500" />}
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <div className="px-3 py-2 bg-white/5 border-t border-white/10">
+                      <p className="text-[11px] text-white/50">Switching roles filters navigation and access levels.</p>
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile search bar */}
+      <AnimatePresence>
+        {mobileSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-b border-white/10"
+          >
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
+              <Input
+                autoFocus
+                placeholder="Search anything..."
+                value={searchQuery}
+                onChange={e => onSearchChange(e.target.value)}
+                className="pl-9 h-10 w-full text-sm bg-white/5 border-white/10 rounded-xl text-white placeholder:text-white/40"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  )
+}

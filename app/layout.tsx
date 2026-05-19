@@ -1,0 +1,95 @@
+import type { Metadata, Viewport } from 'next'
+import { Geist, Geist_Mono } from 'next/font/google'
+import './globals.css'
+import './theme.css'
+
+const geist = Geist({
+  subsets: ['latin'],
+  variable: '--font-sans',
+})
+
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+})
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#0e7490',
+  viewportFit: 'cover',
+}
+
+export const metadata: Metadata = {
+  title: 'AnimaPro — Hotel Animation Team Management for Egyptian Resorts',
+  description: 'The #1 platform for hotel animation teams across Egypt. Schedule teams, track TripAdvisor ratings, manage performance in Sharm El Sheikh, Hurghada, El Gouna, Dahab, Marsa Alam, Ain Sokhna, Taba and more. One-off payment. White-label available.',
+  generator: 'AnimaPro',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'AnimaPro',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  keywords: [
+    'hotel animation management Egypt',
+    'resort entertainment software',
+    'animation team scheduling',
+    'sharm el sheikh hotel management',
+    'hurghada resort animation',
+    'el gouna hotel software',
+    'marsa alam resort management',
+    'dahab hotel animation',
+    'ain sokhna resort software',
+    'taba heights hotel management',
+    'makadi bay animation software',
+    'sahl hasheesh resort entertainment',
+    'TripAdvisor hotel rating tracker',
+    'white label hotel software Egypt',
+    'hotel performance management Egypt',
+    'animation chief software',
+  ],
+  openGraph: {
+    title: 'AnimaPro — Hotel Animation Team Management',
+    description: 'Manage animation teams across all Egyptian resort destinations. Smart scheduling, TripAdvisor tracking, performance KPIs.',
+    type: 'website',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="AnimaPro" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="msapplication-TileColor" content="#141418" />
+        <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
+      </head>
+      <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
+        {children}
+      </body>
+    </html>
+  )
+}

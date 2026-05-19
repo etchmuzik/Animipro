@@ -1,0 +1,84 @@
+'use client'
+
+import { cn } from '@/lib/utils'
+import {
+  LayoutDashboard, CalendarDays, Activity,
+  ClipboardList, Megaphone, MoreHorizontal,
+} from 'lucide-react'
+import type { Section } from '@/lib/roles'
+
+const BOTTOM_NAV_ITEMS: { icon: React.ElementType; label: string; section: Section; badge?: string }[] = [
+  { icon: LayoutDashboard, label: 'Home',      section: 'dashboard' },
+  { icon: CalendarDays,    label: 'Schedule',  section: 'schedule' },
+  { icon: Activity,        label: 'Activities',section: 'activities' },
+  { icon: ClipboardList,   label: 'Tasks',     section: 'assignments', badge: '5' },
+  { icon: Megaphone,       label: 'News',      section: 'announcements', badge: '2' },
+]
+
+interface MobileNavProps {
+  activeSection: Section
+  onSectionChange: (s: Section) => void
+  onMenuOpen: () => void
+  allowedSections: Section[]
+}
+
+export function MobileNav({ activeSection, onSectionChange, onMenuOpen, allowedSections }: MobileNavProps) {
+  const visibleItems = BOTTOM_NAV_ITEMS.filter(i => allowedSections.includes(i.section))
+
+  return (
+    <nav
+      className="md:hidden fixed bottom-0 left-0 right-0 z-30 mobile-nav-glass border-t border-black/[0.04]"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+    >
+      <div className="flex items-stretch h-[60px]">
+        {visibleItems.map(({ icon: Icon, label, section, badge }) => {
+          const isActive = activeSection === section
+          return (
+            <button
+              key={section}
+              onClick={() => onSectionChange(section)}
+              className={cn(
+                'flex-1 flex flex-col items-center justify-center gap-0.5 transition-all duration-200 relative press-effect',
+                isActive ? 'text-[#0e7490]' : 'text-[#94a3b8] active:text-[#64748b]'
+              )}
+            >
+              {/* Active indicator pill */}
+              {isActive && (
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-full bg-[#0e7490] tab-indicator shadow-sm shadow-[#0e7490]/30" />
+              )}
+
+              <div className="relative">
+                <div className={cn(
+                  'w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200',
+                  isActive ? 'bg-[#0e7490]/10' : ''
+                )}>
+                  <Icon className={cn('w-[20px] h-[20px] transition-all', isActive && 'w-[21px] h-[21px]')} />
+                </div>
+                {badge && !isActive && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-[#0e7490] text-[8px] font-bold text-white px-1 shadow-sm shadow-[#0e7490]/30">
+                    {badge}
+                  </span>
+                )}
+              </div>
+              <span className={cn(
+                'text-[10px] leading-none transition-all',
+                isActive ? 'font-bold text-[#0e7490]' : 'font-medium'
+              )}>{label}</span>
+            </button>
+          )
+        })}
+
+        {/* More button */}
+        <button
+          onClick={onMenuOpen}
+          className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[#94a3b8] active:text-[#64748b] transition-all press-effect"
+        >
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center">
+            <MoreHorizontal className="w-[20px] h-[20px]" />
+          </div>
+          <span className="text-[10px] font-medium leading-none">More</span>
+        </button>
+      </div>
+    </nav>
+  )
+}
