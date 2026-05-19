@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "TZ=Africa/Cairo vitest run",
+    "test:watch": "TZ=Africa/Cairo vitest",
+    "test:coverage": "TZ=Africa/Cairo vitest run --coverage"
   },
   "dependencies": {
     "@radix-ui/react-progress": "^1.1.8",
@@ -29,8 +32,12 @@
     "@types/node": "^20.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@vitest/coverage-v8": "^4.1.6",
     "eslint": "^8.0.0",
     "eslint-config-next": "^15.0.0",
-    "typescript": "^5.0.0"
+    "fake-indexeddb": "^6.2.5",
+    "jsdom": "^29.1.1",
+    "typescript": "^5.0.0",
+    "vitest": "^4.1.6"
   }
 }
