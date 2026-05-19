@@ -2,10 +2,15 @@
   command = "npm run build"
   publish = "out"
 
+# This is a MULTI-PAGE Next.js static export, not a single-page app. Netlify
+# serves the built HTML directly (/ -> index.html, /platform -> platform.html),
+# so no catch-all 200 rewrite is needed — a blanket /* -> /index.html would
+# wrongly serve the landing page for /platform. Unmatched routes fall through
+# to the custom 404 page.
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
+  to = "/404.html"
+  status = 404
 
 # Baseline security headers. CSP is intentionally omitted — it needs testing
 # against the app's inline styles, Google Fonts, and framer-motion before it can
