@@ -32,7 +32,7 @@ import {
   type ReminderItem,
 } from '@/lib/reminders'
 import { subscribe as subscribeTaskState } from '@/lib/task-state'
-import type { AppUser } from '@/lib/roles'
+import { isFieldStaff, type AppUser } from '@/lib/roles'
 
 const DISMISS_KEY = 'animapro:upcoming-dismissed:v1'
 const PERMISSION_PROMPT_KEY = 'animapro:notif-prompt-shown:v1'
@@ -84,12 +84,8 @@ export function UpcomingBanner({ currentUser, hotelId }: { currentUser: AppUser;
     const schedule: ScheduleEntry[]  = SCHEDULE_ENTRIES.filter(e => e.hotelId === hotelId)
     const assigns: Assignment[]      = ASSIGNMENTS.filter(a => a.hotelId === hotelId)
     const events: EventItem[]        = EVENTS.filter(e => e.hotelId === hotelId)
-    // Higher-privilege roles see everything; an animator only sees their own.
-    const restrictToUser = currentUser.role === 'ANIMATOR'
-      || currentUser.role === 'ENTERTAINER'
-      || currentUser.role === 'LIFEGUARD'
-      || currentUser.role === 'KIDS_CLUB'
-    const userId = restrictToUser ? currentUser.id : undefined
+    // Field staff see only their own items; managers (level <= 4) see everything.
+    const userId = isFieldStaff(currentUser.role) ? currentUser.id : undefined
     return [
       ...scheduleToReminderItems(schedule, userId),
       ...assignmentsToReminderItems(assigns, userId),

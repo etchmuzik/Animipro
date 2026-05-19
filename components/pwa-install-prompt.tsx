@@ -18,8 +18,9 @@ export function PWAInstallPrompt() {
 
   useEffect(() => {
     // Check if already installed as standalone
+    // `navigator.standalone` is a non-standard iOS Safari flag not in lib.dom.
     const standalone = window.matchMedia('(display-mode: standalone)').matches
-      || (window.navigator as any).standalone === true
+      || (window.navigator as Navigator & { standalone?: boolean }).standalone === true
     setIsStandalone(standalone)
     if (standalone) return
 

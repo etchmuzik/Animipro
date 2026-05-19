@@ -23,6 +23,9 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
+  // metadataBase makes relative OG/Twitter image URLs resolve to absolute ones,
+  // which social crawlers require.
+  metadataBase: new URL('https://animapro-saas.netlify.app'),
   title: 'AnimaPro — Hotel Animation Team Management for Egyptian Resorts',
   description: 'The #1 platform for hotel animation teams across Egypt. Schedule teams, track TripAdvisor ratings, manage performance in Sharm El Sheikh, Hurghada, El Gouna, Dahab, Marsa Alam, Ain Sokhna, Taba and more. One-off payment. White-label available.',
   generator: 'AnimaPro',
@@ -57,6 +60,18 @@ export const metadata: Metadata = {
     title: 'AnimaPro — Hotel Animation Team Management',
     description: 'Manage animation teams across all Egyptian resort destinations. Smart scheduling, TripAdvisor tracking, performance KPIs.',
     type: 'website',
+    siteName: 'AnimaPro',
+    locale: 'en_US',
+    url: '/',
+    // NOTE: this is the 512x512 app icon (square). A dedicated 1200x630 social
+    // card is a future improvement for better link-preview cropping.
+    images: [{ url: '/icons/icon-512x512.png', width: 512, height: 512, alt: 'AnimaPro' }],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'AnimaPro — Hotel Animation Team Management',
+    description: 'Manage animation teams across all Egyptian resort destinations. Smart scheduling, TripAdvisor tracking, performance KPIs.',
+    images: ['/icons/icon-512x512.png'],
   },
   icons: {
     icon: [

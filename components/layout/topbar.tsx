@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Bell, Search, Building2, ChevronDown, Check, Users, Menu, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { DEMO_USERS, ROLE_META, type AppUser } from '@/lib/roles'
+import { DEMO_USERS, ROLE_META, type AppUser, type Section } from '@/lib/roles'
 
 const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   dashboard:     { title: 'Dashboard',             subtitle: "Here's your resort overview" },
@@ -30,11 +30,12 @@ interface TopbarProps {
   currentUser: AppUser
   onUserChange: (user: AppUser) => void
   onMenuOpen: () => void
+  onSectionChange: (s: Section) => void
 }
 
 export function Topbar({
   activeSection, searchQuery, onSearchChange,
-  hotelName, companyName, currentUser, onUserChange, onMenuOpen,
+  hotelName, companyName, currentUser, onUserChange, onMenuOpen, onSectionChange,
 }: TopbarProps) {
   const [roleMenuOpen, setRoleMenuOpen]       = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
@@ -111,8 +112,12 @@ export function Topbar({
             {mobileSearchOpen ? <X className="w-4 h-4 text-white" /> : <Search className="w-4 h-4 text-white" />}
           </button>
 
-          {/* Notifications */}
-          <button className="relative h-9 w-9 flex items-center justify-center rounded-xl hover:bg-white/10 active:scale-[0.98] transition-all">
+          {/* Notifications — opens the announcements section */}
+          <button
+            onClick={() => onSectionChange('announcements')}
+            aria-label="Notifications"
+            className="relative h-9 w-9 flex items-center justify-center rounded-xl hover:bg-white/10 active:scale-[0.98] transition-all"
+          >
             <Bell className="w-4 h-4 text-white/70" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-500 shadow-[0_1px_2px_rgba(0,0,0,0.1)]" />
             <span className="sr-only">Notifications</span>

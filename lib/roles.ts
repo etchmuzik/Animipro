@@ -159,6 +159,16 @@ export function getPermissions(role: UserRole): Permissions {
   }
 }
 
+/**
+ * Field staff are the lowest-authority roles (level 5): the animators,
+ * entertainers, lifeguards and kids-club staff who run activities. They see
+ * only their OWN scheduled items, whereas managers (level <= 4) see everything.
+ * Centralising this here keeps the rule correct when new field roles are added.
+ */
+export function isFieldStaff(role: UserRole): boolean {
+  return ROLE_META[role].level >= 5
+}
+
 // ─── Simulated session users (one per role for demo) ─────────────────────────
 
 export interface AppUser {

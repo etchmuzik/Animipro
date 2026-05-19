@@ -126,6 +126,7 @@ export default function AnimaProApp() {
             currentUser={currentUser}
             onUserChange={handleUserChange}
             onMenuOpen={() => setMobileSidebarOpen(true)}
+            onSectionChange={handleSectionChange}
           />
 
           {/* Scrollable content — add pb-16 on mobile to clear the bottom nav */}
