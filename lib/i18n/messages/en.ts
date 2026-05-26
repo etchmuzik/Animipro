@@ -98,10 +98,10 @@ export const en = {
 
   hero: {
     badge: 'Live across {count} Red Sea resorts right now',
-    titleLead: 'Every poolside show,',
-    titleAccent: 'run like clockwork.',
+    titleLead: 'Built so your guests',
+    titleAccent: 'leave 5-star reviews.',
     subtitle:
-      'AnimaPro is the operations platform built for Egyptian resort animation teams. Schedule every activity, capture proof it actually happened, and watch your TripAdvisor score climb, across all your hotels.',
+      'AnimaPro is the operations platform for Egyptian resort animation teams. Schedule every activity, capture proof it actually happened, and watch your TripAdvisor score climb, across all your hotels.',
     ctaPrimary: 'Own it forever, from {price}',
     ctaSecondary: 'Try the live demo',
     proof: '{count} animators on shift across Sharm, Hurghada, El Gouna & 5 more destinations.',

@@ -91,10 +91,10 @@ export const it: Messages = {
 
   hero: {
     badge: 'Attivo in {count} resort sul Mar Rosso',
-    titleLead: 'Ogni spettacolo in piscina,',
-    titleAccent: 'gestito alla perfezione.',
+    titleLead: 'Costruito perché i tuoi ospiti',
+    titleAccent: 'lascino recensioni a 5 stelle.',
     subtitle:
-      'AnimaPro è la piattaforma operativa creata per i team di animazione dei resort egiziani. Pianifica ogni attività, raccogli la prova che è stata svolta e guarda salire il tuo punteggio TripAdvisor, in tutti i tuoi hotel.',
+      'AnimaPro è la piattaforma operativa per i team di animazione dei resort egiziani. Pianifica ogni attività, raccogli la prova che è stata svolta e guarda salire il tuo punteggio TripAdvisor, in tutti i tuoi hotel.',
     ctaPrimary: 'Tuo per sempre, da {price}',
     ctaSecondary: 'Prova la demo',
     proof: '{count} animatori in servizio tra Sharm, Hurghada, El Gouna e altre 5 destinazioni.',
