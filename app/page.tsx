@@ -13,7 +13,7 @@ import {
   MapPin, Waves, Fish, Palmtree, Anchor, Sunset,
   Landmark, Sailboat, CreditCard, Smartphone, Banknote,
   Play, Camera, BellRing, Timer, ShieldCheck, Video, Sparkles,
-  Cloud, Server, HardDrive,
+  Cloud, Server, HardDrive, MessageSquarePlus, ListChecks, UserPlus,
 } from 'lucide-react'
 import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
 import { HomepageDemo } from '@/components/homepage-demo'
@@ -49,61 +49,70 @@ const CITIES = [
   { name: 'Safaga',          hotels: 12,  icon: Palmtree, desc: 'Red Sea diving and windsurfing' },
 ]
 
+// 12 features arranged so the asymmetric zig-zag layout below puts the two
+// highest-value, buyer-resonant claims (positions 0 and 3) in the wide hero
+// slots: live guest feedback (the TripAdvisor lift mechanism) and the full
+// hiring loop (the workflow that justifies the 25K floor).
 const FEATURES = [
+  {
+    icon: MessageSquarePlus,
+    title: 'Guest ratings that move TripAdvisor',
+    desc: 'Capture a guest rating + comment on every activity, see the live average on the dashboard, and link team performance directly to the review score that fills your beds next season.',
+  },
   {
     icon: Play,
     title: 'One-Tap Activity Start',
-    desc: 'Animators tap Start when they begin a session — every shift gets a real timestamp. No paper sign-in, no excuses.',
+    desc: 'Animators tap Start when they begin — every shift gets a real timestamp. No paper sign-in, no excuses.',
   },
   {
     icon: Camera,
     title: 'Photo & Video Proof',
-    desc: 'Each activity gets photo or short-video proof attached to the card. Hotel management sees what actually happened.',
+    desc: 'Each activity card carries photo or short-video proof. Management sees what actually happened.',
+  },
+  {
+    icon: UserPlus,
+    title: 'End-to-end hiring, in the platform',
+    desc: 'Public careers page collects applications with CVs. Hotel admins review, shortlist, accept, then walk new hires through an onboarding checklist — contract, uniform, training, system access, added to the team. The whole hiring loop in one tool.',
   },
   {
     icon: BellRing,
     title: 'Smart Pre-Shift Reminders',
-    desc: '15-minute and 5-minute browser notifications before every activity. Works on the installed PWA — no missed shifts.',
+    desc: '15-minute and 5-minute browser notifications before every activity. Installed PWA — no missed shifts.',
   },
   {
     icon: CalendarCheck,
-    title: 'Smart Scheduling',
-    desc: 'Build weekly schedules for every team and property. Publish to animators instantly with one click.',
+    title: 'Smart Weekly Scheduling',
+    desc: 'Build weekly schedules per team and property. Publish to animators instantly with one click.',
+  },
+  {
+    icon: Bell,
+    title: 'Live Notifications Inbox',
+    desc: 'A single dropdown in the topbar aggregates new applications, leave requests, and announcements. One click jumps to the section that needs your attention.',
+  },
+  {
+    icon: ListChecks,
+    title: 'Onboarding Checklists',
+    desc: 'Accepted candidates get a real onboarding checklist tied to their application. Track contract, uniform, training, and access in one place — bridges hiring straight into the team roster.',
   },
   {
     icon: Building2,
-    title: 'Multi-Hotel & Multi-Team',
-    desc: 'One company, many hotels. Manage all teams from a single unified dashboard with cross-hotel analytics.',
+    title: 'Multi-Hotel Dashboard',
+    desc: 'One company, many hotels. Cross-hotel analytics, schedule + team + score in one unified view.',
   },
   {
     icon: Star,
-    title: 'TripAdvisor Live Scores',
-    desc: 'Track TripAdvisor, Google, and Booking.com ratings live — all in one screen. Spot drops before they hurt.',
-  },
-  {
-    icon: BarChart2,
-    title: 'Performance Reports',
-    desc: 'Weekly KPIs: attendance, punctuality, guest satisfaction. Automated reports, zero manual work.',
-  },
-  {
-    icon: Megaphone,
-    title: 'Instant Announcements',
-    desc: 'Push urgent notices by role. Approve or reject leave requests from anywhere in seconds.',
-  },
-  {
-    icon: UserCheck,
-    title: 'Role-Based Access',
-    desc: '8 built-in roles from Super Admin to Animator. Everyone sees only what they need — nothing more.',
+    title: 'TripAdvisor + Google + Booking Live',
+    desc: 'Track all three review platforms on the dashboard. Spot rating drops before they hurt your bookings.',
   },
   {
     icon: Globe,
-    title: '4 Languages + RTL',
-    desc: 'Full interface in English, Arabic, Russian and Italian. Right-to-left layout for Arabic guests and staff.',
+    title: '4 Languages + RTL Arabic',
+    desc: 'Full interface in English, Arabic, Russian and Italian. Right-to-left flips the whole shell for Arabic guests and staff.',
   },
   {
     icon: Zap,
-    title: 'White-label & resellers',
-    desc: 'Rebrand it live as your own product. Run it as an agency for multiple resorts — see our partner programme.',
+    title: 'Live White-Label + Reseller Programme',
+    desc: 'Change app name, brand colour, and contact details from the Settings screen and watch the whole platform reskin instantly. Run it as your own agency product — see our partner tiers.',
   },
 ]
 
