@@ -2,6 +2,14 @@
   command = "npm run build"
   publish = "out"
 
+# Pin Node 22 explicitly. The Ubuntu Noble build image (current Netlify default)
+# ignores .nvmrc in some scenarios and falls back to Node 18, which Next 16
+# refuses to build under. NODE_VERSION in [build.environment] is the highest-
+# priority Node version source on Netlify and removes the ambiguity.
+[build.environment]
+  NODE_VERSION = "22"
+  NPM_FLAGS = "--legacy-peer-deps"
+
 # This is a MULTI-PAGE Next.js static export, not a single-page app. Netlify
 # serves the built HTML directly (/ -> index.html, /platform -> platform.html),
 # so no catch-all 200 rewrite is needed — a blanket /* -> /index.html would
