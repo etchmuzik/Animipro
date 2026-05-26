@@ -164,8 +164,11 @@ function ApplyForm({ initialRole }: { initialRole: ApplicantRole }) {
     )
   }
 
+  // text-base on mobile (16px) is intentional: it prevents iOS Safari from
+  // auto-zooming the page when the user focuses an input. From sm: up we drop
+  // back to text-sm for visual rhythm on bigger screens.
   const fieldCls =
-    'w-full rounded-xl border border-[oklch(0.4_0.04_215_/_0.18)] bg-white/70 px-4 py-2.5 text-sm text-[oklch(0.27_0.055_220)] placeholder:text-[oklch(0.6_0.02_220)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.5_0.1_212_/_0.3)] focus:border-[oklch(0.5_0.1_212)] transition-colors'
+    'w-full rounded-xl border border-[oklch(0.4_0.04_215_/_0.18)] bg-white/70 px-4 py-2.5 text-base sm:text-sm text-[oklch(0.27_0.055_220)] placeholder:text-[oklch(0.6_0.02_220)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.5_0.1_212_/_0.3)] focus:border-[oklch(0.5_0.1_212)] transition-colors'
   const labelCls = 'mb-1.5 block text-xs font-bold text-[oklch(0.36_0.04_218)]'
 
   return (

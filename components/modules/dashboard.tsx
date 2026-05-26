@@ -72,7 +72,7 @@ function StatCard({ icon: Icon, label, value, sub, trend, color = 'teal', gridSp
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-xs text-zinc-300 font-semibold uppercase tracking-tight leading-relaxed">{label}</p>
-          <p className="text-3xl font-mono font-bold text-white mt-2">{value}</p>
+          <p className="text-3xl tabular-nums font-bold text-white mt-2">{value}</p>
           {sub && <p className="text-sm text-zinc-300 leading-relaxed mt-1">{sub}</p>}
         </div>
         <div className={cn('p-3 rounded-xl shrink-0', iconBg)}>
@@ -177,7 +177,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             </div>
             <p className="text-xs text-zinc-300 font-semibold uppercase tracking-tight mb-1">TripAdvisor</p>
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-mono font-bold text-white">{hotel.tripAdvisorRating.toFixed(1)}</span>
+              <span className="text-3xl tabular-nums font-bold text-white">{hotel.tripAdvisorRating.toFixed(1)}</span>
               <StarRating rating={hotel.tripAdvisorRating} size="md" />
             </div>
             <p className="text-sm text-zinc-300 leading-relaxed mb-3">{hotel.tripAdvisorReviews.toLocaleString()} reviews</p>
@@ -201,7 +201,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             </div>
             <p className="text-xs text-zinc-300 font-semibold uppercase tracking-tight mb-1">Google</p>
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-mono font-bold text-white">{hotel.googleRating.toFixed(1)}</span>
+              <span className="text-3xl tabular-nums font-bold text-white">{hotel.googleRating.toFixed(1)}</span>
               <StarRating rating={hotel.googleRating} size="md" />
             </div>
             <p className="text-sm text-zinc-300 leading-relaxed mb-3">Based on guest reviews</p>
@@ -218,7 +218,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             </div>
             <p className="text-xs text-zinc-300 font-semibold uppercase tracking-tight mb-1" style={{ color: '#0e7490' }}>Booking.com</p>
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-mono font-bold text-white">{hotel.bookingRating.toFixed(1)}</span>
+              <span className="text-3xl tabular-nums font-bold text-white">{hotel.bookingRating.toFixed(1)}</span>
               <span className="text-xs text-zinc-400">/ 10</span>
             </div>
             <span className={cn(
@@ -230,7 +230,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             <div className="pt-3 border-t border-white/10">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-zinc-300">Animation team</span>
-                <span className="text-xs font-mono font-semibold text-white">{Math.min(10, hotel.bookingRating + 0.3).toFixed(1)}</span>
+                <span className="text-xs tabular-nums font-semibold text-white">{Math.min(10, hotel.bookingRating + 0.3).toFixed(1)}</span>
               </div>
               <div className="h-1.5 rounded-full bg-zinc-800 overflow-hidden">
                 <div className="h-full rounded-full transition-all" style={{ width: `${(hotel.bookingRating / 10) * 100}%`, background: '#003580' }} />
@@ -373,7 +373,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
                   <p className="text-[10px] text-zinc-300">{a.teamName}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-xs font-mono font-bold text-[#0e7490]">{a.performance}%</p>
+                  <p className="text-xs tabular-nums font-bold text-[#0e7490]">{a.performance}%</p>
                 </div>
               </div>
             ))}

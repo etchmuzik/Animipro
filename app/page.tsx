@@ -236,7 +236,7 @@ function CheckoutModal({
             <p className="text-white/40 text-xs mt-1">Licence — yours forever</p>
           </div>
           <div className="text-right">
-            <p className="text-white font-black text-2xl font-mono">{tier.price}</p>
+            <p className="text-white font-black text-2xl tabular-nums">{tier.price}</p>
             <p className="text-white/50 text-sm font-semibold">{tier.currency} <span className="text-white/30">({tier.usd})</span></p>
           </div>
           <button
@@ -284,7 +284,7 @@ function CheckoutModal({
                     value={form[f.key as keyof typeof form]}
                     onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
                     placeholder={f.placeholder}
-                    className="w-full border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-sm text-[#121318] focus:outline-none focus:ring-2 focus:ring-[#0e7490]/30 focus:border-[#0e7490] transition-colors placeholder:text-[#c0ccda]"
+                    className="w-full border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-base sm:text-sm text-[#121318] focus:outline-none focus:ring-2 focus:ring-[#0e7490]/30 focus:border-[#0e7490] transition-colors placeholder:text-[#c0ccda]"
                   />
                 </div>
               ))}
@@ -392,7 +392,7 @@ function CheckoutModal({
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-[#64748b]">One-off</span>
-                  <span className="font-bold text-[#121318] font-mono">{tier.price} {tier.currency}</span>
+                  <span className="font-bold text-[#121318] tabular-nums">{tier.price} {tier.currency}</span>
                 </div>
                 <div className="flex justify-between text-sm pt-1.5 border-t border-[#e2e8f0]/60">
                   <span className="text-[#64748b]">Hosting</span>
@@ -400,7 +400,7 @@ function CheckoutModal({
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-[#64748b]">Recurring</span>
-                  <span className={cn('font-bold font-mono', hosted === 'self' ? 'text-[#64748b]' : 'text-[#0e7490]')}>{hostedPrice}</span>
+                  <span className={cn('font-bold tabular-nums', hosted === 'self' ? 'text-[#64748b]' : 'text-[#0e7490]')}>{hostedPrice}</span>
                 </div>
               </div>
               <button
@@ -734,7 +734,7 @@ function StatsBar() {
                 variants={itemVariants}
                 className="text-center"
               >
-                <p className="text-3xl sm:text-4xl font-black text-white mb-2 font-mono">{s.value}</p>
+                <p className="text-3xl sm:text-4xl font-black text-white mb-2 tabular-nums">{s.value}</p>
                 <p className="text-zinc-300 text-xs sm:text-sm font-semibold leading-tight">{s.label}</p>
               </motion.div>
             ))}
@@ -1086,7 +1086,7 @@ function TripAdvisorSection() {
                 <div className="flex-1 min-w-0">
                   <p className="text-white/50 text-xs font-semibold mb-1">{r.platform}</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-3xl font-black text-white font-mono">{r.score}</span>
+                    <span className="text-3xl font-black text-white tabular-nums">{r.score}</span>
                     <span className="text-white/40 text-sm">/ {r.platform === 'Booking.com' ? '10' : '5'}</span>
                   </div>
                   <p className="text-white/35 text-xs mt-1">{r.sub}</p>
@@ -1396,7 +1396,7 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
                   {tier.name}
                 </p>
                 <div className="flex items-baseline gap-2 mb-4">
-                  <span className={cn('text-5xl font-black font-mono', tier.highlight ? 'text-white' : 'text-[#121318]')}>
+                  <span className={cn('text-5xl font-black tabular-nums', tier.highlight ? 'text-white' : 'text-[#121318]')}>
                     {tier.price}
                   </span>
                   <span className={cn('text-sm font-semibold', tier.highlight ? 'text-white/50' : 'text-[#94a3b8]')}>
@@ -1426,7 +1426,7 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
                     : 'bg-[#121318] text-white hover:bg-[#1a2540]'
                 )}
               >
-                {tier.cta} <span className="font-mono">— {tier.price} {tier.currency}</span>
+                {tier.cta} <span className="tabular-nums">— {tier.price} {tier.currency}</span>
               </button>
             </motion.div>
           ))}
@@ -1500,7 +1500,7 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
                   <p className="font-black text-[#121318] text-base">{plan.name}</p>
                 </div>
                 <div className="flex items-baseline gap-1.5 mb-2">
-                  <span className="text-3xl font-black text-[#121318] font-mono">{plan.price}</span>
+                  <span className="text-3xl font-black text-[#121318] tabular-nums">{plan.price}</span>
                   <span className="text-xs text-[#94a3b8] font-semibold">{plan.priceSub}</span>
                 </div>
                 <p className="text-sm text-[#64748b] leading-relaxed mb-5">{plan.desc}</p>
@@ -1610,7 +1610,7 @@ function ContactSection() {
                   <div>
                     <p className="text-[#94a3b8] text-xs font-semibold">{c.label}</p>
                     {c.href ? (
-                      <a href={c.href} className="text-[#121318] text-sm font-bold hover:text-[#0e7490] transition-colors">
+                      <a href={c.href} className="text-[#121318] text-sm font-bold hover:text-[#0e7490] transition-colors py-1 -my-1 inline-block">
                         {c.value}
                       </a>
                     ) : (
@@ -1652,7 +1652,7 @@ function ContactSection() {
                       type={f.type}
                       placeholder={f.placeholder}
                       required
-                      className="w-full border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-sm text-[#121318] focus:outline-none focus:ring-2 focus:ring-[#0e7490]/30 focus:border-[#0e7490] transition-colors placeholder:text-[#c0ccda]"
+                      className="w-full border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-base sm:text-sm text-[#121318] focus:outline-none focus:ring-2 focus:ring-[#0e7490]/30 focus:border-[#0e7490] transition-colors placeholder:text-[#c0ccda]"
                     />
                   </div>
                 ))}
@@ -1663,7 +1663,7 @@ function ContactSection() {
                     rows={4}
                     placeholder="Tell us about your hotel and team size..."
                     required
-                    className="w-full border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-sm text-[#121318] focus:outline-none focus:ring-2 focus:ring-[#0e7490]/30 focus:border-[#0e7490] transition-colors resize-none placeholder:text-[#c0ccda]"
+                    className="w-full border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-base sm:text-sm text-[#121318] focus:outline-none focus:ring-2 focus:ring-[#0e7490]/30 focus:border-[#0e7490] transition-colors resize-none placeholder:text-[#c0ccda]"
                   />
                 </div>
                 <button
@@ -1705,7 +1705,7 @@ function FinalCTA({ onBuy }: { onBuy: () => void }) {
               onClick={onBuy}
               className="group flex items-center justify-center gap-2 bg-[#0e7490] hover:bg-[#0c6080] text-white font-black px-8 py-4 rounded-xl transition-all shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)] text-base active:-translate-y-[1px]"
             >
-              Buy Now — From <span className="font-mono">25,000 EGP</span>
+              Buy Now — From <span className="tabular-nums">25,000 EGP</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <Link href="/platform" className="flex items-center justify-center gap-1.5 text-white/60 hover:text-white text-sm font-semibold transition-colors border border-white/[0.12] hover:border-white/30 rounded-xl px-6 py-4">
@@ -1743,14 +1743,15 @@ function Footer() {
               <p className="text-[#94a3b8] text-xs mt-0.5">Resort Animation Management</p>
             </div>
           </div>
+          {/* py-2 on each link gives a 44px+ tap target without changing visual size — important for mobile. */}
           <nav className="flex items-center gap-5 text-xs font-semibold">
-            <Link href="/partners" className="text-[#0e7490] hover:text-[#0c6080] transition-colors">
+            <Link href="/partners" className="text-[#0e7490] hover:text-[#0c6080] transition-colors py-2 -my-2">
               {t('footer.partners')}
             </Link>
-            <Link href="/careers" className="text-[#64748b] hover:text-[#121318] transition-colors">
+            <Link href="/careers" className="text-[#64748b] hover:text-[#121318] transition-colors py-2 -my-2">
               {t('footer.hiring')}
             </Link>
-            <Link href="/platform" className="text-[#64748b] hover:text-[#121318] transition-colors">
+            <Link href="/platform" className="text-[#64748b] hover:text-[#121318] transition-colors py-2 -my-2">
               {t('common.liveDemo')}
             </Link>
           </nav>

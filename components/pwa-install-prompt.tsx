@@ -95,7 +95,8 @@ export function PWAInstallPrompt() {
 
             <button
               onClick={handleDismiss}
-              className="text-white/30 hover:text-white/70 transition-colors shrink-0 p-1"
+              aria-label="Dismiss install prompt"
+              className="text-white/30 hover:text-white/70 transition-colors shrink-0 grid place-items-center -m-2 p-2 w-10 h-10"
             >
               <X className="w-4 h-4" />
             </button>
@@ -126,7 +127,7 @@ export function PWAInstallPrompt() {
           <div className="relative bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden mb-4 animate-in slide-in-from-bottom-8 duration-300">
             <div className="bg-[#0f1729] px-5 py-4 flex items-center justify-between">
               <p className="text-white font-bold text-sm">Install AnimaPro on iPhone</p>
-              <button onClick={handleDismiss} className="text-white/40 hover:text-white transition-colors">
+              <button onClick={handleDismiss} aria-label="Close" className="text-white/40 hover:text-white transition-colors grid place-items-center -m-2 p-2 w-10 h-10">
                 <X className="w-4 h-4" />
               </button>
             </div>
