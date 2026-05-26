@@ -1,30 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Bell, Search, Building2, ChevronDown, Check, Users, Menu, X } from 'lucide-react'
+import { Search, Building2, ChevronDown, Check, Users, Menu, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { DEMO_USERS, ROLE_META, type AppUser, type Section } from '@/lib/roles'
-
-const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
-  dashboard:     { title: 'Dashboard',             subtitle: "Here's your resort overview" },
-  team:          { title: 'Team Management',       subtitle: 'Animators, roles and contracts' },
-  schedule:      { title: 'Schedule',              subtitle: 'Weekly activity scheduling' },
-  activities:    { title: 'Activities',            subtitle: 'Activity catalog and programs' },
-  assignments:   { title: 'Assignments',           subtitle: 'Task management and delegation' },
-  events:        { title: 'Events',                subtitle: 'Shows, parties and performances' },
-  announcements: { title: 'Announcements',         subtitle: 'Team communications and notices' },
-  leave:         { title: 'Leave Requests',        subtitle: 'Time-off and absence requests' },
-  reports:       { title: 'Reports',               subtitle: 'Performance metrics and insights' },
-  performance:   { title: 'Performance',           subtitle: 'KPI tracking and evaluations' },
-  settings:      { title: 'Settings',              subtitle: 'Hotel configuration and preferences' },
-}
+import { LanguageSwitcher } from '@/components/language-switcher'
+import { NotificationsBell } from '@/components/layout/notifications-bell'
+import { useTranslation } from '@/lib/i18n'
+import { getBrand, subscribe as subscribeBrand } from '@/lib/brand-store'
 
 interface TopbarProps {
   activeSection: string
   searchQuery: string
   onSearchChange: (q: string) => void
+  hotelId: string
   hotelName: string
   companyName: string
   currentUser: AppUser
@@ -35,13 +26,26 @@ interface TopbarProps {
 
 export function Topbar({
   activeSection, searchQuery, onSearchChange,
-  hotelName, companyName, currentUser, onUserChange, onMenuOpen, onSectionChange,
+  hotelId, hotelName, companyName, currentUser, onUserChange, onMenuOpen, onSectionChange,
 }: TopbarProps) {
+  const { t, locale } = useTranslation()
   const [roleMenuOpen, setRoleMenuOpen]       = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
 
-  const { title } = SECTION_TITLES[activeSection] ?? { title: 'AnimaPro', subtitle: '' }
-  const today = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+  // Live white-label brand name (fallback title for unknown sections).
+  const [brandName, setBrandName] = useState(() => getBrand().appName)
+  useEffect(() => {
+    const refresh = () => setBrandName(getBrand().appName)
+    refresh()
+    return subscribeBrand(refresh)
+  }, [])
+
+  // Section title/subtitle come from the i18n catalog keyed by the active
+  // section; fall back to the brand name for unknown sections.
+  const title = t(`sections.${activeSection}`) === `sections.${activeSection}`
+    ? brandName
+    : t(`sections.${activeSection}`)
+  const today = new Date().toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' })
   const roleMeta = ROLE_META[currentUser.role]
 
   const levelColor = (level: number) => ({
@@ -96,7 +100,7 @@ export function Topbar({
           <div className="relative hidden md:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
             <Input
-              placeholder="Search..."
+              placeholder={t('topbar.search')}
               value={searchQuery}
               onChange={e => onSearchChange(e.target.value)}
               className="pl-9 h-9 w-44 text-xs bg-white/5 border-white/10 rounded-xl text-white placeholder:text-white/40 focus-visible:w-60 focus-visible:bg-white/10 focus-visible:border-teal-500/40 focus-visible:ring-teal-500/10 transition-all duration-200"
@@ -112,16 +116,11 @@ export function Topbar({
             {mobileSearchOpen ? <X className="w-4 h-4 text-white" /> : <Search className="w-4 h-4 text-white" />}
           </button>
 
-          {/* Notifications — opens the announcements section */}
-          <button
-            onClick={() => onSectionChange('announcements')}
-            aria-label="Notifications"
-            className="relative h-9 w-9 flex items-center justify-center rounded-xl hover:bg-white/10 active:scale-[0.98] transition-all"
-          >
-            <Bell className="w-4 h-4 text-white/70" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-500 shadow-[0_1px_2px_rgba(0,0,0,0.1)]" />
-            <span className="sr-only">Notifications</span>
-          </button>
+          {/* Language switcher */}
+          <LanguageSwitcher variant="dark" />
+
+          {/* Notifications center */}
+          <NotificationsBell hotelId={hotelId} onSectionChange={onSectionChange} />
 
           {/* User / role switcher */}
           <div className="relative">
@@ -132,7 +131,7 @@ export function Topbar({
               <div className={cn('w-7 h-7 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.3)]', avatarGradient(roleMeta.level))}>
                 <span className="text-[10px] font-bold text-white">{currentUser.initials}</span>
               </div>
-              <div className="hidden sm:block text-left">
+              <div className="hidden sm:block text-start">
                 <p className="text-xs font-semibold text-white leading-none">{currentUser.name}</p>
                 <span className={cn('inline-block text-[11px] font-bold px-2 py-0.5 rounded-full mt-0.5 leading-tight', levelColor(roleMeta.level))}>
                   {roleMeta.label}
@@ -151,12 +150,12 @@ export function Topbar({
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -8 }}
                     transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                    className="absolute right-0 top-full mt-2 z-50 w-72 bg-zinc-800 border border-white/10 rounded-xl shadow-lg shadow-black/30 overflow-hidden"
+                    className="absolute end-0 top-full mt-2 z-50 w-72 bg-zinc-800 border border-white/10 rounded-xl shadow-lg shadow-black/30 overflow-hidden"
                   >
                     <div className="px-3 py-2.5 bg-white/5 border-b border-white/10 flex items-center gap-2">
                       <Users className="w-3.5 h-3.5 text-white/60" />
-                      <span className="text-xs font-semibold text-white/70">Switch Role / User</span>
-                      <span className="ml-auto text-[11px] text-white/40 italic">Demo only</span>
+                      <span className="text-xs font-semibold text-white/70">{t('topbar.switchUser')}</span>
+                      <span className="ml-auto text-[11px] text-white/40 italic">{t('common.demoOnly')}</span>
                     </div>
                     <div className="py-1 max-h-72 overflow-y-auto scrollbar-thin">
                       {DEMO_USERS.map(user => {
@@ -165,7 +164,7 @@ export function Topbar({
                         return (
                           <button key={user.id}
                             onClick={() => { onUserChange(user); setRoleMenuOpen(false) }}
-                            className={cn('w-full flex items-center gap-3 px-3 py-2.5 text-left transition-all',
+                            className={cn('w-full flex items-center gap-3 px-3 py-2.5 text-start transition-all',
                               isActive ? 'bg-teal-500/10' : 'hover:bg-white/5'
                             )}>
                             <div className={cn('w-8 h-8 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 text-xs font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,0.3)]', avatarGradient(meta.level))}>
@@ -185,7 +184,7 @@ export function Topbar({
                       })}
                     </div>
                     <div className="px-3 py-2 bg-white/5 border-t border-white/10">
-                      <p className="text-[11px] text-white/50">Switching roles filters navigation and access levels.</p>
+                      <p className="text-[11px] text-white/50">{t('topbar.switchHint')}</p>
                     </div>
                   </motion.div>
                 </>
@@ -209,7 +208,7 @@ export function Topbar({
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
               <Input
                 autoFocus
-                placeholder="Search anything..."
+                placeholder={t('topbar.searchAnything')}
                 value={searchQuery}
                 onChange={e => onSearchChange(e.target.value)}
                 className="pl-9 h-10 w-full text-sm bg-white/5 border-white/10 rounded-xl text-white placeholder:text-white/40"

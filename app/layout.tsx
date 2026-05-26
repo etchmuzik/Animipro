@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, Geist_Mono, Bricolage_Grotesque, Noto_Sans_Arabic } from 'next/font/google'
 import './globals.css'
 import './theme.css'
+import { DirController } from '@/components/dir-controller'
+import { BrandController } from '@/components/brand-controller'
 
 const geist = Geist({
   subsets: ['latin'],
@@ -11,6 +13,25 @@ const geist = Geist({
 const geistMono = Geist_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
+})
+
+// Display face for marketing headlines only (the app UI stays on Geist).
+// Bricolage Grotesque: humanist grotesque with warmth + bite — reads as
+// energetic and operational at huge sizes without tipping into editorial.
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['600', '700', '800'],
+  display: 'swap',
+})
+
+// Arabic UI font — applied under [lang="ar"]. Without this, Arabic fell back to
+// a Latin face (the existing `font-arabic` class was referenced but undefined).
+const notoArabic = Noto_Sans_Arabic({
+  subsets: ['arabic'],
+  variable: '--font-arabic',
+  weight: ['400', '500', '700'],
+  display: 'swap',
 })
 
 export const viewport: Viewport = {
@@ -102,7 +123,9 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#141418" />
         <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
       </head>
-      <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
+      <body className={`${geist.variable} ${geistMono.variable} ${bricolage.variable} ${notoArabic.variable} font-sans antialiased`}>
+        <DirController />
+        <BrandController />
         {children}
       </body>
     </html>

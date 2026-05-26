@@ -230,3 +230,60 @@
 .animate-breathe {
   animation: breathe 3s ease-in-out infinite;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Hero — sunlit Red Sea atmosphere (marketing only)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Warm sand canvas with a low sun and a turquoise sea-haze along the bottom.
+   Built from layered radial gradients so it never 404s like a stock photo and
+   stays razor-sharp at any viewport. OKLCH keeps the neutrals tinted, not flat. */
+.hero-canvas {
+  background-color: oklch(0.965 0.013 84);
+  background-image:
+    radial-gradient(120% 80% at 88% 8%, oklch(0.9 0.11 72 / 0.55) 0%, oklch(0.93 0.06 78 / 0) 42%),
+    radial-gradient(75% 55% at 50% 118%, oklch(0.78 0.1 205 / 0.5) 0%, oklch(0.9 0.05 200 / 0) 60%),
+    radial-gradient(60% 50% at 8% -10%, oklch(0.88 0.05 60 / 0.35) 0%, oklch(0.9 0.04 70 / 0) 55%);
+}
+
+/* The sun disc itself — a soft, slowly breathing light source behind the demo. */
+.hero-sun {
+  background: radial-gradient(
+    circle at center,
+    oklch(0.92 0.13 78 / 0.95) 0%,
+    oklch(0.85 0.16 65 / 0.6) 30%,
+    oklch(0.8 0.15 50 / 0) 70%
+  );
+  animation: heroSun 9s ease-in-out infinite;
+}
+@keyframes heroSun {
+  0%, 100% { transform: scale(1); opacity: 0.92; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+/* Fine film grain so the flat gradient reads as a printed poster, not a CSS box. */
+.hero-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Slow vertical drift for the floating proof satellites around the demo. */
+@keyframes heroFloatA {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-9px) rotate(-3deg); }
+}
+@keyframes heroFloatB {
+  0%, 100% { transform: translateY(0) rotate(4deg); }
+  50% { transform: translateY(7px) rotate(4deg); }
+}
+.hero-float-a { animation: heroFloatA 6s ease-in-out infinite; }
+.hero-float-b { animation: heroFloatB 7s ease-in-out infinite 0.6s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-sun, .hero-float-a, .hero-float-b { animation: none; }
+}

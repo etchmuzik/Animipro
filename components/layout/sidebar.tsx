@@ -8,11 +8,13 @@ import {
   BarChart2, ChevronLeft, ChevronRight, Settings,
   Zap, PartyPopper, LogOut, Building2,
   ChevronsUpDown, Check, MapPin, Hotel,
-  Activity, UserCheck, TrendingUp, X,
+  Activity, UserCheck, UserPlus, TrendingUp, X,
 } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
 import { COMPANIES, ALL_HOTELS } from '@/lib/mock-data'
 import { ROLE_META, getAllowedSections, type AppUser, type Section } from '@/lib/roles'
+import { getApplicationStats, subscribe as subscribeApplications } from '@/lib/applications'
+import { getBrand, subscribe as subscribeBrand } from '@/lib/brand-store'
+import { useTranslation } from '@/lib/i18n'
 
 const ALL_NAV_ITEMS: { icon: React.ElementType; label: string; section: Section; badge?: string }[] = [
   { icon: LayoutDashboard, label: 'Dashboard',      section: 'dashboard' },
@@ -23,6 +25,7 @@ const ALL_NAV_ITEMS: { icon: React.ElementType; label: string; section: Section;
   { icon: PartyPopper,     label: 'Events',         section: 'events',        badge: '3' },
   { icon: Megaphone,       label: 'Announcements',  section: 'announcements', badge: '2' },
   { icon: UserCheck,       label: 'Leave Requests', section: 'leave',         badge: '4' },
+  { icon: UserPlus,        label: 'Recruitment',    section: 'recruitment' },
   { icon: BarChart2,       label: 'Reports',        section: 'reports' },
   { icon: TrendingUp,      label: 'Performance',    section: 'performance' },
   { icon: Settings,        label: 'Settings',       section: 'settings' },
@@ -67,14 +70,39 @@ function SidebarContent({
   collapsed: boolean
   onClose?: () => void
 }) {
+  const { t } = useTranslation()
   const [switcherOpen, setSwitcherOpen] = useState(false)
+
+  // Live count of NEW applications for the Recruitment nav badge. Starts at 0 so
+  // the server and first client render agree (no hydration mismatch), then fills
+  // in after mount and stays in sync with the applications store.
+  const [newApplications, setNewApplications] = useState(0)
+  useEffect(() => {
+    const refresh = () => setNewApplications(getApplicationStats().new)
+    refresh()
+    return subscribeApplications(refresh)
+  }, [])
+
+  // Live white-label brand (app name shown in the logo block).
+  const [brand, setBrand] = useState(() => getBrand())
+  useEffect(() => {
+    const refresh = () => setBrand(getBrand())
+    refresh()
+    return subscribeBrand(refresh)
+  }, [])
 
   const selectedCompany = COMPANIES.find(c => c.id === selectedCompanyId) ?? COMPANIES[0]
   const selectedHotel   = ALL_HOTELS.find(h => h.id === selectedHotelId)  ?? selectedCompany.hotels[0]
   const allowedSections = getAllowedSections(currentUser.role)
   const roleMeta        = ROLE_META[currentUser.role]
   const canSwitchHotel  = roleMeta.level <= 2
-  const navItems        = ALL_NAV_ITEMS.filter(n => allowedSections.includes(n.section))
+  const navItems        = ALL_NAV_ITEMS
+    .filter(n => allowedSections.includes(n.section))
+    .map(n =>
+      n.section === 'recruitment'
+        ? { ...n, badge: newApplications > 0 ? String(newApplications) : undefined }
+        : n,
+    )
 
   return (
     <div className="flex flex-col h-full">
@@ -89,8 +117,8 @@ function SidebarContent({
         </div>
         {!collapsed && (
           <div className="flex-1 min-w-0">
-            <span className="text-sm font-bold tracking-tight text-white">AnimaPro</span>
-            <p className="text-[10px] text-white/70 leading-none mt-0.5">Resort Management</p>
+            <span className="text-sm font-bold tracking-tight text-white">{brand.appName}</span>
+            <p className="text-[10px] text-white/70 leading-none mt-0.5">{brand.tagline}</p>
           </div>
         )}
         {onClose && !collapsed && (
@@ -105,7 +133,7 @@ function SidebarContent({
         {!collapsed ? (
           <>
             <p className="text-[11px] font-semibold text-white/60 uppercase tracking-widest px-1 mb-1.5">
-              Active Property
+              {t('sidebar.activeProperty')}
             </p>
             <button
               onClick={() => canSwitchHotel && setSwitcherOpen(v => !v)}
@@ -159,7 +187,7 @@ function SidebarContent({
                 className="absolute left-3 right-3 top-full mt-2 z-50 bg-[#0f1729] border border-white/10 rounded-xl shadow-xl shadow-black/20 overflow-hidden backdrop-blur-sm"
               >
                 <div className="px-3 py-2.5 bg-white/[0.03] border-b border-white/10">
-                  <p className="text-[11px] font-semibold text-white/70 uppercase tracking-widest">Switch Property</p>
+                  <p className="text-[11px] font-semibold text-white/70 uppercase tracking-widest">{t('sidebar.switchProperty')}</p>
                 </div>
                 <div className="max-h-72 overflow-y-auto scrollbar-thin">
                   {COMPANIES.map((company, ci) => (
@@ -210,7 +238,7 @@ function SidebarContent({
 
       {/* ── Navigation ───────────────────────────────────────────────────── */}
       <nav className="flex-1 overflow-y-auto scrollbar-thin py-3 px-2 space-y-0.5 mt-2">
-        {navItems.map(({ icon: Icon, label, section, badge }) => {
+        {navItems.map(({ icon: Icon, section, badge }) => {
           const isActive = activeSection === section
           return (
             <button key={section}
@@ -226,7 +254,7 @@ function SidebarContent({
               <Icon className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')} />
               {!collapsed && (
                 <>
-                  <span className="text-sm leading-none flex-1">{label}</span>
+                  <span className="text-sm leading-none flex-1">{t(`sections.${section}`)}</span>
                   {badge && (
                     <span className={cn(
                       'text-[11px] h-5 min-w-[20px] px-1.5 rounded-full flex items-center justify-center font-mono font-bold',
@@ -287,7 +315,11 @@ function SidebarContent({
 
 export function Sidebar(props: SidebarProps) {
   const { mobileOpen, onMobileClose, ...rest } = props
+  const { dir } = useTranslation()
   const [collapsed, setCollapsed] = useState(false)
+  // In RTL the drawer lives on the right and slides in from the right edge.
+  const isRtl = dir === 'rtl'
+  const drawerOffset = isRtl ? 288 : -288
 
   useEffect(() => {
     if (mobileOpen) {
@@ -332,11 +364,14 @@ export function Sidebar(props: SidebarProps) {
       <AnimatePresence>
         {mobileOpen && (
           <motion.aside
-            initial={{ x: -288 }}
+            initial={{ x: drawerOffset }}
             animate={{ x: 0 }}
-            exit={{ x: -288 }}
+            exit={{ x: drawerOffset }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="fixed left-0 top-0 h-full w-72 z-50 bg-hsl(228, 14%, 8%) text-white flex flex-col md:hidden shadow-xl shadow-black/30"
+            className={cn(
+              'fixed top-0 h-full w-72 z-50 bg-hsl(228, 14%, 8%) text-white flex flex-col md:hidden shadow-xl shadow-black/30',
+              isRtl ? 'right-0' : 'left-0',
+            )}
           >
             <SidebarContent {...rest} collapsed={false} onClose={onMobileClose} />
           </motion.aside>

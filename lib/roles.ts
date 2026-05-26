@@ -91,6 +91,7 @@ export type Section =
   | 'events'
   | 'announcements'
   | 'leave'
+  | 'recruitment'
   | 'reports'
   | 'performance'
   | 'settings'
@@ -111,6 +112,7 @@ const SECTION_MIN_LEVEL: Record<Section, number> = {
   team:          3, // animation chief+
   reports:       3, // animation chief+
   performance:   3, // animation chief+
+  recruitment:   2, // hotel admin+ (HR / GM handle hiring)
   settings:      2, // hotel admin+
 }
 
@@ -139,6 +141,7 @@ export interface Permissions {
   canManageAllHotels:  boolean  // super admin / company-level admin
   canEditSettings:     boolean  // hotel settings
   canAssignTasks:      boolean  // create & assign tasks
+  canManageRecruitment: boolean // review & decide on job applications
 }
 
 export function getPermissions(role: UserRole): Permissions {
@@ -156,6 +159,7 @@ export function getPermissions(role: UserRole): Permissions {
     canManageAllHotels:   level <= 1,
     canEditSettings:      level <= 2,
     canAssignTasks:       level <= 4,
+    canManageRecruitment: level <= 2,  // hotel admin+ handle hiring
   }
 }
 

@@ -6,13 +6,14 @@ import {
   ClipboardList, Megaphone, MoreHorizontal,
 } from 'lucide-react'
 import type { Section } from '@/lib/roles'
+import { useTranslation } from '@/lib/i18n'
 
-const BOTTOM_NAV_ITEMS: { icon: React.ElementType; label: string; section: Section; badge?: string }[] = [
-  { icon: LayoutDashboard, label: 'Home',      section: 'dashboard' },
-  { icon: CalendarDays,    label: 'Schedule',  section: 'schedule' },
-  { icon: Activity,        label: 'Activities',section: 'activities' },
-  { icon: ClipboardList,   label: 'Tasks',     section: 'assignments', badge: '5' },
-  { icon: Megaphone,       label: 'News',      section: 'announcements', badge: '2' },
+const BOTTOM_NAV_ITEMS: { icon: React.ElementType; labelKey: string; section: Section; badge?: string }[] = [
+  { icon: LayoutDashboard, labelKey: 'mobileNav.home',       section: 'dashboard' },
+  { icon: CalendarDays,    labelKey: 'mobileNav.schedule',   section: 'schedule' },
+  { icon: Activity,        labelKey: 'mobileNav.activities', section: 'activities' },
+  { icon: ClipboardList,   labelKey: 'mobileNav.tasks',      section: 'assignments', badge: '5' },
+  { icon: Megaphone,       labelKey: 'mobileNav.news',       section: 'announcements', badge: '2' },
 ]
 
 interface MobileNavProps {
@@ -23,6 +24,7 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ activeSection, onSectionChange, onMenuOpen, allowedSections }: MobileNavProps) {
+  const { t } = useTranslation()
   const visibleItems = BOTTOM_NAV_ITEMS.filter(i => allowedSections.includes(i.section))
 
   return (
@@ -31,7 +33,7 @@ export function MobileNav({ activeSection, onSectionChange, onMenuOpen, allowedS
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div className="flex items-stretch h-[60px]">
-        {visibleItems.map(({ icon: Icon, label, section, badge }) => {
+        {visibleItems.map(({ icon: Icon, labelKey, section, badge }) => {
           const isActive = activeSection === section
           return (
             <button
@@ -63,7 +65,7 @@ export function MobileNav({ activeSection, onSectionChange, onMenuOpen, allowedS
               <span className={cn(
                 'text-[10px] leading-none transition-all',
                 isActive ? 'font-bold text-[#0e7490]' : 'font-medium'
-              )}>{label}</span>
+              )}>{t(labelKey)}</span>
             </button>
           )
         })}
@@ -76,7 +78,7 @@ export function MobileNav({ activeSection, onSectionChange, onMenuOpen, allowedS
           <div className="w-9 h-9 rounded-xl flex items-center justify-center">
             <MoreHorizontal className="w-[20px] h-[20px]" />
           </div>
-          <span className="text-[10px] font-medium leading-none">More</span>
+          <span className="text-[10px] font-medium leading-none">{t('mobileNav.more')}</span>
         </button>
       </div>
     </nav>

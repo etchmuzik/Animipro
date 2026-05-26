@@ -47,3 +47,12 @@ public/fallback-*.js
 # Capacitor (if added later)
 /ios
 /android
+
+# Local Netlify folder
+.netlify
+
+# Local Claude Code config (preview launch.json, local settings)
+.claude/
+
+# Build artifacts
+out.zip

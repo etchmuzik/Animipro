@@ -1,11 +1,14 @@
 'use client'
 
-import { useState } from 'react'
-import { Plus, Zap, Clock, Users, MapPin, Tag, Package } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Plus, Zap, Clock, Users, MapPin, Tag, Package, Star, MessageSquarePlus } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ACTIVITIES, type Activity } from '@/lib/mock-data'
+import {
+  addFeedback, getFeedbackForActivity, subscribe as subscribeFeedback,
+} from '@/lib/feedback'
 import { cn } from '@/lib/utils'
 
 const TYPE_COLORS: Record<string, string> = {
@@ -33,8 +36,101 @@ const AGE_COLORS: Record<string, string> = {
 
 const ALL_TYPES = ['ALL', 'SPORTS', 'WATER_SPORTS', 'AQUA_GYM', 'KIDS_ACTIVITY', 'EVENING_SHOW', 'DANCE_CLASS', 'GAME', 'EXCURSION', 'CULTURAL', 'FITNESS', 'ENTERTAINMENT']
 
-function ActivityCard({ activity, onEdit, onSchedule }: { activity: Activity; onEdit: (a: Activity) => void; onSchedule: (a: Activity) => void }) {
+// Compact star rating input used inside the rating dialog.
+function StarPicker({ value, onChange }: { value: number; onChange: (n: number) => void }) {
+  const [hover, setHover] = useState(0)
+  return (
+    <div className="flex items-center gap-1">
+      {[1, 2, 3, 4, 5].map(n => (
+        <button
+          key={n}
+          type="button"
+          onMouseEnter={() => setHover(n)}
+          onMouseLeave={() => setHover(0)}
+          onClick={() => onChange(n)}
+          aria-label={`${n} star${n > 1 ? 's' : ''}`}
+          className="p-0.5 transition-transform hover:scale-110"
+        >
+          <Star className={cn('w-7 h-7', (hover || value) >= n ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/40')} />
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function RatingDialog({ activity, onClose }: { activity: Activity; onClose: () => void }) {
+  const [rating, setRating] = useState(5)
+  const [comment, setComment] = useState('')
+  const [guestName, setGuestName] = useState('')
+  const [done, setDone] = useState(false)
+
+  function submit() {
+    addFeedback({
+      activityId: activity.id,
+      activityName: activity.name,
+      rating,
+      comment: comment.trim(),
+      guestName: guestName.trim() || 'Guest',
+    })
+    setDone(true)
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-card border border-border rounded-2xl w-full max-w-sm p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+        {done ? (
+          <div className="text-center py-4">
+            <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-green-500/15">
+              <Star className="w-6 h-6 fill-green-500 text-green-500" />
+            </div>
+            <p className="font-bold text-foreground">Thanks for the feedback!</p>
+            <p className="text-sm text-muted-foreground mt-1">It now counts toward this hotel&apos;s guest satisfaction score.</p>
+            <Button size="sm" className="mt-4 h-8 text-xs" onClick={onClose}>Done</Button>
+          </div>
+        ) : (
+          <>
+            <h3 className="font-bold text-foreground mb-1">Rate this activity</h3>
+            <p className="text-sm text-muted-foreground mb-4">{activity.name}</p>
+            <div className="flex justify-center mb-4"><StarPicker value={rating} onChange={setRating} /></div>
+            <input
+              value={guestName}
+              onChange={e => setGuestName(e.target.value)}
+              placeholder="Your name (optional)"
+              className="w-full h-9 rounded-lg border border-input bg-background px-3 text-sm mb-2 focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            <textarea
+              value={comment}
+              onChange={e => setComment(e.target.value)}
+              rows={3}
+              placeholder="Leave a comment (optional)"
+              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm resize-none mb-4 focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            <div className="flex gap-2">
+              <Button size="sm" className="flex-1 h-8 text-xs" onClick={submit}>Submit rating</Button>
+              <Button size="sm" variant="outline" className="flex-1 h-8 text-xs" onClick={onClose}>Cancel</Button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function ActivityCard({ activity, onEdit, onSchedule, onRate }: { activity: Activity; onEdit: (a: Activity) => void; onSchedule: (a: Activity) => void; onRate: (a: Activity) => void }) {
   const typeLabel = activity.type.replace(/_/g, ' ')
+
+  // Live guest rating for this activity.
+  const [summary, setSummary] = useState<{ count: number; avg: number }>({ count: 0, avg: 0 })
+  useEffect(() => {
+    const refresh = () => {
+      const list = getFeedbackForActivity(activity.id)
+      const avg = list.length ? Math.round((list.reduce((s, f) => s + f.rating, 0) / list.length) * 10) / 10 : 0
+      setSummary({ count: list.length, avg })
+    }
+    refresh()
+    return subscribeFeedback(refresh)
+  }, [activity.id])
+
   return (
     <Card className="hover:shadow-md hover:border-primary/20 transition-all duration-150 group">
       <CardContent className="p-4">
@@ -89,12 +185,22 @@ function ActivityCard({ activity, onEdit, onSchedule }: { activity: Activity; on
         )}
 
         <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
-          <div className={cn('flex items-center gap-1.5 text-[10px] font-medium', activity.isActive ? 'text-green-600' : 'text-muted-foreground')}>
-            <div className={cn('w-1.5 h-1.5 rounded-full', activity.isActive ? 'bg-green-500' : 'bg-gray-400')} />
-            {activity.isActive ? 'Active' : 'Inactive'}
-          </div>
+          {summary.count > 0 ? (
+            <div className="flex items-center gap-1 text-[10px] font-medium text-amber-600" title={`${summary.count} guest ratings`}>
+              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+              <span className="font-bold">{summary.avg}</span>
+              <span className="text-muted-foreground">({summary.count})</span>
+            </div>
+          ) : (
+            <div className={cn('flex items-center gap-1.5 text-[10px] font-medium', activity.isActive ? 'text-green-600' : 'text-muted-foreground')}>
+              <div className={cn('w-1.5 h-1.5 rounded-full', activity.isActive ? 'bg-green-500' : 'bg-gray-400')} />
+              {activity.isActive ? 'Active' : 'Inactive'}
+            </div>
+          )}
           <div className="flex gap-1">
-            <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2" onClick={e => { e.stopPropagation(); onEdit(activity) }}>Edit</Button>
+            <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2 gap-1 text-amber-600" onClick={e => { e.stopPropagation(); onRate(activity) }}>
+              <MessageSquarePlus className="w-3 h-3" /> Rate
+            </Button>
             <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2 text-primary" onClick={e => { e.stopPropagation(); onSchedule(activity) }}>Schedule</Button>
           </div>
         </div>
@@ -107,6 +213,7 @@ export function ActivitiesModule({ searchQuery }: { searchQuery: string }) {
   const [filterType, setFilterType] = useState('ALL')
   const [filterAge, setFilterAge] = useState('ALL')
   const [actionActivity, setActionActivity] = useState<{ activity: Activity; mode: 'edit' | 'schedule' } | null>(null)
+  const [ratingActivity, setRatingActivity] = useState<Activity | null>(null)
 
   const filtered = ACTIVITIES.filter(a => {
     const q = searchQuery.toLowerCase()
@@ -164,9 +271,15 @@ export function ActivitiesModule({ searchQuery }: { searchQuery: string }) {
             key={a.id} activity={a}
             onEdit={act => setActionActivity({ activity: act, mode: 'edit' })}
             onSchedule={act => setActionActivity({ activity: act, mode: 'schedule' })}
+            onRate={act => setRatingActivity(act)}
           />
         ))}
       </div>
+
+      {/* Guest rating dialog */}
+      {ratingActivity && (
+        <RatingDialog activity={ratingActivity} onClose={() => setRatingActivity(null)} />
+      )}
 
       {/* Activity action modal */}
       {actionActivity && (

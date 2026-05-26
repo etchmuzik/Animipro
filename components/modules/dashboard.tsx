@@ -1,7 +1,9 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Calendar, Star, TrendingUp, TrendingDown, Minus, CheckCircle2, MessageSquare, Award, AlertCircle } from 'lucide-react'
+import { getFeedbackSummary, subscribe as subscribeFeedback } from '@/lib/feedback'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -128,6 +130,17 @@ const itemVariants = {
 export function DashboardModule({ hotelId }: { hotelId: string }) {
   const DASHBOARD_STATS       = getDashboardStats(hotelId)
   const TEAM_PERFORMANCE_DATA = getTeamPerformanceData(hotelId)
+
+  // Live guest-satisfaction average from the feedback store (updates when a
+  // guest rates an activity). Falls back to the mock figure when no live
+  // feedback exists yet.
+  const [feedback, setFeedback] = useState(() => getFeedbackSummary())
+  useEffect(() => {
+    const refresh = () => setFeedback(getFeedbackSummary())
+    refresh()
+    return subscribeFeedback(refresh)
+  }, [])
+  const guestAvg = feedback.count > 0 ? feedback.average : DASHBOARD_STATS.guestFeedbackAvg
   const schedule              = getHotelSchedule(hotelId)
   const animators             = getHotelAnimators(hotelId)
   const hotel                 = getHotelById(hotelId)
@@ -233,7 +246,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
         <StatCard icon={Calendar} label="Today's Activities" value={DASHBOARD_STATS.activitiesScheduled} sub={`${DASHBOARD_STATS.activitiesCompleted} completed`} color="blue" gridSpan="lg:col-span-1" />
         <StatCard icon={Star} label="Avg Performance" value={`${DASHBOARD_STATS.avgPerformance}%`} sub="This week" trend="+3% vs last week" color="amber" gridSpan="lg:col-span-1" />
         <StatCard icon={CheckCircle2} label="Attendance Rate" value={`${DASHBOARD_STATS.avgAttendance}%`} sub="Today" color="green" gridSpan="lg:col-span-1" />
-        <StatCard icon={MessageSquare} label="Guest Feedback" value={`${DASHBOARD_STATS.guestFeedbackAvg}/5`} sub="This month" trend="↑ 0.2 vs last month" color="teal" gridSpan="md:col-span-2 lg:col-span-1" />
+        <StatCard icon={MessageSquare} label="Guest Feedback" value={`${guestAvg}/5`} sub={feedback.count > 0 ? `${feedback.count} guest ratings` : 'This month'} trend="↑ 0.2 vs last month" color="teal" gridSpan="md:col-span-2 lg:col-span-1" />
       </motion.div>
 
       <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-4">

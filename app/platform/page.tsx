@@ -18,6 +18,7 @@ import { AnnouncementsModule } from '@/components/modules/announcements'
 import { ReportsModule } from '@/components/modules/reports'
 import { PerformanceModule } from '@/components/modules/performance'
 import { LeaveModule } from '@/components/modules/leave'
+import { RecruitmentModule } from '@/components/modules/recruitment'
 import { SettingsModule } from '@/components/modules/settings'
 import { COMPANIES, ALL_HOTELS } from '@/lib/mock-data'
 import { DEMO_USERS, canAccess, getAllowedSections, type AppUser, type Section } from '@/lib/roles'
@@ -72,6 +73,7 @@ export default function AnimaProApp() {
       case 'events':        return <EventsModule          hotelId={selectedHotelId} searchQuery={searchQuery} />
       case 'announcements': return <AnnouncementsModule   hotelId={selectedHotelId} searchQuery={searchQuery} />
       case 'leave':         return <LeaveModule           hotelId={selectedHotelId} currentUser={currentUser} searchQuery={searchQuery} />
+      case 'recruitment':   return <RecruitmentModule     currentUser={currentUser} searchQuery={searchQuery} />
       case 'reports':       return <ReportsModule         hotelId={selectedHotelId} />
       case 'performance':   return <PerformanceModule     hotelId={selectedHotelId} searchQuery={searchQuery} />
       case 'settings':      return <SettingsModule        hotel={selectedHotel} company={selectedCompany} currentUser={currentUser} />
@@ -121,6 +123,7 @@ export default function AnimaProApp() {
             activeSection={activeSection}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
+            hotelId={selectedHotelId}
             hotelName={selectedHotel.name}
             companyName={selectedCompany.name}
             currentUser={currentUser}

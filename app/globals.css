@@ -74,3 +74,20 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* ── Arabic / RTL ──────────────────────────────────────────────────────────
+   When the locale is Arabic the DirController sets <html lang="ar" dir="rtl">.
+   Swap the whole document to the Arabic web font, and disable the Latin
+   stylistic-set features which don't apply to Arabic shaping. */
+:lang(ar),
+[lang="ar"] body,
+html[lang="ar"] {
+  font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif;
+  font-feature-settings: normal;
+}
+
+/* Explicit utility for inline Arabic snippets (e.g. an activity's Arabic name
+   shown alongside Latin UI). Mirrors the Tailwind `font-arabic` token. */
+.font-arabic {
+  font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif;
+}
