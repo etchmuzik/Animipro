@@ -12,7 +12,8 @@
     "lint": "next lint",
     "test": "TZ=Africa/Cairo vitest run",
     "test:watch": "TZ=Africa/Cairo vitest",
-    "test:coverage": "TZ=Africa/Cairo vitest run --coverage"
+    "test:coverage": "TZ=Africa/Cairo vitest run --coverage",
+    "deploy": "npm run build && netlify deploy --prod --dir=out --message=\"manual deploy from local build\""
   },
   "dependencies": {
     "@radix-ui/react-progress": "^1.1.8",
