@@ -17,6 +17,7 @@ export const ar: Messages = {
 
   nav: {
     forAnimators: 'للمنشّطين',
+    forGuests: 'للضيوف',
     features: 'المميزات',
     pricing: 'الأسعار',
     careers: 'الوظائف',
@@ -213,5 +214,72 @@ export const ar: Messages = {
     successBody: 'شكراً {name}. سيراجع فريق المبيعات طلبك ويتواصل معك خلال يومي عمل.',
     successAgain: 'إرسال طلب آخر',
     successHome: 'العودة للرئيسية',
+  },
+  guest: {
+    picker: {
+      eyebrow: 'دخول الضيوف',
+      title: 'اختر فندقك',
+      subtitle: 'حدد مكان إقامتك لرؤية أنشطة اليوم وليالي النوادي.',
+    },
+    shell: {
+      eyebrow: 'كونسيرج الضيف',
+      changeHotel: 'تغيير الفندق',
+      sections: 'أقسام الضيف',
+    },
+    tabs: {
+      today: 'اليوم',
+      clubs: 'ليلة النادي',
+      tickets: 'تذاكري',
+    },
+    today: {
+      heading: 'برنامج اليوم',
+      empty: {
+        title: 'يوم هادئ',
+        body: 'لا توجد أنشطة مجدولة اليوم. تحقق غداً.',
+      },
+    },
+    clubs: {
+      heading: 'الليالي القادمة',
+      dateLabel: 'التاريخ',
+      doorsLabel: 'الأبواب',
+      priceLabel: 'السعر',
+      buyCta: 'شراء التذكرة',
+      empty: {
+        title: 'لا ليالي قادمة',
+        body: 'النوادي هادئة هذا الأسبوع. ستظهر التواريخ الجديدة هنا.',
+      },
+    },
+    buy: {
+      title: 'شراء تذكرة',
+      close: 'إغلاق',
+      nameLabel: 'الاسم الكامل',
+      namePlaceholder: 'كما هو في جواز السفر',
+      roomLabel: 'رقم الغرفة',
+      countLabel: 'عدد الضيوف',
+      payLabel: 'الدفع',
+      pay: {
+        card:   'بطاقة',
+        wallet: 'محفظة',
+        cash:   'نقداً',
+        room:   'على الغرفة',
+      },
+      totalLabel: 'الإجمالي',
+      confirmCta: 'تأكيد الشراء',
+      processing: 'جارٍ المعالجة…',
+      confirmedTitle: 'تم الحجز.',
+      confirmedSubtitle: 'أظهر هذا الرمز عند الباب.',
+      done: 'تم',
+      simNotice: 'عرض تجريبي — لا يتم خصم مبلغ فعلي.',
+    },
+    tickets: {
+      heading: 'تذاكري',
+      empty: {
+        title: 'لا توجد تذاكر بعد',
+        body: 'اشترِ تذكرة نادٍ وستظهر هنا برمز QR.',
+      },
+    },
+    footer: {
+      poweredBy: 'مشغّل بواسطة',
+    },
   },
 }

@@ -207,6 +207,7 @@ export type UserRole =
   | 'LIFEGUARD'
   | 'KIDS_CLUB'
   | 'DOOR_SCANNER'   // Club door staff: validates QR tickets only — no other access.
+  | 'GUEST'          // Public hotel guest. Sees /guest/[hotelId] only — never the platform shell.
 
 export type TeamType =
   | 'BEACH_ANIMATION'

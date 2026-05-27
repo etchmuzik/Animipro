@@ -21,6 +21,7 @@ export const en = {
 
   nav: {
     forAnimators: 'For Animators',
+    forGuests: 'For Guests',
     features: 'Features',
     pricing: 'Pricing',
     careers: 'Careers',
@@ -222,6 +223,74 @@ export const en = {
     successBody: 'Thanks, {name}. Our deal team will review your application and reach out within two business days.',
     successAgain: 'Submit another application',
     successHome: 'Back to home',
+  },
+  // ─── Public guest surface (/guest/[hotelId]) ────────────────────────────────
+  guest: {
+    picker: {
+      eyebrow: 'Guest access',
+      title: 'Choose your hotel',
+      subtitle: 'Pick where you\'re staying to see today\'s activities and tonight\'s club nights.',
+    },
+    shell: {
+      eyebrow: 'Guest concierge',
+      changeHotel: 'Change hotel',
+      sections: 'Guest sections',
+    },
+    tabs: {
+      today: 'Today',
+      clubs: 'Tonight\'s clubs',
+      tickets: 'My tickets',
+    },
+    today: {
+      heading: 'What\'s on today',
+      empty: {
+        title: 'Quiet day',
+        body: 'No activities scheduled for today. Check back tomorrow.',
+      },
+    },
+    clubs: {
+      heading: 'Upcoming club nights',
+      dateLabel: 'Date',
+      doorsLabel: 'Doors',
+      priceLabel: 'Price',
+      buyCta: 'Buy ticket',
+      empty: {
+        title: 'No upcoming nights',
+        body: 'The clubs are quiet this week. New dates will appear here.',
+      },
+    },
+    buy: {
+      title: 'Buy ticket',
+      close: 'Close',
+      nameLabel: 'Full name',
+      namePlaceholder: 'As shown on your passport',
+      roomLabel: 'Room number',
+      countLabel: 'Guests',
+      payLabel: 'Payment',
+      pay: {
+        card:   'Card',
+        wallet: 'Wallet',
+        cash:   'Cash',
+        room:   'Room charge',
+      },
+      totalLabel: 'Total',
+      confirmCta: 'Confirm purchase',
+      processing: 'Processing…',
+      confirmedTitle: 'You\'re in.',
+      confirmedSubtitle: 'Show this QR at the door.',
+      done: 'Done',
+      simNotice: 'Demo only — no real payment is processed.',
+    },
+    tickets: {
+      heading: 'My tickets',
+      empty: {
+        title: 'No tickets yet',
+        body: 'Buy a club ticket and it\'ll appear here with a QR code.',
+      },
+    },
+    footer: {
+      poweredBy: 'Powered by',
+    },
   },
 } as const
 

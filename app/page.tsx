@@ -120,9 +120,9 @@ const PRICING_TIERS = [
   {
     id: 'single',
     name: 'Single Hotel',
-    price: '25,000',
-    currency: 'EGP',
-    usd: '~$500',
+    price: '1,000',
+    currency: 'USD',
+    usd: '~50,000 EGP',
     desc: 'One property, one animation team. Own it forever.',
     highlight: false,
     features: [
@@ -479,6 +479,12 @@ function Navbar({ onBuy }: { onBuy: () => void }) {
         <div className="hidden md:flex items-center gap-2">
           <LanguageSwitcher variant="light" />
           <Link
+            href="/guest"
+            className="text-[oklch(0.42_0.03_220)] hover:text-[oklch(0.27_0.055_220)] text-sm font-semibold transition-colors px-2"
+          >
+            {t('nav.forGuests')}
+          </Link>
+          <Link
             href="/platform"
             className="text-[oklch(0.42_0.03_220)] hover:text-[oklch(0.27_0.055_220)] text-sm font-semibold transition-colors px-2"
           >
@@ -606,7 +612,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
                 onClick={onBuy}
                 className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-[oklch(0.5_0.1_212)] px-7 py-4 text-base font-bold text-white shadow-[0_14px_30px_-12px_oklch(0.5_0.1_212_/_0.7)] transition-all hover:bg-[oklch(0.45_0.1_212)] hover:shadow-[0_18px_36px_-12px_oklch(0.5_0.1_212_/_0.8)] active:translate-y-px"
               >
-                {t('hero.ctaPrimary', { price: '25,000 EGP' })}
+                {t('hero.ctaPrimary', { price: '$1,000' })}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
               <Link
@@ -1707,14 +1713,14 @@ function FinalCTA({ onBuy }: { onBuy: () => void }) {
             Ready to run your animation program?
           </h2>
           <p className="text-white/50 text-lg mb-10 font-medium max-w-[55ch] mx-auto leading-relaxed">
-            Join 147 hotels across Egypt. From 25,000 EGP. Setup in 48 hours. Yours forever.
+            Join 147 hotels across Egypt. From $1,000. Setup in 48 hours. Yours forever.
           </p>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4">
             <button
               onClick={onBuy}
               className="group flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-black px-8 py-4 rounded-xl transition-all shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)] text-base active:-translate-y-[1px]"
             >
-              Buy Now — From <span className="tabular-nums">25,000 EGP</span>
+              Buy Now — From <span className="tabular-nums">$1,000</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <Link href="/platform" className="flex items-center justify-center gap-1.5 text-white/60 hover:text-white text-sm font-semibold transition-colors border border-white/[0.12] hover:border-white/30 rounded-xl px-6 py-4">

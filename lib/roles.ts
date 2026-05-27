@@ -86,6 +86,17 @@ export const ROLE_META: Record<UserRole, RoleMeta> = {
     textColor: 'text-slate-400',
     level: 6,  // strictest level — sees ONLY the tickets section, scan tab.
   },
+  // Hotel guest. Reached by URL only (/guest/[hotelId]); never present in the
+  // platform shell's DEMO_USERS switcher. Level 99 makes every canAccess()
+  // check return false defensively — a misrouted GUEST sees an empty nav.
+  GUEST: {
+    role: 'GUEST',
+    label: 'Guest',
+    description: 'Public hotel guest. Browses activities, buys club tickets.',
+    color: 'bg-coral-500',
+    textColor: 'text-coral-500',
+    level: 99,
+  },
 }
 
 // ─── Section permissions ────────────────────────────────────────────────────

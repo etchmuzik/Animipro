@@ -15,6 +15,7 @@ export const ru: Messages = {
 
   nav: {
     forAnimators: 'Для аниматоров',
+    forGuests: 'Для гостей',
     features: 'Возможности',
     pricing: 'Цены',
     careers: 'Вакансии',
@@ -211,5 +212,72 @@ export const ru: Messages = {
     successBody: 'Спасибо, {name}. Команда продаж рассмотрит заявку и свяжется в течение двух рабочих дней.',
     successAgain: 'Отправить ещё заявку',
     successHome: 'На главную',
+  },
+  guest: {
+    picker: {
+      eyebrow: 'Гостевой доступ',
+      title: 'Выберите ваш отель',
+      subtitle: 'Выберите, где вы остановились, чтобы увидеть сегодняшние активности и клубные вечера.',
+    },
+    shell: {
+      eyebrow: 'Гостевой консьерж',
+      changeHotel: 'Сменить отель',
+      sections: 'Разделы для гостя',
+    },
+    tabs: {
+      today: 'Сегодня',
+      clubs: 'Клубные вечера',
+      tickets: 'Мои билеты',
+    },
+    today: {
+      heading: 'Программа на сегодня',
+      empty: {
+        title: 'Тихий день',
+        body: 'На сегодня активностей нет. Заходите завтра.',
+      },
+    },
+    clubs: {
+      heading: 'Ближайшие клубные вечера',
+      dateLabel: 'Дата',
+      doorsLabel: 'Двери',
+      priceLabel: 'Цена',
+      buyCta: 'Купить билет',
+      empty: {
+        title: 'Ближайших вечеров нет',
+        body: 'На этой неделе тихо. Новые даты появятся здесь.',
+      },
+    },
+    buy: {
+      title: 'Купить билет',
+      close: 'Закрыть',
+      nameLabel: 'Полное имя',
+      namePlaceholder: 'Как в паспорте',
+      roomLabel: 'Номер комнаты',
+      countLabel: 'Гостей',
+      payLabel: 'Оплата',
+      pay: {
+        card:   'Карта',
+        wallet: 'Кошелёк',
+        cash:   'Наличные',
+        room:   'На номер',
+      },
+      totalLabel: 'Итого',
+      confirmCta: 'Подтвердить покупку',
+      processing: 'Обработка…',
+      confirmedTitle: 'Вы в деле.',
+      confirmedSubtitle: 'Покажите этот QR-код у входа.',
+      done: 'Готово',
+      simNotice: 'Демо — реальная оплата не списывается.',
+    },
+    tickets: {
+      heading: 'Мои билеты',
+      empty: {
+        title: 'Билетов пока нет',
+        body: 'Купите клубный билет — он появится здесь с QR-кодом.',
+      },
+    },
+    footer: {
+      poweredBy: 'Работает на',
+    },
   },
 }

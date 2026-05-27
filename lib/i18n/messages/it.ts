@@ -15,6 +15,7 @@ export const it: Messages = {
 
   nav: {
     forAnimators: 'Per animatori',
+    forGuests: 'Per ospiti',
     features: 'Funzionalità',
     pricing: 'Prezzi',
     careers: 'Lavora con noi',
@@ -211,5 +212,72 @@ export const it: Messages = {
     successBody: 'Grazie, {name}. Il nostro team commerciale esaminerà la candidatura e ti contatterà entro due giorni lavorativi.',
     successAgain: "Invia un'altra candidatura",
     successHome: 'Torna alla home',
+  },
+  guest: {
+    picker: {
+      eyebrow: 'Accesso ospiti',
+      title: 'Scegli il tuo hotel',
+      subtitle: 'Seleziona dove alloggi per vedere le attività di oggi e le serate al club.',
+    },
+    shell: {
+      eyebrow: 'Concierge ospite',
+      changeHotel: 'Cambia hotel',
+      sections: 'Sezioni ospite',
+    },
+    tabs: {
+      today: 'Oggi',
+      clubs: 'Serate al club',
+      tickets: 'I miei biglietti',
+    },
+    today: {
+      heading: 'Programma di oggi',
+      empty: {
+        title: 'Giornata tranquilla',
+        body: 'Nessuna attività in programma oggi. Riprova domani.',
+      },
+    },
+    clubs: {
+      heading: 'Prossime serate al club',
+      dateLabel: 'Data',
+      doorsLabel: 'Porte',
+      priceLabel: 'Prezzo',
+      buyCta: 'Compra biglietto',
+      empty: {
+        title: 'Nessuna serata in programma',
+        body: 'I club sono tranquilli questa settimana. Le nuove date appariranno qui.',
+      },
+    },
+    buy: {
+      title: 'Compra biglietto',
+      close: 'Chiudi',
+      nameLabel: 'Nome completo',
+      namePlaceholder: 'Come sul passaporto',
+      roomLabel: 'Numero camera',
+      countLabel: 'Ospiti',
+      payLabel: 'Pagamento',
+      pay: {
+        card:   'Carta',
+        wallet: 'Wallet',
+        cash:   'Contanti',
+        room:   'Addebito in camera',
+      },
+      totalLabel: 'Totale',
+      confirmCta: 'Conferma acquisto',
+      processing: 'Elaborazione…',
+      confirmedTitle: 'Sei dentro.',
+      confirmedSubtitle: 'Mostra questo QR all\'ingresso.',
+      done: 'Fatto',
+      simNotice: 'Demo — nessun pagamento reale viene elaborato.',
+    },
+    tickets: {
+      heading: 'I miei biglietti',
+      empty: {
+        title: 'Nessun biglietto',
+        body: 'Compra un biglietto del club e apparirà qui con il QR.',
+      },
+    },
+    footer: {
+      poweredBy: 'Powered by',
+    },
   },
 }
