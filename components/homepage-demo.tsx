@@ -163,16 +163,16 @@ export function HomepageDemo() {
           <div className="flex items-start gap-3 mb-3">
             <div className="text-center shrink-0">
               <p className="text-sm font-black text-zinc-900 leading-none">10:00</p>
-              <p className="text-[10px] text-zinc-400 mt-0.5 font-medium">10:45</p>
+              <p className="text-micro text-zinc-400 mt-0.5 font-medium">10:45</p>
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-base font-bold text-zinc-900 leading-tight">Aqua Gym</p>
-              <div className="flex items-center gap-3 mt-1 text-[11px] text-zinc-500">
+              <div className="flex items-center gap-3 mt-1 text-mini text-zinc-500">
                 <span className="flex items-center gap-1"><User className="w-3 h-3" /> Amira Hassan</span>
                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> Main Pool</span>
               </div>
             </div>
-            <span className={cn('text-[10px] font-bold border px-2 py-0.5 rounded-full shrink-0', statusConfig.cls)}>
+            <span className={cn('text-micro font-bold border px-2 py-0.5 rounded-full shrink-0', statusConfig.cls)}>
               {statusConfig.label}
             </span>
           </div>
@@ -232,7 +232,7 @@ export function HomepageDemo() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="ml-auto inline-flex items-center gap-1 text-[11px] text-zinc-500 hover:text-zinc-900 font-medium"
+                className="ml-auto inline-flex items-center gap-1 text-mini text-zinc-500 hover:text-zinc-900 font-medium"
                 aria-label="Reset demo"
               >
                 <RotateCcw className="w-3 h-3" /> Reset
@@ -247,7 +247,7 @@ export function HomepageDemo() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="flex items-center gap-2 mt-3 text-[11px] text-zinc-500"
+                className="flex items-center gap-2 mt-3 text-mini text-zinc-500"
               >
                 <Clock className="w-3 h-3" />
                 {completedAt ? (
@@ -317,7 +317,7 @@ export function HomepageDemo() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ delay: 0.6 }}
-                className="mt-3 text-[11px] text-zinc-400 flex items-center gap-1"
+                className="mt-3 text-mini text-zinc-400 flex items-center gap-1"
               >
                 <Sparkles className="w-3 h-3 text-amber-500" />
                 Try it — tap <span className="font-bold text-cyan-600">Start</span> to begin the activity
@@ -327,7 +327,7 @@ export function HomepageDemo() {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="mt-3 text-[11px] text-zinc-400 flex items-center gap-1"
+                className="mt-3 text-mini text-zinc-400 flex items-center gap-1"
               >
                 <Sparkles className="w-3 h-3 text-green-500" />
                 Nicely done! Add a photo or video to show proof of activity.

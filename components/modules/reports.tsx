@@ -87,8 +87,8 @@ export function ReportsModule({ hotelId }: { hotelId?: string } = {}) {
               </div>
               <p className="text-2xl font-black text-foreground">{kpi.value}</p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-[10px] text-muted-foreground">{kpi.sub}</span>
-                <span className="text-[10px] font-semibold text-green-600">{kpi.trend}</span>
+                <span className="text-micro text-muted-foreground">{kpi.sub}</span>
+                <span className="text-micro font-semibold text-green-600">{kpi.trend}</span>
               </div>
             </CardContent>
           </Card>

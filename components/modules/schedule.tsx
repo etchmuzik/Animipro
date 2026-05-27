@@ -1,28 +1,24 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Plus, Clock, MapPin, User, Check, X, AlertTriangle } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, Clock, MapPin, User, X } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { getHotelSchedule, getHotelAnimators, getHotelTeams, type ScheduleEntry } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
 import { TaskCardActions } from '@/components/task-card-actions'
+import { StatusBadge } from '@/components/ui/status-badge'
 
-const STATUS_CONFIG: Record<string, { label: string; cls: string; icon: React.ElementType }> = {
-  SCHEDULED: { label: 'Scheduled', cls: 'bg-blue-100 text-blue-700 border-blue-200', icon: Clock },
-  IN_PROGRESS: { label: 'In Progress', cls: 'bg-primary/10 text-primary border-primary/20', icon: Clock },
-  COMPLETED: { label: 'Completed', cls: 'bg-green-100 text-green-700 border-green-200', icon: Check },
-  CANCELLED: { label: 'Cancelled', cls: 'bg-gray-100 text-gray-700 border-gray-200', icon: X },
-  MISSED: { label: 'Missed', cls: 'bg-red-100 text-red-600 border-red-200', icon: AlertTriangle },
-}
-
-const ATTENDANCE_CONFIG: Record<string, { label: string; cls: string }> = {
-  PRESENT: { label: 'Present', cls: 'bg-green-500 text-white' },
-  ABSENT: { label: 'Absent', cls: 'bg-red-500 text-white' },
-  LATE: { label: 'Late', cls: 'bg-yellow-500 text-white' },
-  EXCUSED: { label: 'Excused', cls: 'bg-blue-400 text-white' },
-  HALF_DAY: { label: 'Half Day', cls: 'bg-purple-400 text-white' },
+// Per-status accent stripe color shown on the left edge of the card.
+// The card body itself stays on the neutral `--card` surface so text is
+// always readable; the stripe (and the StatusBadge) carry the status meaning.
+const STATUS_STRIPE: Record<string, string> = {
+  SCHEDULED:   'bg-blue-500/70',
+  IN_PROGRESS: 'bg-primary',
+  COMPLETED:   'bg-green-500/70',
+  CANCELLED:   'bg-zinc-500/50',
+  MISSED:      'bg-red-500/70',
 }
 
 const HOURS = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00']
@@ -64,43 +60,48 @@ export function ScheduleModule({ hotelId, searchQuery }: { hotelId: string; sear
   }
 
   function EntryCard({ entry }: { entry: ScheduleEntry }) {
-    const cfg = STATUS_CONFIG[entry.status]
-    const attCfg = entry.attendance ? ATTENDANCE_CONFIG[entry.attendance] : null
+    const stripe = STATUS_STRIPE[entry.status] ?? 'bg-zinc-500/40'
     const isActionable = entry.type !== 'OFF_DUTY' && entry.type !== 'BREAK'
     return (
-      <div className={cn('p-3 rounded-lg border hover:shadow-sm transition-shadow', cfg.cls)}>
-        <div className="flex items-start gap-3">
-          <div className="text-center w-12 shrink-0">
-            <p className="text-[11px] font-bold leading-none">{entry.startTime}</p>
-            <p className="text-[9px] opacity-70 mt-0.5">{entry.endTime}</p>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold leading-tight">{entry.activityName ?? entry.type}</p>
-            <div className="flex items-center gap-1 mt-0.5">
-              <User className="w-2.5 h-2.5 opacity-60" />
-              <p className="text-[10px] opacity-80 truncate">{entry.animatorName}</p>
+      <div className="relative overflow-hidden rounded-lg border border-border bg-card hover:bg-card/80 hover:border-border/80 transition-colors">
+        {/* Status accent stripe — runs full height on the left */}
+        <span aria-hidden="true" className={cn('absolute inset-y-0 left-0 w-1', stripe)} />
+
+        <div className="pl-4 pr-3 py-3">
+          <div className="flex items-start gap-3">
+            <div className="text-center w-12 shrink-0">
+              <p className="text-mini font-bold leading-none text-foreground">{entry.startTime}</p>
+              <p className="text-tiny text-muted-foreground mt-0.5">{entry.endTime}</p>
             </div>
-            <div className="flex items-center gap-1 mt-0.5">
-              <MapPin className="w-2.5 h-2.5 opacity-60" />
-              <p className="text-[10px] opacity-80">{entry.venue}</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold leading-tight text-foreground">{entry.activityName ?? entry.type}</p>
+              <div className="flex items-center gap-1 mt-0.5 text-muted-foreground">
+                <User className="w-2.5 h-2.5" />
+                <p className="text-micro truncate">{entry.animatorName}</p>
+              </div>
+              <div className="flex items-center gap-1 mt-0.5 text-muted-foreground">
+                <MapPin className="w-2.5 h-2.5" />
+                <p className="text-micro">{entry.venue}</p>
+              </div>
+            </div>
+            <div className="flex flex-col items-end gap-1 shrink-0">
+              <StatusBadge domain="schedule" status={entry.status} size="sm" />
+              {entry.attendance && (
+                <StatusBadge
+                  domain="attendance"
+                  status={entry.attendance}
+                  size="sm"
+                  dot={false}
+                />
+              )}
             </div>
           </div>
-          <div className="flex flex-col items-end gap-1 shrink-0">
-            <Badge className={cn('text-[9px] px-1.5 border-0', cfg.cls.replace('border-', ''))}>
-              {cfg.label}
-            </Badge>
-            {attCfg && (
-              <Badge className={cn('text-[9px] px-1.5 border-0', attCfg.cls)}>
-                {attCfg.label}
-              </Badge>
-            )}
-          </div>
+          {isActionable && (
+            <div className="mt-2 pt-2 border-t border-border/60">
+              <TaskCardActions kind="schedule" id={entry.id} originalStatus={entry.status} compact />
+            </div>
+          )}
         </div>
-        {isActionable && (
-          <div className="mt-2 pt-2 border-t border-current/10">
-            <TaskCardActions kind="schedule" id={entry.id} originalStatus={entry.status} compact />
-          </div>
-        )}
       </div>
     )
   }
@@ -197,7 +198,7 @@ export function ScheduleModule({ hotelId, searchQuery }: { hotelId: string; sear
           <Card key={s.label}>
             <CardContent className="p-3 text-center">
               <p className={cn('text-2xl font-black', s.color)}>{s.value}</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">{s.label}</p>
+              <p className="text-mini text-muted-foreground mt-0.5">{s.label}</p>
             </CardContent>
           </Card>
         ))}
@@ -212,20 +213,20 @@ export function ScheduleModule({ hotelId, searchQuery }: { hotelId: string; sear
             return (
               <div key={fmt(day)} className={cn('rounded-xl border overflow-hidden', isToday ? 'border-primary shadow-sm shadow-primary/20' : 'border-border')}>
                 <div className={cn('px-2 py-2 text-center', isToday ? 'bg-primary text-primary-foreground' : 'bg-muted/50')}>
-                  <p className="text-[10px] font-medium opacity-80">{day.toLocaleDateString('en', { weekday: 'short' })}</p>
+                  <p className="text-micro font-medium opacity-80">{day.toLocaleDateString('en', { weekday: 'short' })}</p>
                   <p className={cn('text-lg font-black leading-none mt-0.5', isToday ? 'text-primary-foreground' : 'text-foreground')}>{day.getDate()}</p>
                 </div>
                 <div className="p-1.5 space-y-1 min-h-20">
                   {dayEntries.length === 0 && (
-                    <p className="text-[9px] text-muted-foreground/50 text-center pt-2">No entries</p>
+                    <p className="text-tiny text-muted-foreground/50 text-center pt-2">No entries</p>
                   )}
                   {dayEntries.map(entry => (
                     <div key={entry.id}
-                      className={cn('px-1.5 py-1 rounded text-[9px] font-medium leading-tight truncate',
-                        STATUS_CONFIG[entry.status]?.cls ?? 'bg-muted text-muted-foreground'
-                      )}>
+                      className="relative px-1.5 py-1 pl-2 rounded text-tiny font-medium leading-tight truncate bg-muted text-foreground overflow-hidden"
+                    >
+                      <span aria-hidden="true" className={cn('absolute inset-y-0 left-0 w-0.5', STATUS_STRIPE[entry.status] ?? 'bg-zinc-500/40')} />
                       <p className="truncate">{entry.startTime} {entry.activityName ?? entry.type}</p>
-                      <p className="truncate opacity-70">{entry.animatorName.split(' ')[0]}</p>
+                      <p className="truncate text-muted-foreground">{entry.animatorName.split(' ')[0]}</p>
                     </div>
                   ))}
                 </div>
@@ -279,9 +280,9 @@ export function ScheduleModule({ hotelId, searchQuery }: { hotelId: string; sear
                     </div>
                     <div>
                       <p className="text-sm font-semibold">{animator.firstName} {animator.lastName}</p>
-                      <p className="text-[11px] text-muted-foreground">{animator.teamName}</p>
+                      <p className="text-mini text-muted-foreground">{animator.teamName}</p>
                     </div>
-                    <Badge variant="secondary" className="ml-auto text-[10px]">{animEntries.length} sessions</Badge>
+                    <Badge variant="secondary" className="ml-auto text-micro">{animEntries.length} sessions</Badge>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                     {animEntries.map(e => <EntryCard key={e.id} entry={e} />)}

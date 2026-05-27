@@ -206,6 +206,7 @@ export type UserRole =
   | 'ENTERTAINER'
   | 'LIFEGUARD'
   | 'KIDS_CLUB'
+  | 'DOOR_SCANNER'   // Club door staff: validates QR tickets only — no other access.
 
 export type TeamType =
   | 'BEACH_ANIMATION'

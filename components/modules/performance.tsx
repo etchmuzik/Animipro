@@ -56,7 +56,7 @@ function AnimatorScoreCard({ score }: { score: typeof PERFORMANCE_SCORES[0] }) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold leading-none">{score.animatorName}</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">{animator?.teamName} · {animator?.role?.replace('_', ' ')}</p>
+            <p className="text-micro text-muted-foreground mt-0.5">{animator?.teamName} · {animator?.role?.replace('_', ' ')}</p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black text-white', gradeColors[grade])}>
@@ -64,7 +64,7 @@ function AnimatorScoreCard({ score }: { score: typeof PERFORMANCE_SCORES[0] }) {
             </div>
             <div className="text-right">
               <p className={cn('text-lg font-black leading-none', SCORE_COLOR(score.overall))}>{score.overall}</p>
-              <p className="text-[9px] text-muted-foreground">/100</p>
+              <p className="text-tiny text-muted-foreground">/100</p>
             </div>
           </div>
         </div>
@@ -73,9 +73,9 @@ function AnimatorScoreCard({ score }: { score: typeof PERFORMANCE_SCORES[0] }) {
         <div className="space-y-1.5">
           {Object.entries(KPI_LABELS).map(([k, label]) => (
             <div key={k} className="flex items-center gap-2">
-              <span className="text-[9px] text-muted-foreground w-20 shrink-0">{label}</span>
+              <span className="text-tiny text-muted-foreground w-20 shrink-0">{label}</span>
               <Progress value={score[k as keyof typeof score] as number} className={cn('h-1 flex-1', SCORE_BAR(score[k as keyof typeof score] as number))} />
-              <span className={cn('text-[10px] font-semibold w-6 text-right', SCORE_COLOR(score[k as keyof typeof score] as number))}>
+              <span className={cn('text-micro font-semibold w-6 text-right', SCORE_COLOR(score[k as keyof typeof score] as number))}>
                 {score[k as keyof typeof score]}
               </span>
             </div>
@@ -94,8 +94,8 @@ function AnimatorScoreCard({ score }: { score: typeof PERFORMANCE_SCORES[0] }) {
               </RadarChart>
             </ResponsiveContainer>
             <div className="flex gap-2 mt-2">
-              <Button size="sm" className="flex-1 h-7 text-[11px]" onClick={() => alert(`Full performance review for ${score.animatorName} — available in full version`)}>Full Review</Button>
-              <Button size="sm" variant="outline" className="flex-1 h-7 text-[11px]" onClick={() => { const c = prompt(`Add comment for ${score.animatorName}:`); if (c) alert(`Comment saved: "${c}"`) }}>Add Comment</Button>
+              <Button size="sm" className="flex-1 h-7 text-mini" onClick={() => alert(`Full performance review for ${score.animatorName} — available in full version`)}>Full Review</Button>
+              <Button size="sm" variant="outline" className="flex-1 h-7 text-mini" onClick={() => { const c = prompt(`Add comment for ${score.animatorName}:`); if (c) alert(`Comment saved: "${c}"`) }}>Add Comment</Button>
             </div>
           </div>
         )}
@@ -139,7 +139,7 @@ export function PerformanceModule({ hotelId, searchQuery }: { hotelId?: string; 
             <option value="guestFeedback">Sort: Guest Feedback</option>
           </select>
         </div>
-        <Badge variant="outline" className="text-[10px]">Period: Week 23, 2024</Badge>
+        <Badge variant="outline" className="text-micro">Period: Week 23, 2024</Badge>
       </div>
 
       {/* Top Performers Podium */}
@@ -162,7 +162,7 @@ export function PerformanceModule({ hotelId, searchQuery }: { hotelId?: string; 
                     {s.animatorName.split(' ').map(n => n[0]).join('').slice(0, 2)}
                   </div>
                   <p className="text-xs font-bold leading-tight">{s.animatorName}</p>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">{animator?.teamName}</p>
+                  <p className="text-micro text-muted-foreground mt-0.5">{animator?.teamName}</p>
                   <p className={cn('text-lg font-black mt-1', SCORE_COLOR(s.overall))}>{s.overall}</p>
                 </div>
               )
@@ -181,7 +181,7 @@ export function PerformanceModule({ hotelId, searchQuery }: { hotelId?: string; 
             {Object.entries(KPI_LABELS).map(([k, label]) => (
               <div key={k} className="text-center">
                 <p className={cn('text-2xl font-black', SCORE_COLOR(avgScores[k]))}>{avgScores[k]}</p>
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-micro text-muted-foreground">{label}</p>
                 <Progress value={avgScores[k]} className={cn('h-1.5 mt-1.5', SCORE_BAR(avgScores[k]))} />
               </div>
             ))}

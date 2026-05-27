@@ -43,17 +43,17 @@ function AnnouncementCard({ ann }: { ann: Announcement }) {
           <div className="flex-1 min-w-0">
             <div className="flex items-start gap-2 mb-1">
               <p className="text-sm font-bold flex-1 leading-tight">{ann.title}</p>
-              {ann.priority === 'URGENT' && <Badge className="bg-red-500 text-white border-0 text-[9px] shrink-0">URGENT</Badge>}
+              {ann.priority === 'URGENT' && <Badge className="bg-red-500 text-white border-0 text-tiny shrink-0">URGENT</Badge>}
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed mb-3">{ann.content}</p>
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] text-muted-foreground">{ann.authorName}</span>
-                <span className="text-[10px] text-muted-foreground/50">·</span>
-                <span className="text-[10px] text-muted-foreground">{new Date(ann.createdAt).toLocaleDateString('en', { day: 'numeric', month: 'short' })}</span>
+                <span className="text-micro text-muted-foreground">{ann.authorName}</span>
+                <span className="text-micro text-muted-foreground/50">·</span>
+                <span className="text-micro text-muted-foreground">{new Date(ann.createdAt).toLocaleDateString('en', { day: 'numeric', month: 'short' })}</span>
               </div>
               {ann.expiresAt && (
-                <div className={cn('flex items-center gap-1 text-[10px]', isExpiring ? 'text-red-500' : 'text-muted-foreground')}>
+                <div className={cn('flex items-center gap-1 text-micro', isExpiring ? 'text-red-500' : 'text-muted-foreground')}>
                   <Clock className="w-3 h-3" />
                   <span>Expires {new Date(ann.expiresAt).toLocaleDateString('en', { day: 'numeric', month: 'short' })}</span>
                 </div>
@@ -61,9 +61,9 @@ function AnnouncementCard({ ann }: { ann: Announcement }) {
             </div>
             <div className="flex flex-wrap gap-1 mt-2">
               {ann.targetRoles.slice(0, 3).map(r => (
-                <span key={r} className="text-[9px] bg-white/60 border border-current/20 px-1.5 py-0.5 rounded text-muted-foreground">{r.replace('_', ' ')}</span>
+                <span key={r} className="text-tiny bg-white/60 border border-current/20 px-1.5 py-0.5 rounded text-muted-foreground">{r.replace('_', ' ')}</span>
               ))}
-              {ann.targetRoles.length > 3 && <span className="text-[9px] text-muted-foreground/60">+{ann.targetRoles.length - 3}</span>}
+              {ann.targetRoles.length > 3 && <span className="text-tiny text-muted-foreground/60">+{ann.targetRoles.length - 3}</span>}
             </div>
           </div>
         </div>
@@ -81,23 +81,23 @@ function LeaveCard({ req, onAction }: { req: LeaveRequest; onAction: (id: string
         <div className="flex items-start justify-between gap-2 mb-2">
           <div>
             <p className="text-sm font-semibold">{req.animatorName}</p>
-            <p className="text-[11px] text-muted-foreground">{LEAVE_TYPE_LABELS[req.type]}</p>
+            <p className="text-mini text-muted-foreground">{LEAVE_TYPE_LABELS[req.type]}</p>
           </div>
-          <Badge className={cn('text-[10px] border shrink-0', sc.cls)}>{sc.label}</Badge>
+          <Badge className={cn('text-micro border shrink-0', sc.cls)}>{sc.label}</Badge>
         </div>
-        <p className="text-[11px] text-muted-foreground mb-2 italic">&ldquo;{req.reason}&rdquo;</p>
-        <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+        <p className="text-mini text-muted-foreground mb-2 italic">&ldquo;{req.reason}&rdquo;</p>
+        <div className="flex items-center justify-between text-micro text-muted-foreground">
           <span>{new Date(req.startDate).toLocaleDateString('en', { day: 'numeric', month: 'short' })} – {new Date(req.endDate).toLocaleDateString('en', { day: 'numeric', month: 'short' })}</span>
           <span className="font-semibold">{days} day{days > 1 ? 's' : ''}</span>
         </div>
         {req.status === 'PENDING' && (
           <div className="flex gap-2 mt-3">
-            <Button size="sm" className="flex-1 h-7 text-[11px] bg-green-600 hover:bg-green-700" onClick={() => onAction(req.id, 'APPROVED')}>Approve</Button>
-            <Button size="sm" variant="outline" className="flex-1 h-7 text-[11px] border-red-200 text-red-600 hover:bg-red-50" onClick={() => onAction(req.id, 'REJECTED')}>Reject</Button>
+            <Button size="sm" className="flex-1 h-7 text-mini bg-green-600 hover:bg-green-700" onClick={() => onAction(req.id, 'APPROVED')}>Approve</Button>
+            <Button size="sm" variant="outline" className="flex-1 h-7 text-mini border-red-200 text-red-600 hover:bg-red-50" onClick={() => onAction(req.id, 'REJECTED')}>Reject</Button>
           </div>
         )}
         {req.reviewedBy && (
-          <p className="text-[9px] text-muted-foreground mt-2">Reviewed by {req.reviewedBy}</p>
+          <p className="text-tiny text-muted-foreground mt-2">Reviewed by {req.reviewedBy}</p>
         )}
       </CardContent>
     </Card>
@@ -140,7 +140,7 @@ export function AnnouncementsModule({ hotelId, searchQuery }: { hotelId: string;
           <button onClick={() => setTab('leave')} className={cn('relative px-3 py-1.5 rounded-md text-sm font-medium transition-all', tab === 'leave' ? 'bg-card shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground')}>
             Leave Requests
             {pendingLeaves > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-accent text-accent-foreground text-[9px] font-bold flex items-center justify-center">{pendingLeaves}</span>
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-accent text-accent-foreground text-tiny font-bold flex items-center justify-center">{pendingLeaves}</span>
             )}
           </button>
         </div>
@@ -217,7 +217,7 @@ export function AnnouncementsModule({ hotelId, searchQuery }: { hotelId: string;
             {(['PENDING', 'APPROVED', 'REJECTED', 'CANCELLED'] as const).map(s => (
               <Card key={s}><CardContent className="p-3 text-center">
                 <p className="text-2xl font-black text-foreground">{LEAVE_REQUESTS.filter(r => r.status === s).length}</p>
-                <p className="text-[11px] text-muted-foreground">{LEAVE_STATUS_CONFIG[s].label}</p>
+                <p className="text-mini text-muted-foreground">{LEAVE_STATUS_CONFIG[s].label}</p>
               </CardContent></Card>
             ))}
           </div>

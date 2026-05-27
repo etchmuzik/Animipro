@@ -9,6 +9,7 @@ import {
   Zap, PartyPopper, LogOut, Building2,
   ChevronsUpDown, Check, MapPin, Hotel,
   Activity, UserCheck, UserPlus, TrendingUp, X,
+  Ticket as TicketIcon,
 } from 'lucide-react'
 import { COMPANIES, ALL_HOTELS } from '@/lib/mock-data'
 import { ROLE_META, getAllowedSections, type AppUser, type Section } from '@/lib/roles'
@@ -26,6 +27,7 @@ const ALL_NAV_ITEMS: { icon: React.ElementType; label: string; section: Section;
   { icon: Megaphone,       label: 'Announcements',  section: 'announcements', badge: '2' },
   { icon: UserCheck,       label: 'Leave Requests', section: 'leave',         badge: '4' },
   { icon: UserPlus,        label: 'Recruitment',    section: 'recruitment' },
+  { icon: TicketIcon,      label: 'Club Tickets',   section: 'tickets' },
   { icon: BarChart2,       label: 'Reports',        section: 'reports' },
   { icon: TrendingUp,      label: 'Performance',    section: 'performance' },
   { icon: Settings,        label: 'Settings',       section: 'settings' },
@@ -118,7 +120,7 @@ function SidebarContent({
         {!collapsed && (
           <div className="flex-1 min-w-0">
             <span className="text-sm font-bold tracking-tight text-white">{brand.appName}</span>
-            <p className="text-[10px] text-white/70 leading-none mt-0.5">{brand.tagline}</p>
+            <p className="text-micro text-white/70 leading-none mt-0.5">{brand.tagline}</p>
           </div>
         )}
         {onClose && !collapsed && (
@@ -132,7 +134,7 @@ function SidebarContent({
       <div className={cn('px-3 mt-3 relative', collapsed && 'px-2')}>
         {!collapsed ? (
           <>
-            <p className="text-[11px] font-semibold text-white/60 uppercase tracking-widest px-1 mb-1.5">
+            <p className="text-mini font-semibold text-white/60 uppercase tracking-widest px-1 mb-1.5">
               {t('sidebar.activeProperty')}
             </p>
             <button
@@ -144,14 +146,14 @@ function SidebarContent({
               )}
             >
               <div className="w-7 h-7 rounded-lg bg-teal-500/20 border border-teal-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-[11px] font-mono font-bold text-teal-400">{selectedHotel.stars}★</span>
+                <span className="text-mini font-mono font-bold text-teal-400">{selectedHotel.stars}★</span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[11px] text-white/70 uppercase tracking-widest leading-none truncate">{selectedCompany.name}</p>
+                <p className="text-mini text-white/70 uppercase tracking-widest leading-none truncate">{selectedCompany.name}</p>
                 <p className="text-sm font-semibold text-white leading-tight mt-0.5 truncate">{selectedHotel.name}</p>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className="text-[10px] font-mono font-bold text-teal-400/80 bg-teal-500/10 px-1 rounded">{CITY_FLAG[selectedHotel.city] ?? '---'}</span>
-                  <span className="text-[10px] text-white/70">{CITY_LABELS[selectedHotel.city] ?? selectedHotel.city}</span>
+                  <span className="text-micro font-mono font-bold text-teal-400/80 bg-teal-500/10 px-1 rounded">{CITY_FLAG[selectedHotel.city] ?? '---'}</span>
+                  <span className="text-micro text-white/70">{CITY_LABELS[selectedHotel.city] ?? selectedHotel.city}</span>
                 </div>
               </div>
               {canSwitchHotel && <ChevronsUpDown className="w-3.5 h-3.5 text-white/70 mt-2 shrink-0" />}
@@ -160,7 +162,7 @@ function SidebarContent({
             {canSwitchHotel && (
               <div className="flex items-center gap-1 mt-1.5 px-1">
                 <Hotel className="w-2.5 h-2.5 text-white/20" />
-                <span className="text-[11px] text-white/20">{ALL_HOTELS.length} hotels across {COMPANIES.length} companies</span>
+                <span className="text-mini text-white/20">{ALL_HOTELS.length} hotels across {COMPANIES.length} companies</span>
               </div>
             )}
           </>
@@ -184,26 +186,26 @@ function SidebarContent({
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -4 }}
                 transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                className="absolute left-3 right-3 top-full mt-2 z-50 bg-[#0f1729] border border-white/10 rounded-xl shadow-xl shadow-black/20 overflow-hidden backdrop-blur-sm"
+                className="absolute left-3 right-3 top-full mt-2 z-50 bg-brand-navy-elev2 border border-white/10 rounded-xl shadow-xl shadow-black/20 overflow-hidden backdrop-blur-sm"
               >
                 <div className="px-3 py-2.5 bg-white/[0.03] border-b border-white/10">
-                  <p className="text-[11px] font-semibold text-white/70 uppercase tracking-widest">{t('sidebar.switchProperty')}</p>
+                  <p className="text-mini font-semibold text-white/70 uppercase tracking-widest">{t('sidebar.switchProperty')}</p>
                 </div>
                 <div className="max-h-72 overflow-y-auto scrollbar-thin">
                   {COMPANIES.map((company, ci) => (
                     <div key={company.id}>
                       <div className="flex items-center gap-2 px-3 pt-3 pb-1.5">
                         <div className="flex-1 h-px bg-white/10" />
-                        <span className="text-[11px] font-bold text-white/60 uppercase tracking-widest whitespace-nowrap">{company.name}</span>
+                        <span className="text-mini font-bold text-white/60 uppercase tracking-widest whitespace-nowrap">{company.name}</span>
                         <div className="flex-1 h-px bg-white/10" />
                       </div>
                       <div className="px-3 pb-1">
-                        <span className={cn('text-[11px] font-semibold px-1.5 py-0.5 rounded',
+                        <span className={cn('text-mini font-semibold px-1.5 py-0.5 rounded',
                           company.plan === 'ENTERPRISE' && 'bg-violet-500/20 text-violet-300',
                           company.plan === 'PROFESSIONAL' && 'bg-blue-500/20 text-blue-300',
                           company.plan === 'BASIC' && 'bg-green-500/20 text-green-300',
                         )}>{company.plan}</span>
-                        <span className="text-[11px] text-white/60 ml-1.5">{company.hotels.length} properties</span>
+                        <span className="text-mini text-white/60 ml-1.5">{company.hotels.length} properties</span>
                       </div>
                       {company.hotels.map(hotel => {
                         const isSelected = hotel.id === selectedHotelId
@@ -212,14 +214,14 @@ function SidebarContent({
                             className={cn('w-full flex items-center gap-3 px-3 py-2.5 text-left transition-all',
                               isSelected ? 'bg-teal-500/15 text-white' : 'hover:bg-white/[0.04] text-white/60'
                             )}>
-                            <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-[11px] font-mono font-bold border',
+                            <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-mini font-mono font-bold border',
                               isSelected ? 'bg-teal-500/20 text-teal-400 border-teal-500/30' : 'bg-white/[0.04] text-white/70 border-white/10'
                             )}>{hotel.stars}★</div>
                             <div className="flex-1 min-w-0">
                               <p className={cn('text-sm font-semibold leading-none truncate', isSelected ? 'text-white' : 'text-white/70')}>{hotel.name}</p>
                               <div className="flex items-center gap-1 mt-1">
                                 <MapPin className="w-2.5 h-2.5 text-white/20" />
-                                <span className="text-[11px] text-white/70">{CITY_LABELS[hotel.city] ?? hotel.city}</span>
+                                <span className="text-mini text-white/70">{CITY_LABELS[hotel.city] ?? hotel.city}</span>
                               </div>
                             </div>
                             {isSelected && <Check className="w-3.5 h-3.5 text-teal-400 shrink-0" />}
@@ -257,7 +259,7 @@ function SidebarContent({
                   <span className="text-sm leading-none flex-1">{t(`sections.${section}`)}</span>
                   {badge && (
                     <span className={cn(
-                      'text-[11px] h-5 min-w-[20px] px-1.5 rounded-full flex items-center justify-center font-mono font-bold',
+                      'text-mini h-5 min-w-[20px] px-1.5 rounded-full flex items-center justify-center font-mono font-bold',
                       isActive
                         ? 'bg-white/20 text-white'
                         : 'bg-teal-500/20 text-teal-400'
@@ -274,7 +276,7 @@ function SidebarContent({
       <div className={cn('border-t border-white/10 p-3 shrink-0', collapsed && 'flex flex-col items-center gap-1')}>
         {!collapsed && (
           <div className="flex items-center gap-1.5 mb-2 px-1">
-            <span className={cn('inline-flex items-center text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest',
+            <span className={cn('inline-flex items-center text-mini font-bold px-2.5 py-1 rounded-full uppercase tracking-widest',
               roleMeta.level === 1 && 'bg-rose-500/20 text-rose-300',
               roleMeta.level === 2 && 'bg-violet-500/20 text-violet-300',
               roleMeta.level === 3 && 'bg-blue-500/20 text-blue-300',
@@ -284,7 +286,7 @@ function SidebarContent({
               {roleMeta.label}
             </span>
             {currentUser.teamName && (
-              <span className="text-[11px] text-white/70 truncate">· {currentUser.teamName}</span>
+              <span className="text-mini text-white/70 truncate">· {currentUser.teamName}</span>
             )}
           </div>
         )}
@@ -302,7 +304,7 @@ function SidebarContent({
             <>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-white truncate">{currentUser.name}</p>
-                <p className="text-[11px] text-white/70 truncate">{roleMeta.label}</p>
+                <p className="text-mini text-white/70 truncate">{roleMeta.label}</p>
               </div>
               <LogOut className="w-3.5 h-3.5 text-white/60 shrink-0 hover:text-white/60 cursor-pointer transition-colors" />
             </>

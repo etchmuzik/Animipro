@@ -79,35 +79,35 @@ function ApplicantCard({ app, onSelect }: { app: JobApplication; onSelect: () =>
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground leading-none truncate">{app.firstName} {app.lastName}</p>
-                <p className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
+                <p className="text-mini text-muted-foreground mt-1 flex items-center gap-1">
                   <Globe className="w-3 h-3" /> {app.nationality}
                 </p>
               </div>
-              <Badge className={cn('text-[9px] px-1.5 py-0.5 border shrink-0', ROLE_COLORS[app.role])}>
+              <Badge className={cn('text-tiny px-1.5 py-0.5 border shrink-0', ROLE_COLORS[app.role])}>
                 {ROLE_LABELS[app.role]}
               </Badge>
             </div>
 
             <div className="mt-2.5 flex flex-wrap gap-1">
               {app.languages.slice(0, 3).map(l => (
-                <Badge key={l} variant="secondary" className="text-[9px] px-1.5 py-0">{l}</Badge>
+                <Badge key={l} variant="secondary" className="text-tiny px-1.5 py-0">{l}</Badge>
               ))}
             </div>
 
             <div className="mt-3 flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-2 text-micro text-muted-foreground">
                 <span className="flex items-center gap-1"><Star className="w-3 h-3 text-accent" />{app.yearsExperience}y exp</span>
                 {app.cvMediaId && (
                   <span className="flex items-center gap-1 text-primary"><FileText className="w-3 h-3" />CV</span>
                 )}
               </div>
               <div className="flex items-center gap-1.5">
-                <Badge className={cn('text-[9px] px-1.5 py-0.5 border', STATUS_META[app.status].cls)}>
+                <Badge className={cn('text-tiny px-1.5 py-0.5 border', STATUS_META[app.status].cls)}>
                   {STATUS_META[app.status].label}
                 </Badge>
               </div>
             </div>
-            <p className="mt-2 text-[10px] text-muted-foreground flex items-center gap-1">
+            <p className="mt-2 text-micro text-muted-foreground flex items-center gap-1">
               <Clock className="w-3 h-3" /> {relativeDate(app.submittedAt)}
             </p>
           </div>
@@ -173,7 +173,7 @@ function OnboardingChecklist({ applicationId, canManage }: { applicationId: stri
         <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
           <ListChecks className="w-4 h-4 text-green-600" /> Onboarding
         </p>
-        <span className="text-[11px] font-bold text-green-600">{progress.done}/{progress.total} done</span>
+        <span className="text-mini font-bold text-green-600">{progress.done}/{progress.total} done</span>
       </div>
       <div className="h-1.5 w-full rounded-full bg-muted mb-3 overflow-hidden">
         <div className="h-full rounded-full bg-green-500 transition-all duration-300" style={{ width: `${pct}%` }} />
@@ -229,8 +229,8 @@ function ApplicantModal({
             <div className="min-w-0">
               <CardTitle className="text-base">{app.firstName} {app.lastName}</CardTitle>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
-                <Badge className={cn('text-[10px] border', ROLE_COLORS[app.role])}>{ROLE_LABELS[app.role]}</Badge>
-                <Badge className={cn('text-[10px] border', STATUS_META[app.status].cls)}>{STATUS_META[app.status].label}</Badge>
+                <Badge className={cn('text-micro border', ROLE_COLORS[app.role])}>{ROLE_LABELS[app.role]}</Badge>
+                <Badge className={cn('text-micro border', STATUS_META[app.status].cls)}>{STATUS_META[app.status].label}</Badge>
               </div>
             </div>
           </div>
@@ -240,19 +240,19 @@ function ApplicantModal({
           {/* Contact + meta */}
           <div className="grid grid-cols-2 gap-3 text-sm">
             <a href={`mailto:${app.email}`} className="bg-muted/50 rounded-lg p-3 hover:bg-muted transition-colors">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-1"><Mail className="w-3 h-3" />Email</p>
+              <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-1"><Mail className="w-3 h-3" />Email</p>
               <p className="font-semibold text-xs truncate">{app.email}</p>
             </a>
             <a href={`tel:${app.phone}`} className="bg-muted/50 rounded-lg p-3 hover:bg-muted transition-colors">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-1"><Phone className="w-3 h-3" />Phone</p>
+              <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-1"><Phone className="w-3 h-3" />Phone</p>
               <p className="font-semibold text-xs truncate">{app.phone}</p>
             </a>
             <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Nationality</p>
+              <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Nationality</p>
               <p className="font-semibold text-xs">{app.nationality}</p>
             </div>
             <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Experience</p>
+              <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Experience</p>
               <p className="font-semibold text-xs">{app.yearsExperience} years</p>
             </div>
           </div>
@@ -262,21 +262,21 @@ function ApplicantModal({
           )}
 
           <div>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Languages</p>
+            <p className="text-micro text-muted-foreground uppercase tracking-widest mb-2">Languages</p>
             <div className="flex flex-wrap gap-1.5">
-              {app.languages.map(l => <Badge key={l} variant="secondary" className="text-[10px]">{l}</Badge>)}
+              {app.languages.map(l => <Badge key={l} variant="secondary" className="text-micro">{l}</Badge>)}
             </div>
           </div>
 
           <div>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Specialties</p>
+            <p className="text-micro text-muted-foreground uppercase tracking-widest mb-2">Specialties</p>
             <div className="flex flex-wrap gap-1.5">
-              {app.specialties.map(s => <Badge key={s} className="text-[10px] bg-primary/10 text-primary border-0">{s}</Badge>)}
+              {app.specialties.map(s => <Badge key={s} className="text-micro bg-primary/10 text-primary border-0">{s}</Badge>)}
             </div>
           </div>
 
           <div>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Pitch</p>
+            <p className="text-micro text-muted-foreground uppercase tracking-widest mb-2">Pitch</p>
             <p className="text-sm text-foreground/90 leading-relaxed bg-muted/40 rounded-lg p-3">{app.pitch}</p>
           </div>
 
@@ -318,7 +318,7 @@ function ApplicantModal({
               </Button>
             </div>
           ) : (
-            <p className="text-[11px] text-muted-foreground text-center pt-1">You have view-only access to applications.</p>
+            <p className="text-mini text-muted-foreground text-center pt-1">You have view-only access to applications.</p>
           )}
         </CardContent>
       </Card>
@@ -332,7 +332,7 @@ function StatChip({ label, value, tone }: { label: string; value: number; tone: 
   return (
     <div className={cn('rounded-xl border px-3 py-2 min-w-[84px]', tone)}>
       <p className="text-xl font-black font-mono leading-none">{value}</p>
-      <p className="text-[10px] font-semibold uppercase tracking-wide mt-1 opacity-80">{label}</p>
+      <p className="text-micro font-semibold uppercase tracking-wide mt-1 opacity-80">{label}</p>
     </div>
   )
 }
@@ -440,7 +440,7 @@ export function RecruitmentModule({
       )}
 
       {/* Demo hint */}
-      <p className="text-[11px] text-muted-foreground flex items-center gap-1.5 pt-2">
+      <p className="text-mini text-muted-foreground flex items-center gap-1.5 pt-2">
         <Sparkles className="w-3 h-3 text-accent" />
         Tip: open the <span className="font-semibold text-foreground">Careers</span> page on the website and submit an application — it appears here instantly.
       </p>

@@ -78,6 +78,14 @@ export const ROLE_META: Record<UserRole, RoleMeta> = {
     textColor: 'text-pink-500',
     level: 5,
   },
+  DOOR_SCANNER: {
+    role: 'DOOR_SCANNER',
+    label: 'Door Scanner',
+    description: 'Club door staff. Scans guest QR tickets at the venue. No other platform access.',
+    color: 'bg-slate-600',
+    textColor: 'text-slate-400',
+    level: 6,  // strictest level — sees ONLY the tickets section, scan tab.
+  },
 }
 
 // ─── Section permissions ────────────────────────────────────────────────────
@@ -94,6 +102,7 @@ export type Section =
   | 'recruitment'
   | 'reports'
   | 'performance'
+  | 'tickets'
   | 'settings'
 
 /**
@@ -102,7 +111,7 @@ export type Section =
  * ALL roles at or above (<=) the listed level can access.
  */
 const SECTION_MIN_LEVEL: Record<Section, number> = {
-  dashboard:     5, // everyone
+  dashboard:     5, // everyone (except door scanners — see below)
   schedule:      5, // everyone sees their schedule
   announcements: 5, // everyone reads announcements
   leave:         5, // everyone can submit/view leave
@@ -113,6 +122,7 @@ const SECTION_MIN_LEVEL: Record<Section, number> = {
   reports:       3, // animation chief+
   performance:   3, // animation chief+
   recruitment:   2, // hotel admin+ (HR / GM handle hiring)
+  tickets:       6, // EVERYONE incl. door scanners — module gates tabs internally
   settings:      2, // hotel admin+
 }
 
@@ -142,10 +152,16 @@ export interface Permissions {
   canEditSettings:     boolean  // hotel settings
   canAssignTasks:      boolean  // create & assign tasks
   canManageRecruitment: boolean // review & decide on job applications
+  // ─── Club ticket sales (Sharm hotels resell tickets to local nightclubs) ──
+  canSellTickets:      boolean  // ring up a ticket sale to a guest
+  canScanTickets:      boolean  // validate a QR at the club door
+  canViewSalesReport:  boolean  // see sales totals + per-seller breakdown
+  canManageClubs:      boolean  // edit the club catalog & nightly inventory
 }
 
 export function getPermissions(role: UserRole): Permissions {
   const level = ROLE_META[role].level
+  const isDoorScanner = role === 'DOOR_SCANNER'
   return {
     canManageTeam:        level <= 3,
     canPublishSchedule:   level <= 3,
@@ -155,11 +171,18 @@ export function getPermissions(role: UserRole): Permissions {
     canReviewPerformance: level <= 3,
     canManageEvents:      level <= 4,
     canPostAnnouncements: level <= 4,
-    canSwitchHotel:       level <= 2,  // admin+ can switch hotels
+    canSwitchHotel:       level <= 2,
     canManageAllHotels:   level <= 1,
     canEditSettings:      level <= 2,
     canAssignTasks:       level <= 4,
-    canManageRecruitment: level <= 2,  // hotel admin+ handle hiring
+    canManageRecruitment: level <= 2,
+    // All animation staff (level <= 5) can sell — door scanners can NOT sell.
+    canSellTickets:       level <= 5 && !isDoorScanner,
+    // Door scanners + managers (chief+) can scan tickets.
+    canScanTickets:       isDoorScanner || level <= 3,
+    // Reports + club management are admin-only.
+    canViewSalesReport:   level <= 3 && !isDoorScanner,
+    canManageClubs:       level <= 2 && !isDoorScanner,
   }
 }
 
@@ -260,5 +283,15 @@ export const DEMO_USERS: AppUser[] = [
     hotelId: 'h1',
     teamId: 't2',
     teamName: 'Pool Stars',
+  },
+  {
+    id: 'su9',
+    name: 'Mahmoud Said',
+    initials: 'MS',
+    role: 'DOOR_SCANNER',
+    companyId: 'co1',
+    hotelId: 'h1',
+    // Door scanners are typically club-side staff, not hotel team members.
+    teamName: 'Pacha Sharm — Door',
   },
 ]

@@ -11,27 +11,30 @@ import {
 } from '@/lib/feedback'
 import { cn } from '@/lib/utils'
 
+// Subtle category tints — softer than pastel so they don't dominate the card.
+// `bg-<color>-500/15` gives a translucent fill that reads on the dark
+// platform surface; `text-<color>-300` keeps labels legible at small sizes.
 const TYPE_COLORS: Record<string, string> = {
-  SPORTS: 'bg-green-100 text-green-700 border-green-200',
-  WATER_SPORTS: 'bg-blue-100 text-blue-700 border-blue-200',
-  AQUA_GYM: 'bg-cyan-100 text-cyan-700 border-cyan-200',
-  KIDS_ACTIVITY: 'bg-orange-100 text-orange-700 border-orange-200',
-  EVENING_SHOW: 'bg-purple-100 text-purple-700 border-purple-200',
-  DANCE_CLASS: 'bg-pink-100 text-pink-700 border-pink-200',
-  GAME: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-  EXCURSION: 'bg-teal-100 text-teal-700 border-teal-200',
-  CULTURAL: 'bg-amber-100 text-amber-700 border-amber-200',
-  FITNESS: 'bg-red-100 text-red-700 border-red-200',
-  ENTERTAINMENT: 'bg-violet-100 text-violet-700 border-violet-200',
+  SPORTS:        'bg-green-500/15 text-green-300 border-green-500/20',
+  WATER_SPORTS:  'bg-blue-500/15 text-blue-300 border-blue-500/20',
+  AQUA_GYM:      'bg-cyan-500/15 text-cyan-300 border-cyan-500/20',
+  KIDS_ACTIVITY: 'bg-orange-500/15 text-orange-300 border-orange-500/20',
+  EVENING_SHOW:  'bg-purple-500/15 text-purple-300 border-purple-500/20',
+  DANCE_CLASS:   'bg-pink-500/15 text-pink-300 border-pink-500/20',
+  GAME:          'bg-yellow-500/15 text-yellow-300 border-yellow-500/20',
+  EXCURSION:     'bg-teal-500/15 text-teal-300 border-teal-500/20',
+  CULTURAL:      'bg-amber-500/15 text-amber-300 border-amber-500/20',
+  FITNESS:       'bg-red-500/15 text-red-300 border-red-500/20',
+  ENTERTAINMENT: 'bg-violet-500/15 text-violet-300 border-violet-500/20',
 }
 
 const AGE_COLORS: Record<string, string> = {
-  KIDS: 'bg-orange-50 text-orange-600',
-  TEENS: 'bg-purple-50 text-purple-600',
-  ADULTS: 'bg-blue-50 text-blue-600',
-  SENIORS: 'bg-gray-50 text-gray-600',
-  ALL: 'bg-green-50 text-green-600',
-  FAMILY: 'bg-pink-50 text-pink-600',
+  KIDS:    'bg-orange-500/10 text-orange-300',
+  TEENS:   'bg-purple-500/10 text-purple-300',
+  ADULTS:  'bg-blue-500/10 text-blue-300',
+  SENIORS: 'bg-zinc-500/10 text-zinc-300',
+  ALL:     'bg-green-500/10 text-green-300',
+  FAMILY:  'bg-pink-500/10 text-pink-300',
 }
 
 const ALL_TYPES = ['ALL', 'SPORTS', 'WATER_SPORTS', 'AQUA_GYM', 'KIDS_ACTIVITY', 'EVENING_SHOW', 'DANCE_CLASS', 'GAME', 'EXCURSION', 'CULTURAL', 'FITNESS', 'ENTERTAINMENT']
@@ -132,43 +135,43 @@ function ActivityCard({ activity, onEdit, onSchedule, onRate }: { activity: Acti
   }, [activity.id])
 
   return (
-    <Card className="hover:shadow-md hover:border-primary/20 transition-all duration-150 group">
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between gap-2 mb-3">
+    <Card className="hover:shadow-md hover:border-primary/30 transition-all duration-150 group">
+      <CardContent className="p-3.5">
+        <div className="flex items-start justify-between gap-2 mb-2.5">
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold leading-tight group-hover:text-primary transition-colors">{activity.name}</p>
+            <p className="text-13 font-bold leading-tight text-foreground group-hover:text-primary transition-colors">{activity.name}</p>
             {activity.nameAr && (
-              <p className="text-xs text-muted-foreground mt-0.5 font-arabic" dir="rtl">{activity.nameAr}</p>
+              <p className="text-mini text-muted-foreground mt-0.5 font-arabic" dir="rtl">{activity.nameAr}</p>
             )}
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
-            <Badge className={cn('text-[9px] px-1.5 py-0.5 border', TYPE_COLORS[activity.type] ?? 'bg-muted text-muted-foreground border-muted')}>
+            <Badge className={cn('text-tiny px-1.5 py-0.5 border h-auto font-semibold', TYPE_COLORS[activity.type] ?? 'bg-muted text-muted-foreground border-muted')}>
               {typeLabel}
             </Badge>
-            <div className={cn('inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium', AGE_COLORS[activity.ageGroup])}>
+            <div className={cn('inline-flex items-center px-1.5 py-0.5 rounded text-tiny font-semibold', AGE_COLORS[activity.ageGroup])}>
               {activity.ageGroup}
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-2 mb-3">
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-mini text-muted-foreground">
             <Clock className="w-3 h-3 shrink-0" />
             <span>{activity.duration}min</span>
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-mini text-muted-foreground">
             <Users className="w-3 h-3 shrink-0" />
             <span>Min {activity.minAnimators}</span>
           </div>
           {activity.maxGuests && (
-            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <div className="flex items-center gap-1.5 text-mini text-muted-foreground">
               <Users className="w-3 h-3 shrink-0 text-accent" />
               <span>{activity.maxGuests} guests</span>
             </div>
           )}
         </div>
 
-        <div className="flex items-center gap-1.5 mb-3 text-[11px] text-muted-foreground">
+        <div className="flex items-center gap-1.5 mb-3 text-mini text-muted-foreground">
           <MapPin className="w-3 h-3 shrink-0" />
           <span>{activity.venue}</span>
         </div>
@@ -178,7 +181,7 @@ function ActivityCard({ activity, onEdit, onSchedule, onRate }: { activity: Acti
             <Package className="w-3 h-3 shrink-0 text-muted-foreground mt-0.5" />
             <div className="flex flex-wrap gap-1">
               {activity.equipment.map(eq => (
-                <span key={eq} className="text-[9px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground">{eq}</span>
+                <span key={eq} className="text-tiny bg-muted px-1.5 py-0.5 rounded text-muted-foreground">{eq}</span>
               ))}
             </div>
           </div>
@@ -186,22 +189,33 @@ function ActivityCard({ activity, onEdit, onSchedule, onRate }: { activity: Acti
 
         <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
           {summary.count > 0 ? (
-            <div className="flex items-center gap-1 text-[10px] font-medium text-amber-600" title={`${summary.count} guest ratings`}>
+            <div className="flex items-center gap-1 text-micro font-medium text-amber-600" title={`${summary.count} guest ratings`}>
               <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
               <span className="font-bold">{summary.avg}</span>
               <span className="text-muted-foreground">({summary.count})</span>
             </div>
           ) : (
-            <div className={cn('flex items-center gap-1.5 text-[10px] font-medium', activity.isActive ? 'text-green-600' : 'text-muted-foreground')}>
+            <div className={cn('flex items-center gap-1.5 text-micro font-medium', activity.isActive ? 'text-green-600' : 'text-muted-foreground')}>
               <div className={cn('w-1.5 h-1.5 rounded-full', activity.isActive ? 'bg-green-500' : 'bg-gray-400')} />
               {activity.isActive ? 'Active' : 'Inactive'}
             </div>
           )}
-          <div className="flex gap-1">
-            <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2 gap-1 text-amber-600" onClick={e => { e.stopPropagation(); onRate(activity) }}>
+          <div className="flex gap-1.5">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-7 text-mini px-2.5 gap-1 border-amber-400/40 text-amber-300 hover:bg-amber-400/10 hover:text-amber-200"
+              onClick={e => { e.stopPropagation(); onRate(activity) }}
+            >
               <MessageSquarePlus className="w-3 h-3" /> Rate
             </Button>
-            <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2 text-primary" onClick={e => { e.stopPropagation(); onSchedule(activity) }}>Schedule</Button>
+            <Button
+              size="sm"
+              className="h-7 text-mini px-2.5"
+              onClick={e => { e.stopPropagation(); onSchedule(activity) }}
+            >
+              Schedule
+            </Button>
           </div>
         </div>
       </CardContent>
@@ -255,7 +269,7 @@ export function ActivitiesModule({ searchQuery }: { searchQuery: string }) {
           <button key={t} onClick={() => setFilterType(filterType === t ? 'ALL' : t)}
             className={cn('p-2 rounded-lg border text-center transition-all', filterType === t ? 'border-primary bg-primary/5' : 'border-border bg-card hover:border-primary/30')}>
             <p className={cn('text-sm font-black', filterType === t ? 'text-primary' : 'text-foreground')}>{byType[t]}</p>
-            <p className="text-[8px] text-muted-foreground mt-0.5 leading-tight">{t.replace(/_/g, ' ')}</p>
+            <p className="text-tiny text-muted-foreground mt-0.5 leading-tight">{t.replace(/_/g, ' ')}</p>
           </button>
         ))}
       </div>

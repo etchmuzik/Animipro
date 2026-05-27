@@ -238,7 +238,7 @@ function ApplyForm({ initialTier }: { initialTier: PartnerTier }) {
         {submitting ? t('partners.formSubmitting') : t('partners.formSubmit')}
         {!submitting && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
       </button>
-      <p className="mt-3 text-center text-[11px] text-[oklch(0.55_0.03_220)]">
+      <p className="mt-3 text-center text-mini text-[oklch(0.55_0.03_220)]">
         {t('partners.formDemoNote')}
       </p>
     </form>
@@ -287,7 +287,7 @@ export default function PartnersPage() {
               className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 ring-1 ring-[oklch(0.52_0.1_210_/_0.18)] backdrop-blur-sm"
             >
               <Sun className="h-3.5 w-3.5 text-[oklch(0.7_0.16_60)]" />
-              <span className="text-[13px] font-semibold text-[oklch(0.34_0.05_215)]">{t('partners.kicker')}</span>
+              <span className="text-13 font-semibold text-[oklch(0.34_0.05_215)]">{t('partners.kicker')}</span>
             </motion.div>
 
             <motion.h1

@@ -76,13 +76,13 @@ export function PWAInstallPrompt() {
       {/* Install banner */}
       <div className={cn(
         'fixed bottom-20 md:bottom-6 left-3 right-3 sm:left-auto sm:right-6 sm:max-w-sm z-50',
-        'bg-[#0f1729] text-white rounded-2xl shadow-2xl shadow-black/30 border border-white/10',
+        'bg-brand-navy-elev2 text-white rounded-2xl shadow-2xl shadow-black/30 border border-white/10',
         'animate-in slide-in-from-bottom-4 fade-in duration-500',
       )}>
         <div className="p-4">
           <div className="flex items-start gap-3">
             {/* Icon */}
-            <div className="w-12 h-12 rounded-xl bg-[#0e7490] flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shrink-0">
               <Smartphone className="w-6 h-6 text-white" />
             </div>
 
@@ -105,7 +105,7 @@ export function PWAInstallPrompt() {
           <div className="flex items-center gap-2 mt-3">
             <button
               onClick={handleInstall}
-              className="flex-1 flex items-center justify-center gap-2 bg-[#0e7490] hover:bg-[#0c6080] text-white text-sm font-bold py-2.5 rounded-xl transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2.5 rounded-xl transition-colors"
             >
               <Download className="w-4 h-4" />
               {isIOS ? 'How to Install' : 'Install App'}
@@ -125,7 +125,7 @@ export function PWAInstallPrompt() {
         <div className="fixed inset-0 z-[100] flex items-end justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleDismiss} />
           <div className="relative bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden mb-4 animate-in slide-in-from-bottom-8 duration-300">
-            <div className="bg-[#0f1729] px-5 py-4 flex items-center justify-between">
+            <div className="bg-brand-navy-elev2 px-5 py-4 flex items-center justify-between">
               <p className="text-white font-bold text-sm">Install AnimaPro on iPhone</p>
               <button onClick={handleDismiss} aria-label="Close" className="text-white/40 hover:text-white transition-colors grid place-items-center -m-2 p-2 w-10 h-10">
                 <X className="w-4 h-4" />
@@ -138,18 +138,18 @@ export function PWAInstallPrompt() {
                 { step: '3', text: 'Tap "Add" in the top right', sub: 'AnimaPro will appear on your home screen' },
               ].map(s => (
                 <div key={s.step} className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-full bg-[#0e7490] flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center shrink-0">
                     <span className="text-white text-xs font-bold">{s.step}</span>
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-[#0f1729]">{s.text}</p>
-                    <p className="text-xs text-[#64748b] mt-0.5">{s.sub}</p>
+                    <p className="text-sm font-bold text-brand-navy-elev2">{s.text}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{s.sub}</p>
                   </div>
                 </div>
               ))}
               <button
                 onClick={handleDismiss}
-                className="w-full bg-[#0f1729] text-white font-bold py-3 rounded-xl text-sm hover:bg-[#1a2540] transition-colors mt-2"
+                className="w-full bg-brand-navy-elev2 text-white font-bold py-3 rounded-xl text-sm hover:bg-brand-navy-elev1 transition-colors mt-2"
               >
                 Got it
               </button>

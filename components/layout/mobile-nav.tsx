@@ -41,30 +41,30 @@ export function MobileNav({ activeSection, onSectionChange, onMenuOpen, allowedS
               onClick={() => onSectionChange(section)}
               className={cn(
                 'flex-1 flex flex-col items-center justify-center gap-0.5 transition-all duration-200 relative press-effect',
-                isActive ? 'text-[#0e7490]' : 'text-[#94a3b8] active:text-[#64748b]'
+                isActive ? 'text-primary' : 'text-slate-400 active:text-muted-foreground'
               )}
             >
               {/* Active indicator pill */}
               {isActive && (
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-full bg-[#0e7490] tab-indicator shadow-sm shadow-[#0e7490]/30" />
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-full bg-primary tab-indicator shadow-sm shadow-primary/30" />
               )}
 
               <div className="relative">
                 <div className={cn(
                   'w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200',
-                  isActive ? 'bg-[#0e7490]/10' : ''
+                  isActive ? 'bg-primary/10' : ''
                 )}>
                   <Icon className={cn('w-[20px] h-[20px] transition-all', isActive && 'w-[21px] h-[21px]')} />
                 </div>
                 {badge && !isActive && (
-                  <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-[#0e7490] text-[8px] font-bold text-white px-1 shadow-sm shadow-[#0e7490]/30">
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-primary text-tiny font-bold text-white px-1 shadow-sm shadow-primary/30">
                     {badge}
                   </span>
                 )}
               </div>
               <span className={cn(
-                'text-[10px] leading-none transition-all',
-                isActive ? 'font-bold text-[#0e7490]' : 'font-medium'
+                'text-micro leading-none transition-all',
+                isActive ? 'font-bold text-primary' : 'font-medium'
               )}>{t(labelKey)}</span>
             </button>
           )
@@ -73,12 +73,12 @@ export function MobileNav({ activeSection, onSectionChange, onMenuOpen, allowedS
         {/* More button */}
         <button
           onClick={onMenuOpen}
-          className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[#94a3b8] active:text-[#64748b] transition-all press-effect"
+          className="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400 active:text-muted-foreground transition-all press-effect"
         >
           <div className="w-9 h-9 rounded-xl flex items-center justify-center">
             <MoreHorizontal className="w-[20px] h-[20px]" />
           </div>
-          <span className="text-[10px] font-medium leading-none">{t('mobileNav.more')}</span>
+          <span className="text-micro font-medium leading-none">{t('mobileNav.more')}</span>
         </button>
       </div>
     </nav>

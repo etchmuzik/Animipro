@@ -192,7 +192,7 @@ export function LeaveModule({ hotelId, currentUser, searchQuery }: LeaveModulePr
               <span className={cn('w-1.5 h-1.5 rounded-full', STATUS_CONFIG[s]?.dot)} />
             )}
             {s === 'ALL' ? 'All' : STATUS_CONFIG[s].label}
-            <span className="ml-0.5 bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full text-[10px] font-bold">
+            <span className="ml-0.5 bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full text-micro font-bold">
               {counts[s]}
             </span>
           </button>
@@ -238,13 +238,13 @@ export function LeaveModule({ hotelId, currentUser, searchQuery }: LeaveModulePr
                       </p>
                       <p className="text-xs text-muted-foreground">{animator?.role ?? ''}</p>
                     </div>
-                    <span className={cn('text-[10px] font-semibold px-2 py-1 rounded-full border', cfg.cls)}>
+                    <span className={cn('text-micro font-semibold px-2 py-1 rounded-full border', cfg.cls)}>
                       {cfg.label}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-3 mt-2 flex-wrap">
-                    <span className={cn('text-[10px] font-semibold px-2 py-0.5 rounded-full', TYPE_COLORS[req.type] ?? 'bg-gray-100 text-gray-700')}>
+                    <span className={cn('text-micro font-semibold px-2 py-0.5 rounded-full', TYPE_COLORS[req.type] ?? 'bg-gray-100 text-gray-700')}>
                       {TYPE_LABELS[req.type] ?? req.type}
                     </span>
                     <span className="text-xs text-muted-foreground flex items-center gap-1">
@@ -260,7 +260,7 @@ export function LeaveModule({ hotelId, currentUser, searchQuery }: LeaveModulePr
                     <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2">{req.reason}</p>
                   )}
 
-                  <p className="text-[10px] text-muted-foreground mt-1.5">
+                  <p className="text-micro text-muted-foreground mt-1.5">
                     Submitted {req.createdAt}
                   </p>
                 </div>
@@ -270,14 +270,14 @@ export function LeaveModule({ hotelId, currentUser, searchQuery }: LeaveModulePr
                   <div className="flex flex-col gap-2 shrink-0">
                     <button
                       onClick={() => handleAction(req.id, 'APPROVED')}
-                      className="flex items-center gap-1 text-[11px] font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1.5 rounded-lg hover:bg-green-100 transition-colors"
+                      className="flex items-center gap-1 text-mini font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1.5 rounded-lg hover:bg-green-100 transition-colors"
                     >
                       <Check className="w-3.5 h-3.5" />
                       Approve
                     </button>
                     <button
                       onClick={() => handleAction(req.id, 'REJECTED')}
-                      className="flex items-center gap-1 text-[11px] font-semibold text-red-600 bg-red-50 border border-red-200 px-2.5 py-1.5 rounded-lg hover:bg-red-100 transition-colors"
+                      className="flex items-center gap-1 text-mini font-semibold text-red-600 bg-red-50 border border-red-200 px-2.5 py-1.5 rounded-lg hover:bg-red-100 transition-colors"
                     >
                       <X className="w-3.5 h-3.5" />
                       Reject

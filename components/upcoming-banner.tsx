@@ -171,14 +171,14 @@ export function UpcomingBanner({ currentUser, hotelId }: { currentUser: AppUser;
 
   if (showPermissionPrompt) {
     return (
-      <div className="bg-amber-500/10 text-amber-700 dark:text-amber-300 text-[11px] font-medium px-3 sm:px-4 py-1.5 shrink-0 flex items-center gap-2 border-b border-amber-500/20">
+      <div className="bg-amber-500/10 text-amber-700 dark:text-amber-300 text-mini font-medium px-3 sm:px-4 py-1.5 shrink-0 flex items-center gap-2 border-b border-amber-500/20">
         <AlarmClock className="w-3 h-3 shrink-0" />
         <span className="flex-1 truncate">Enable activity reminders to get a notification before each shift.</span>
         <button
           type="button"
           onClick={handleEnableClick}
           disabled={requesting}
-          className="shrink-0 px-2 py-0.5 rounded bg-amber-500 text-white hover:bg-amber-600 transition-colors text-[10px] disabled:opacity-50 inline-flex items-center gap-1"
+          className="shrink-0 px-2 py-0.5 rounded bg-amber-500 text-white hover:bg-amber-600 transition-colors text-micro disabled:opacity-50 inline-flex items-center gap-1"
         >
           {requesting && <Loader2 className="w-2.5 h-2.5 animate-spin" />}
           Enable

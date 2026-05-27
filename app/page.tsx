@@ -238,7 +238,7 @@ function CheckoutModal({
       <div className="relative bg-white rounded-2xl w-full max-w-md shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)]">
 
         {/* Header */}
-        <div className="bg-[#121318] px-6 py-5 flex items-start justify-between">
+        <div className="bg-brand-navy px-6 py-5 flex items-start justify-between">
           <div>
             <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-1">Order Summary</p>
             <p className="text-white font-black text-xl leading-tight">{tier.name}</p>
@@ -257,7 +257,7 @@ function CheckoutModal({
         </div>
 
         {/* Step indicator */}
-        <div className="flex border-b border-[#e2e8f0]">
+        <div className="flex border-b border-border">
           {[
             { key: 'form',    label: '1. Your Details' },
             { key: 'payment', label: '2. Payment' },
@@ -266,10 +266,10 @@ function CheckoutModal({
             <div
               key={s.key}
               className={cn(
-                'flex-1 text-center py-2.5 text-[11px] font-bold border-b-2 transition-colors',
+                'flex-1 text-center py-2.5 text-mini font-bold border-b-2 transition-colors',
                 step === s.key
-                  ? 'border-[#0e7490] text-[#0e7490]'
-                  : 'border-transparent text-[#94a3b8]'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-slate-400'
               )}
             >
               {s.label}
@@ -287,13 +287,13 @@ function CheckoutModal({
                 { key: 'phone', label: 'WhatsApp Number',       placeholder: '+20 100 000 0000',   type: 'tel'   },
               ].map(f => (
                 <div key={f.key}>
-                  <label className="text-xs font-bold text-[#475569] mb-1.5 block">{f.label}</label>
+                  <label className="text-xs font-bold text-slate-600 mb-1.5 block">{f.label}</label>
                   <input
                     type={f.type}
                     value={form[f.key as keyof typeof form]}
                     onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
                     placeholder={f.placeholder}
-                    className="w-full border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-base sm:text-sm text-[#121318] focus:outline-none focus:ring-2 focus:ring-[#0e7490]/30 focus:border-[#0e7490] transition-colors placeholder:text-[#c0ccda]"
+                    className="w-full border border-border rounded-xl px-4 py-2.5 text-base sm:text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors placeholder:text-slate-300"
                   />
                 </div>
               ))}
@@ -301,8 +301,8 @@ function CheckoutModal({
               {/* Hosted Edition — optional, defaults to self-hosted (free). */}
               <div className="pt-2">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-xs font-bold text-[#475569]">Hosted Edition (optional)</p>
-                  <p className="text-[10px] text-[#94a3b8]">Skip if you'll self-host</p>
+                  <p className="text-xs font-bold text-slate-600">Hosted Edition (optional)</p>
+                  <p className="text-micro text-slate-400">Skip if you'll self-host</p>
                 </div>
                 <div className="space-y-1.5">
                   {hostedOptions.map(o => {
@@ -315,21 +315,21 @@ function CheckoutModal({
                         className={cn(
                           'w-full flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all',
                           isActive
-                            ? 'border-[#0e7490] bg-[#0e7490]/5 ring-1 ring-[#0e7490]/20'
-                            : 'border-[#e2e8f0] hover:border-[#0e7490]/40 hover:bg-[#f0fdff]',
+                            ? 'border-primary bg-primary/5 ring-1 ring-primary/20'
+                            : 'border-border hover:border-primary/40 hover:bg-[#f0fdff]',
                         )}
                       >
                         <span className={cn(
                           'grid h-5 w-5 place-items-center rounded-full border shrink-0',
-                          isActive ? 'border-[#0e7490] bg-[#0e7490]' : 'border-[#cbd5e1]',
+                          isActive ? 'border-primary bg-primary' : 'border-[#cbd5e1]',
                         )}>
                           {isActive && <span className="block h-2 w-2 rounded-full bg-white" />}
                         </span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-[#121318] leading-tight">{o.label}</p>
-                          <p className="text-[11px] text-[#64748b] mt-0.5">{o.sub}</p>
+                          <p className="text-sm font-bold text-brand-navy leading-tight">{o.label}</p>
+                          <p className="text-mini text-muted-foreground mt-0.5">{o.sub}</p>
                         </div>
-                        <span className={cn('text-xs font-bold shrink-0', isActive ? 'text-[#0e7490]' : 'text-[#64748b]')}>
+                        <span className={cn('text-xs font-bold shrink-0', isActive ? 'text-primary' : 'text-muted-foreground')}>
                           {o.price}
                         </span>
                       </button>
@@ -341,7 +341,7 @@ function CheckoutModal({
               <button
                 onClick={() => setStep('payment')}
                 disabled={!canContinue}
-                className="w-full bg-[#121318] text-white font-black py-3.5 rounded-xl mt-1 hover:bg-[#1a2540] transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-sm"
+                className="w-full bg-brand-navy text-white font-black py-3.5 rounded-xl mt-1 hover:bg-brand-navy-elev1 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-sm"
               >
                 Continue to Payment
                 <ArrowRight className="inline w-4 h-4 ml-2" />
@@ -351,7 +351,7 @@ function CheckoutModal({
 
           {step === 'payment' && (
             <div className="space-y-3">
-              <p className="text-sm font-bold text-[#121318] mb-4">Choose your payment method</p>
+              <p className="text-sm font-bold text-brand-navy mb-4">Choose your payment method</p>
               {[
                 { label: 'InstaPay / Bank Transfer', sub: 'Instant EGP bank transfer — license delivered in 2 hours', icon: Banknote },
                 { label: 'Vodafone Cash',             sub: 'Mobile wallet — license delivered instantly',              icon: Smartphone },
@@ -360,21 +360,21 @@ function CheckoutModal({
                 <button
                   key={m.label}
                   onClick={() => setStep('done')}
-                  className="w-full flex items-center gap-4 border border-[#e2e8f0] rounded-xl p-4 hover:border-[#0e7490]/50 hover:bg-[#f0fdff] text-left transition-all group active:scale-[0.98]"
+                  className="w-full flex items-center gap-4 border border-border rounded-xl p-4 hover:border-primary/50 hover:bg-[#f0fdff] text-left transition-all group active:scale-[0.98]"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#121318]/5 flex items-center justify-center shrink-0 group-hover:bg-[#0e7490]/10 transition-colors">
-                    <m.icon className="w-5 h-5 text-[#121318] group-hover:text-[#0e7490] transition-colors" />
+                  <div className="w-10 h-10 rounded-xl bg-brand-navy/5 flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
+                    <m.icon className="w-5 h-5 text-brand-navy group-hover:text-primary transition-colors" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-[#121318]">{m.label}</p>
-                    <p className="text-xs text-[#64748b] mt-0.5 leading-tight">{m.sub}</p>
+                    <p className="text-sm font-bold text-brand-navy">{m.label}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-tight">{m.sub}</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-[#94a3b8] shrink-0 group-hover:text-[#0e7490] transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-slate-400 shrink-0 group-hover:text-primary transition-colors" />
                 </button>
               ))}
               <button
                 onClick={() => setStep('form')}
-                className="text-xs text-[#94a3b8] hover:text-[#121318] w-full text-center pt-2 transition-colors"
+                className="text-xs text-slate-400 hover:text-brand-navy w-full text-center pt-2 transition-colors"
               >
                 Back to details
               </button>
@@ -386,35 +386,35 @@ function CheckoutModal({
               <div className="w-16 h-16 bg-green-50 border-2 border-green-200 rounded-full flex items-center justify-center mx-auto mb-5">
                 <CheckCircle2 className="w-8 h-8 text-green-500" />
               </div>
-              <p className="text-xl font-black text-[#121318] mb-2">Order Received</p>
-              <p className="text-sm text-[#64748b] mb-1 leading-relaxed">
-                Thank you, <strong className="text-[#121318]">{form.name || 'there'}</strong>.
+              <p className="text-xl font-black text-brand-navy mb-2">Order Received</p>
+              <p className="text-sm text-muted-foreground mb-1 leading-relaxed">
+                Thank you, <strong className="text-brand-navy">{form.name || 'there'}</strong>.
               </p>
-              <p className="text-sm text-[#64748b] mb-6 leading-relaxed">
-                We will contact you at <strong className="text-[#121318]">{form.phone || form.email}</strong> within 2 hours to confirm payment and deliver your license key.
+              <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                We will contact you at <strong className="text-brand-navy">{form.phone || form.email}</strong> within 2 hours to confirm payment and deliver your license key.
               </p>
-              <div className="bg-[#f8fafc] border border-[#e2e8f0] rounded-xl p-4 mb-6 text-left space-y-1.5">
-                <p className="text-xs font-bold text-[#475569] uppercase tracking-widest mb-2">Order Details</p>
+              <div className="bg-[#f8fafc] border border-border rounded-xl p-4 mb-6 text-left space-y-1.5">
+                <p className="text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">Order Details</p>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#64748b]">Licence</span>
-                  <span className="font-bold text-[#121318]">{tier.name}</span>
+                  <span className="text-muted-foreground">Licence</span>
+                  <span className="font-bold text-brand-navy">{tier.name}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#64748b]">One-off</span>
-                  <span className="font-bold text-[#121318] tabular-nums">{tier.price} {tier.currency}</span>
+                  <span className="text-muted-foreground">One-off</span>
+                  <span className="font-bold text-brand-navy tabular-nums">{tier.price} {tier.currency}</span>
                 </div>
-                <div className="flex justify-between text-sm pt-1.5 border-t border-[#e2e8f0]/60">
-                  <span className="text-[#64748b]">Hosting</span>
-                  <span className="font-bold text-[#121318]">{hostedLabel}</span>
+                <div className="flex justify-between text-sm pt-1.5 border-t border-border/60">
+                  <span className="text-muted-foreground">Hosting</span>
+                  <span className="font-bold text-brand-navy">{hostedLabel}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#64748b]">Recurring</span>
-                  <span className={cn('font-bold tabular-nums', hosted === 'self' ? 'text-[#64748b]' : 'text-[#0e7490]')}>{hostedPrice}</span>
+                  <span className="text-muted-foreground">Recurring</span>
+                  <span className={cn('font-bold tabular-nums', hosted === 'self' ? 'text-muted-foreground' : 'text-primary')}>{hostedPrice}</span>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="bg-[#121318] text-white font-black px-10 py-3 rounded-xl hover:bg-[#1a2540] transition-colors text-sm w-full active:scale-[0.98]"
+                className="bg-brand-navy text-white font-black px-10 py-3 rounded-xl hover:bg-brand-navy-elev1 transition-colors text-sm w-full active:scale-[0.98]"
               >
                 Done
               </button>
@@ -459,7 +459,7 @@ function Navbar({ onBuy }: { onBuy: () => void }) {
             <Zap className="w-4 h-4 text-white" />
           </div>
           <span className="font-display font-extrabold text-lg tracking-tight text-[oklch(0.27_0.055_220)]">AnimaPro</span>
-          <span className="hidden sm:inline-block text-[10px] font-bold text-[oklch(0.45_0.09_210)] bg-[oklch(0.5_0.1_212_/_0.1)] border border-[oklch(0.5_0.1_212_/_0.25)] px-2 py-0.5 rounded-full">for Egypt</span>
+          <span className="hidden sm:inline-block text-micro font-bold text-[oklch(0.45_0.09_210)] bg-[oklch(0.5_0.1_212_/_0.1)] border border-[oklch(0.5_0.1_212_/_0.25)] px-2 py-0.5 rounded-full">for Egypt</span>
         </Link>
 
         {/* Desktop nav */}
@@ -574,7 +574,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[oklch(0.55_0.18_35)] opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[oklch(0.6_0.19_35)]" />
               </span>
-              <span className="text-[13px] font-semibold text-[oklch(0.34_0.05_215)]">
+              <span className="text-13 font-semibold text-[oklch(0.34_0.05_215)]">
                 {t('hero.badge', { count: '147' })}
               </span>
             </motion.div>
@@ -628,7 +628,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
                   ].map((c, i) => (
                     <span
                       key={i}
-                      className="grid h-8 w-8 place-items-center rounded-full text-[11px] font-bold text-white ring-2 ring-[oklch(0.965_0.013_84)]"
+                      className="grid h-8 w-8 place-items-center rounded-full text-mini font-bold text-white ring-2 ring-[oklch(0.965_0.013_84)]"
                       style={{ background: c }}
                     >
                       {['SS', 'HU', 'EG', 'MA'][i]}
@@ -667,8 +667,8 @@ function Hero({ onBuy }: { onBuy: () => void }) {
                 🏊
               </div>
               <div className="leading-tight">
-                <p className="text-[11px] font-bold text-[oklch(0.3_0.05_220)]">Proof captured</p>
-                <p className="text-[10px] text-[oklch(0.55_0.02_220)]">Aqua Gym · 2 photos</p>
+                <p className="text-mini font-bold text-[oklch(0.3_0.05_220)]">Proof captured</p>
+                <p className="text-micro text-[oklch(0.55_0.02_220)]">Aqua Gym · 2 photos</p>
               </div>
             </motion.div>
 
@@ -682,8 +682,8 @@ function Hero({ onBuy }: { onBuy: () => void }) {
             >
               <BellRing className="h-4 w-4 text-white" />
               <div className="leading-tight">
-                <p className="text-[11px] font-bold text-white">Starts in 5 min</p>
-                <p className="text-[10px] text-white/70">Kids Disco · Main Stage</p>
+                <p className="text-mini font-bold text-white">Starts in 5 min</p>
+                <p className="text-micro text-white/70">Kids Disco · Main Stage</p>
               </div>
             </motion.div>
 
@@ -694,7 +694,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
               <HomepageDemo />
             </div>
 
-            <p className="relative z-10 mt-5 text-center text-[13px] font-medium text-[oklch(0.5_0.03_220)]">
+            <p className="relative z-10 mt-5 text-center text-13 font-medium text-[oklch(0.5_0.03_220)]">
               <Sparkles className="mb-0.5 mr-1 inline h-3.5 w-3.5 text-[oklch(0.7_0.16_60)]" />
               {t('hero.demoLive', { action: t('hero.demoStart') })}
             </p>
@@ -816,7 +816,7 @@ function AnimatorWorkflowSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16 sm:mb-20"
         >
-          <span className="inline-flex items-center gap-1.5 bg-cyan-500/15 text-cyan-300 text-[11px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-cyan-400/20 mb-5">
+          <span className="inline-flex items-center gap-1.5 bg-cyan-500/15 text-cyan-300 text-mini font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-cyan-400/20 mb-5">
             <Sparkles className="w-3 h-3" /> New for animators
           </span>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05] max-w-4xl mx-auto text-balance">
@@ -851,10 +851,10 @@ function AnimatorWorkflowSection() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-white/40">
+                      <span className="text-micro font-black uppercase tracking-widest text-white/40">
                         Step {i + 1}
                       </span>
-                      <span className="text-[10px] font-bold uppercase tracking-wide text-cyan-300 bg-cyan-400/10 px-2 py-0.5 rounded-full border border-cyan-400/20">
+                      <span className="text-micro font-bold uppercase tracking-wide text-cyan-300 bg-cyan-400/10 px-2 py-0.5 rounded-full border border-cyan-400/20">
                         {step.badge}
                       </span>
                     </div>
@@ -874,7 +874,7 @@ function AnimatorWorkflowSection() {
             transition={{ type: 'spring', stiffness: 80, damping: 18, delay: 0.2 }}
             className="lg:sticky lg:top-24"
           >
-            <p className="text-center text-[11px] font-bold uppercase tracking-widest text-cyan-300/80 mb-3">
+            <p className="text-center text-mini font-bold uppercase tracking-widest text-cyan-300/80 mb-3">
               ↓ Live — tap it yourself
             </p>
             <HomepageDemo />
@@ -912,11 +912,11 @@ function FeaturesSection() {
     <section id="features" className="bg-white py-16 sm:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="max-w-2xl mb-16">
-          <p className="text-[#0e7490] text-xs font-black uppercase tracking-[0.15em] mb-4">Features</p>
-          <h2 className="text-5xl sm:text-6xl font-black text-[#121318] leading-tight tracking-tighter text-balance">
+          <p className="text-primary text-xs font-black uppercase tracking-[0.15em] mb-4">Features</p>
+          <h2 className="text-5xl sm:text-6xl font-black text-brand-navy leading-tight tracking-tighter text-balance">
             Everything your team needs.
           </h2>
-          <p className="text-[#64748b] text-lg mt-6 max-w-[55ch] leading-relaxed">
+          <p className="text-muted-foreground text-lg mt-6 max-w-[55ch] leading-relaxed">
             Built specifically for Egyptian resort hotels. Not a generic tool — a platform that understands your industry.
           </p>
         </div>
@@ -933,24 +933,24 @@ function FeaturesSection() {
           <div className="grid lg:grid-cols-3 gap-4">
             <motion.div
               variants={itemVariants}
-              className="lg:col-span-2 bg-white border border-[#e2e8f0] rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
+              className="lg:col-span-2 bg-white border border-border rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#0e7490]/10 border border-[#0e7490]/20 flex items-center justify-center mb-5">
-                {(() => { const Icon = FEATURES[0].icon; return <Icon className="w-6 h-6 text-[#0e7490]" />; })()}
+              <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
+                {(() => { const Icon = FEATURES[0].icon; return <Icon className="w-6 h-6 text-primary" />; })()}
               </div>
-              <h3 className="font-black text-[#121318] text-xl mb-2">{FEATURES[0].title}</h3>
-              <p className="text-[#64748b] text-base leading-relaxed max-w-[55ch]">{FEATURES[0].desc}</p>
+              <h3 className="font-black text-brand-navy text-xl mb-2">{FEATURES[0].title}</h3>
+              <p className="text-muted-foreground text-base leading-relaxed max-w-[55ch]">{FEATURES[0].desc}</p>
             </motion.div>
 
             <motion.div
               variants={itemVariants}
-              className="bg-white border border-[#e2e8f0] rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
+              className="bg-white border border-border rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#0e7490]/10 border border-[#0e7490]/20 flex items-center justify-center mb-5">
-                {(() => { const Icon = FEATURES[1].icon; return <Icon className="w-6 h-6 text-[#0e7490]" />; })()}
+              <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
+                {(() => { const Icon = FEATURES[1].icon; return <Icon className="w-6 h-6 text-primary" />; })()}
               </div>
-              <h3 className="font-black text-[#121318] text-lg mb-2">{FEATURES[1].title}</h3>
-              <p className="text-[#64748b] text-sm leading-relaxed">{FEATURES[1].desc}</p>
+              <h3 className="font-black text-brand-navy text-lg mb-2">{FEATURES[1].title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{FEATURES[1].desc}</p>
             </motion.div>
           </div>
 
@@ -958,24 +958,24 @@ function FeaturesSection() {
           <div className="grid lg:grid-cols-3 gap-4">
             <motion.div
               variants={itemVariants}
-              className="bg-white border border-[#e2e8f0] rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
+              className="bg-white border border-border rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#0e7490]/10 border border-[#0e7490]/20 flex items-center justify-center mb-5">
-                {(() => { const Icon = FEATURES[2].icon; return <Icon className="w-6 h-6 text-[#0e7490]" />; })()}
+              <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
+                {(() => { const Icon = FEATURES[2].icon; return <Icon className="w-6 h-6 text-primary" />; })()}
               </div>
-              <h3 className="font-black text-[#121318] text-lg mb-2">{FEATURES[2].title}</h3>
-              <p className="text-[#64748b] text-sm leading-relaxed">{FEATURES[2].desc}</p>
+              <h3 className="font-black text-brand-navy text-lg mb-2">{FEATURES[2].title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{FEATURES[2].desc}</p>
             </motion.div>
 
             <motion.div
               variants={itemVariants}
-              className="lg:col-span-2 bg-white border border-[#e2e8f0] rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
+              className="lg:col-span-2 bg-white border border-border rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#0e7490]/10 border border-[#0e7490]/20 flex items-center justify-center mb-5">
-                {(() => { const Icon = FEATURES[3].icon; return <Icon className="w-6 h-6 text-[#0e7490]" />; })()}
+              <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
+                {(() => { const Icon = FEATURES[3].icon; return <Icon className="w-6 h-6 text-primary" />; })()}
               </div>
-              <h3 className="font-black text-[#121318] text-xl mb-2">{FEATURES[3].title}</h3>
-              <p className="text-[#64748b] text-base leading-relaxed max-w-[55ch]">{FEATURES[3].desc}</p>
+              <h3 className="font-black text-brand-navy text-xl mb-2">{FEATURES[3].title}</h3>
+              <p className="text-muted-foreground text-base leading-relaxed max-w-[55ch]">{FEATURES[3].desc}</p>
             </motion.div>
           </div>
 
@@ -985,13 +985,13 @@ function FeaturesSection() {
               <motion.div
                 key={f.title}
                 variants={itemVariants}
-                className="bg-white border border-[#e2e8f0] rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
+                className="bg-white border border-border rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
               >
-                <div className="w-12 h-12 rounded-xl bg-[#0e7490]/10 border border-[#0e7490]/20 flex items-center justify-center mb-5">
-                  <f.icon className="w-6 h-6 text-[#0e7490]" />
+                <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
+                  <f.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="font-black text-[#121318] text-lg mb-2">{f.title}</h3>
-                <p className="text-[#64748b] text-sm leading-relaxed">{f.desc}</p>
+                <h3 className="font-black text-brand-navy text-lg mb-2">{f.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -1023,7 +1023,7 @@ function TripAdvisorSection() {
   }
 
   return (
-    <section className="bg-[#121318] py-16 sm:py-24 lg:py-32">
+    <section className="bg-brand-navy py-16 sm:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <motion.div
@@ -1037,7 +1037,7 @@ function TripAdvisorSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="text-[#0e7490] text-xs font-black uppercase tracking-[0.15em] mb-4"
+              className="text-primary text-xs font-black uppercase tracking-[0.15em] mb-4"
             >
               Review Intelligence
             </motion.p>
@@ -1062,7 +1062,7 @@ function TripAdvisorSection() {
                 'Travelers\' Choice badge display',
               ].map(item => (
                 <div key={item} className="flex items-center gap-3 text-white/70 text-sm font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-[#0e7490] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
                   <span>{item}</span>
                 </div>
               ))}
@@ -1153,7 +1153,7 @@ function CitiesSection() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-xs font-black text-[#0e7490] uppercase tracking-[0.15em] mb-4"
+            className="text-xs font-black text-primary uppercase tracking-[0.15em] mb-4"
           >
             Where We Operate
           </motion.p>
@@ -1163,7 +1163,7 @@ function CitiesSection() {
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl sm:text-6xl font-black text-[#121318] tracking-tighter text-balance mb-6"
+            className="text-5xl sm:text-6xl font-black text-brand-navy tracking-tighter text-balance mb-6"
           >
             Every major Egyptian resort destination.
           </motion.h2>
@@ -1173,7 +1173,7 @@ function CitiesSection() {
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-[#64748b] text-lg max-w-[60ch] font-medium leading-relaxed"
+            className="text-muted-foreground text-lg max-w-[60ch] font-medium leading-relaxed"
           >
             From the Red Sea Riviera to the Mediterranean coast — AnimaPro runs across all of Egypt's tourist zones.
           </motion.p>
@@ -1190,14 +1190,14 @@ function CitiesSection() {
             <motion.div
               key={city.name}
               variants={itemVariants}
-              className="border border-[#e2e8f0] rounded-2xl p-6 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:border-[#0e7490]/20 transition-all bg-white"
+              className="border border-border rounded-2xl p-6 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:border-primary/20 transition-all bg-white"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#0e7490]/10 border border-[#0e7490]/20 flex items-center justify-center mb-4">
-                <city.icon className="w-5 h-5 text-[#0e7490]" />
+              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4">
+                <city.icon className="w-5 h-5 text-primary" />
               </div>
-              <h3 className="font-black text-[#121318] text-sm mb-1">{city.name}</h3>
-              <p className="text-[10px] text-[#0e7490] font-bold mb-2">{city.hotels}+ hotels</p>
-              <p className="text-[11px] text-[#64748b] leading-relaxed">{city.desc}</p>
+              <h3 className="font-black text-brand-navy text-sm mb-1">{city.name}</h3>
+              <p className="text-micro text-primary font-bold mb-2">{city.hotels}+ hotels</p>
+              <p className="text-mini text-muted-foreground leading-relaxed">{city.desc}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -1250,7 +1250,7 @@ function TestimonialsSection() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-xs font-black text-[#0e7490] uppercase tracking-[0.15em] mb-4"
+            className="text-xs font-black text-primary uppercase tracking-[0.15em] mb-4"
           >
             Testimonials
           </motion.p>
@@ -1260,7 +1260,7 @@ function TestimonialsSection() {
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl sm:text-6xl font-black text-[#121318] tracking-tighter text-balance"
+            className="text-5xl sm:text-6xl font-black text-brand-navy tracking-tighter text-balance"
           >
             Hotels trust us.
           </motion.h2>
@@ -1277,24 +1277,24 @@ function TestimonialsSection() {
             <motion.div
               key={t.name}
               variants={itemVariants}
-              className="bg-white border border-[#e2e8f0] rounded-2xl p-8 flex flex-col shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] transition-all"
+              className="bg-white border border-border rounded-2xl p-8 flex flex-col shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] transition-all"
             >
               <div className="flex gap-0.5 mb-5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-[#f97316] text-[#f97316]" />
                 ))}
               </div>
-              <p className="text-[#334155] text-base leading-relaxed flex-1 mb-8">
+              <p className="text-slate-700 text-base leading-relaxed flex-1 mb-8">
                 &ldquo;{t.quote}&rdquo;
               </p>
-              <div className="border-t border-[#e2e8f0] pt-6 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#121318] flex items-center justify-center text-xs font-black text-white shrink-0">
+              <div className="border-t border-border pt-6 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-brand-navy flex items-center justify-center text-xs font-black text-white shrink-0">
                   {t.initials}
                 </div>
                 <div>
-                  <p className="font-bold text-[#121318] text-sm">{t.name}</p>
-                  <p className="text-[#0e7490] text-xs font-semibold">{t.title}</p>
-                  <p className="text-[#94a3b8] text-xs mt-0.5">{t.hotel}</p>
+                  <p className="font-bold text-brand-navy text-sm">{t.name}</p>
+                  <p className="text-primary text-xs font-semibold">{t.title}</p>
+                  <p className="text-slate-400 text-xs mt-0.5">{t.hotel}</p>
                 </div>
               </div>
             </motion.div>
@@ -1349,7 +1349,7 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-[#0e7490] text-xs font-black uppercase tracking-[0.15em] mb-4"
+            className="text-primary text-xs font-black uppercase tracking-[0.15em] mb-4"
           >
             Pricing
           </motion.p>
@@ -1359,7 +1359,7 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl sm:text-6xl font-black text-[#121318] leading-tight tracking-tighter text-balance mb-6"
+            className="text-5xl sm:text-6xl font-black text-brand-navy leading-tight tracking-tighter text-balance mb-6"
           >
             Own your licence forever.
           </motion.h2>
@@ -1369,7 +1369,7 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-[#64748b] text-lg font-medium"
+            className="text-muted-foreground text-lg font-medium"
           >
             Buy once. Host it yourself, or let us run it for you.
           </motion.p>
@@ -1390,29 +1390,29 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
               className={cn(
                 'relative rounded-2xl p-8 flex flex-col transition-all',
                 tier.highlight
-                  ? 'bg-[#121318] text-white ring-2 ring-[#0e7490] shadow-[0_20px_40px_-15px_rgba(14,116,144,0.2)]'
-                  : 'bg-white border border-[#e2e8f0] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]'
+                  ? 'bg-brand-navy text-white ring-2 ring-primary shadow-[0_20px_40px_-15px_rgba(14,116,144,0.2)]'
+                  : 'bg-white border border-border shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]'
               )}
             >
               {tier.badge && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#0e7490] text-white text-[11px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg whitespace-nowrap">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-mini font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg whitespace-nowrap">
                   {tier.badge}
                 </div>
               )}
 
               <div className="mb-8">
-                <p className={cn('text-xs font-black uppercase tracking-widest mb-3', tier.highlight ? 'text-[#0e7490]' : 'text-[#94a3b8]')}>
+                <p className={cn('text-xs font-black uppercase tracking-widest mb-3', tier.highlight ? 'text-primary' : 'text-slate-400')}>
                   {tier.name}
                 </p>
                 <div className="flex items-baseline gap-2 mb-4">
-                  <span className={cn('text-5xl font-black tabular-nums', tier.highlight ? 'text-white' : 'text-[#121318]')}>
+                  <span className={cn('text-5xl font-black tabular-nums', tier.highlight ? 'text-white' : 'text-brand-navy')}>
                     {tier.price}
                   </span>
-                  <span className={cn('text-sm font-semibold', tier.highlight ? 'text-white/50' : 'text-[#94a3b8]')}>
+                  <span className={cn('text-sm font-semibold', tier.highlight ? 'text-white/50' : 'text-slate-400')}>
                     {tier.currency}
                   </span>
                 </div>
-                <p className={cn('text-sm', tier.highlight ? 'text-white/60' : 'text-[#64748b]')}>
+                <p className={cn('text-sm', tier.highlight ? 'text-white/60' : 'text-muted-foreground')}>
                   {tier.desc}
                 </p>
               </div>
@@ -1420,8 +1420,8 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
               <ul className="space-y-3.5 flex-1 mb-8">
                 {tier.features.map(f => (
                   <li key={f} className="flex items-start gap-3 text-sm">
-                    <Check className="w-4 h-4 mt-0.5 shrink-0 text-[#0e7490]" />
-                    <span className={tier.highlight ? 'text-white/80' : 'text-[#334155]'}>{f}</span>
+                    <Check className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
+                    <span className={tier.highlight ? 'text-white/80' : 'text-slate-700'}>{f}</span>
                   </li>
                 ))}
               </ul>
@@ -1431,8 +1431,8 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
                 className={cn(
                   'w-full py-4 rounded-xl font-black text-sm transition-all active:scale-[0.98]',
                   tier.highlight
-                    ? 'bg-[#0e7490] text-white hover:bg-[#0c6080] shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)]'
-                    : 'bg-[#121318] text-white hover:bg-[#1a2540]'
+                    ? 'bg-primary text-white hover:bg-primary/90 shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)]'
+                    : 'bg-brand-navy text-white hover:bg-brand-navy-elev1'
                 )}
               >
                 {tier.cta} <span className="tabular-nums">— {tier.price} {tier.currency}</span>
@@ -1453,11 +1453,11 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
           transition={{ duration: 0.6 }}
         >
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <p className="text-xs font-black uppercase tracking-[0.15em] text-[#0e7490] mb-3">Optional — Hosted Edition</p>
-            <h3 className="text-3xl sm:text-4xl font-black text-[#121318] tracking-tight text-balance">
+            <p className="text-xs font-black uppercase tracking-[0.15em] text-primary mb-3">Optional — Hosted Edition</p>
+            <h3 className="text-3xl sm:text-4xl font-black text-brand-navy tracking-tight text-balance">
               Host it yourself, or let us run it for you.
             </h3>
-            <p className="text-[#64748b] text-base mt-4 leading-relaxed">
+            <p className="text-muted-foreground text-base mt-4 leading-relaxed">
               Your licence above is yours forever. Want multi-device sync, daily backups, and push notifications without the DevOps? Pick a hosted plan, billed per hotel per month.
             </p>
           </div>
@@ -1471,8 +1471,8 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
                 priceSub: 'with any licence',
                 desc: 'Run it on your own server or static host. You own the data, you handle the backups.',
                 features: ['Full offline / single-tenant', 'Localhost or your hosting', 'No recurring fee, ever'],
-                tone: 'border-[#e2e8f0]',
-                accent: 'text-[#64748b]',
+                tone: 'border-border',
+                accent: 'text-muted-foreground',
               },
               {
                 icon: Cloud,
@@ -1481,8 +1481,8 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
                 priceSub: 'EGP / hotel / month',
                 desc: 'We host it on our cloud. Multi-device sync and daily backups out of the box.',
                 features: ['Multi-device sync', 'Daily backups', '10 GB media storage', 'Email support'],
-                tone: 'border-[#0e7490]/30 ring-1 ring-[#0e7490]/20',
-                accent: 'text-[#0e7490]',
+                tone: 'border-primary/30 ring-1 ring-primary/20',
+                accent: 'text-primary',
               },
               {
                 icon: Server,
@@ -1491,8 +1491,8 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
                 priceSub: 'EGP / hotel / month',
                 desc: 'Everything in Starter, plus push notifications that survive a closed tab and a 99.5% uptime SLA.',
                 features: ['Everything in Starter', 'Push notifications', '50 GB media storage', 'Priority support + 99.5% SLA'],
-                tone: 'border-[#e2e8f0]',
-                accent: 'text-[#0e7490]',
+                tone: 'border-border',
+                accent: 'text-primary',
               },
             ].map(plan => (
               <div
@@ -1503,20 +1503,20 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
                 )}
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center bg-[#0e7490]/10', plan.accent)}>
+                  <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center bg-primary/10', plan.accent)}>
                     <plan.icon className="w-4 h-4" />
                   </div>
-                  <p className="font-black text-[#121318] text-base">{plan.name}</p>
+                  <p className="font-black text-brand-navy text-base">{plan.name}</p>
                 </div>
                 <div className="flex items-baseline gap-1.5 mb-2">
-                  <span className="text-3xl font-black text-[#121318] tabular-nums">{plan.price}</span>
-                  <span className="text-xs text-[#94a3b8] font-semibold">{plan.priceSub}</span>
+                  <span className="text-3xl font-black text-brand-navy tabular-nums">{plan.price}</span>
+                  <span className="text-xs text-slate-400 font-semibold">{plan.priceSub}</span>
                 </div>
-                <p className="text-sm text-[#64748b] leading-relaxed mb-5">{plan.desc}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-5">{plan.desc}</p>
                 <ul className="space-y-2 text-sm">
                   {plan.features.map(f => (
-                    <li key={f} className="flex items-start gap-2 text-[#334155]">
-                      <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#0e7490]" />
+                    <li key={f} className="flex items-start gap-2 text-slate-700">
+                      <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
                       <span>{f}</span>
                     </li>
                   ))}
@@ -1525,8 +1525,8 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
             ))}
           </div>
 
-          <p className="text-center text-[#94a3b8] text-xs mt-6">
-            Annual hosted plans save 15%. Group of 10+ hotels? <Link href="/partners" className="text-[#0e7490] font-bold hover:underline">Talk to us about partner pricing →</Link>
+          <p className="text-center text-slate-400 text-xs mt-6">
+            Annual hosted plans save 15%. Group of 10+ hotels? <Link href="/partners" className="text-primary font-bold hover:underline">Talk to us about partner pricing →</Link>
           </p>
         </motion.div>
 
@@ -1536,10 +1536,10 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="text-[#94a3b8] text-sm font-semibold mb-4">Egyptian payment methods accepted</p>
+          <p className="text-slate-400 text-sm font-semibold mb-4">Egyptian payment methods accepted</p>
           <div className="flex flex-wrap justify-center gap-3">
             {['InstaPay', 'Vodafone Cash', 'Bank Transfer', 'Visa / Mastercard'].map(m => (
-              <span key={m} className="bg-[#f8fafc] border border-[#e2e8f0] text-[#64748b] text-xs font-bold px-4 py-2 rounded-xl">
+              <span key={m} className="bg-[#f8fafc] border border-border text-muted-foreground text-xs font-bold px-4 py-2 rounded-xl">
                 {m}
               </span>
             ))}
@@ -1589,7 +1589,7 @@ function ContactSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="text-[#0e7490] text-xs font-black uppercase tracking-[0.15em] mb-4"
+              className="text-primary text-xs font-black uppercase tracking-[0.15em] mb-4"
             >
               Contact
             </motion.p>
@@ -1599,11 +1599,11 @@ function ContactSection() {
               whileInView="visible"
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl sm:text-6xl font-black text-[#121318] leading-tight tracking-tighter text-balance mb-8"
+              className="text-5xl sm:text-6xl font-black text-brand-navy leading-tight tracking-tighter text-balance mb-8"
             >
               Have questions?
             </motion.h2>
-            <p className="text-[#64748b] text-lg max-w-[55ch] leading-relaxed mb-10">
+            <p className="text-muted-foreground text-lg max-w-[55ch] leading-relaxed mb-10">
               We speak Arabic, English, Polish, Russian, and more. Our team responds within 2 hours during business hours.
             </p>
             <div className="space-y-5">
@@ -1613,17 +1613,17 @@ function ContactSection() {
                 { icon: Building2, label: 'Offices',   value: 'Sharm El Sheikh & Hurghada', href: undefined },
               ].map(c => (
                 <div key={c.label} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#121318] flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-brand-navy flex items-center justify-center shrink-0">
                     <c.icon className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <p className="text-[#94a3b8] text-xs font-semibold">{c.label}</p>
+                    <p className="text-slate-400 text-xs font-semibold">{c.label}</p>
                     {c.href ? (
-                      <a href={c.href} className="text-[#121318] text-sm font-bold hover:text-[#0e7490] transition-colors py-1 -my-1 inline-block">
+                      <a href={c.href} className="text-brand-navy text-sm font-bold hover:text-primary transition-colors py-1 -my-1 inline-block">
                         {c.value}
                       </a>
                     ) : (
-                      <p className="text-[#121318] text-sm font-bold">{c.value}</p>
+                      <p className="text-brand-navy text-sm font-bold">{c.value}</p>
                     )}
                   </div>
                 </div>
@@ -1632,7 +1632,7 @@ function ContactSection() {
           </motion.div>
 
           <motion.div
-            className="bg-white border border-[#e2e8f0] rounded-2xl p-8 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)]"
+            className="bg-white border border-border rounded-2xl p-8 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)]"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1643,41 +1643,41 @@ function ContactSection() {
                 <div className="w-16 h-16 bg-green-50 border-2 border-green-200 rounded-full flex items-center justify-center mx-auto mb-5">
                   <CheckCircle2 className="w-8 h-8 text-green-500" />
                 </div>
-                <p className="text-xl font-black text-[#121318] mb-2">Message sent!</p>
-                <p className="text-[#64748b] text-sm leading-relaxed">We will get back to you within 2 hours during business hours.</p>
+                <p className="text-xl font-black text-brand-navy mb-2">Message sent!</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">We will get back to you within 2 hours during business hours.</p>
               </div>
             ) : (
               <form onSubmit={e => { e.preventDefault(); setSent(true) }} className="space-y-4">
-                <p className="font-black text-[#121318] text-lg mb-6">Send us a message</p>
+                <p className="font-black text-brand-navy text-lg mb-6">Send us a message</p>
                 {[
                   { id: 'cf-name',  label: 'Your Name',        placeholder: 'Mohamed Ahmed',              type: 'text'  },
                   { id: 'cf-hotel', label: 'Hotel / Company',  placeholder: 'Grand Seas Resort, Hurghada', type: 'text'  },
                   { id: 'cf-email', label: 'Email Address',    placeholder: 'you@resort.com',              type: 'email' },
                 ].map(f => (
                   <div key={f.id}>
-                    <label htmlFor={f.id} className="text-xs font-bold text-[#475569] mb-1.5 block">{f.label}</label>
+                    <label htmlFor={f.id} className="text-xs font-bold text-slate-600 mb-1.5 block">{f.label}</label>
                     <input
                       id={f.id}
                       type={f.type}
                       placeholder={f.placeholder}
                       required
-                      className="w-full border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-base sm:text-sm text-[#121318] focus:outline-none focus:ring-2 focus:ring-[#0e7490]/30 focus:border-[#0e7490] transition-colors placeholder:text-[#c0ccda]"
+                      className="w-full border border-border rounded-xl px-4 py-2.5 text-base sm:text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors placeholder:text-slate-300"
                     />
                   </div>
                 ))}
                 <div>
-                  <label htmlFor="cf-msg" className="text-xs font-bold text-[#475569] mb-1.5 block">Message</label>
+                  <label htmlFor="cf-msg" className="text-xs font-bold text-slate-600 mb-1.5 block">Message</label>
                   <textarea
                     id="cf-msg"
                     rows={4}
                     placeholder="Tell us about your hotel and team size..."
                     required
-                    className="w-full border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-base sm:text-sm text-[#121318] focus:outline-none focus:ring-2 focus:ring-[#0e7490]/30 focus:border-[#0e7490] transition-colors resize-none placeholder:text-[#c0ccda]"
+                    className="w-full border border-border rounded-xl px-4 py-2.5 text-base sm:text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors resize-none placeholder:text-slate-300"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-[#121318] hover:bg-[#1a2540] text-white font-black py-3.5 rounded-xl transition-colors text-sm active:scale-[0.98]"
+                  className="w-full bg-brand-navy hover:bg-brand-navy-elev1 text-white font-black py-3.5 rounded-xl transition-colors text-sm active:scale-[0.98]"
                 >
                   Send Message
                 </button>
@@ -1694,8 +1694,8 @@ function ContactSection() {
 
 function FinalCTA({ onBuy }: { onBuy: () => void }) {
   return (
-    <section className="bg-[#121318] py-16 sm:py-24 relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[#0e7490]/20 rounded-full blur-[100px] pointer-events-none" />
+    <section className="bg-brand-navy py-16 sm:py-24 relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
       <div className="relative max-w-3xl mx-auto px-5 sm:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -1712,7 +1712,7 @@ function FinalCTA({ onBuy }: { onBuy: () => void }) {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4">
             <button
               onClick={onBuy}
-              className="group flex items-center justify-center gap-2 bg-[#0e7490] hover:bg-[#0c6080] text-white font-black px-8 py-4 rounded-xl transition-all shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)] text-base active:-translate-y-[1px]"
+              className="group flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-black px-8 py-4 rounded-xl transition-all shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)] text-base active:-translate-y-[1px]"
             >
               Buy Now — From <span className="tabular-nums">25,000 EGP</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -1724,7 +1724,7 @@ function FinalCTA({ onBuy }: { onBuy: () => void }) {
           <div className="flex flex-wrap justify-center gap-6 mt-12 text-white/30 text-xs font-semibold">
             {['Own it for life', 'Self-host or cloud', '48h setup', 'Reseller programme'].map(t => (
               <span key={t} className="flex items-center gap-1.5">
-                <Check className="w-3 h-3 text-[#0e7490]" />
+                <Check className="w-3 h-3 text-primary" />
                 {t}
               </span>
             ))}
@@ -1740,34 +1740,34 @@ function FinalCTA({ onBuy }: { onBuy: () => void }) {
 function Footer() {
   const { t } = useTranslation()
   return (
-    <footer className="bg-white border-t border-[#e2e8f0] py-14">
+    <footer className="bg-white border-t border-border py-14">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-[#0e7490] flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
               <Zap className="w-4 h-4 text-white" />
             </div>
             <div>
-              <span className="text-[#121318] font-black text-base tracking-tight">AnimaPro</span>
-              <p className="text-[#94a3b8] text-xs mt-0.5">Resort Animation Management</p>
+              <span className="text-brand-navy font-black text-base tracking-tight">AnimaPro</span>
+              <p className="text-slate-400 text-xs mt-0.5">Resort Animation Management</p>
             </div>
           </div>
           {/* py-2 on each link gives a 44px+ tap target without changing visual size — important for mobile. */}
           <nav className="flex items-center gap-5 text-xs font-semibold">
-            <Link href="/partners" className="text-[#0e7490] hover:text-[#0c6080] transition-colors py-2 -my-2">
+            <Link href="/partners" className="text-primary hover:text-primary/90 transition-colors py-2 -my-2">
               {t('footer.partners')}
             </Link>
-            <Link href="/careers" className="text-[#64748b] hover:text-[#121318] transition-colors py-2 -my-2">
+            <Link href="/careers" className="text-muted-foreground hover:text-brand-navy transition-colors py-2 -my-2">
               {t('footer.hiring')}
             </Link>
-            <Link href="/platform" className="text-[#64748b] hover:text-[#121318] transition-colors py-2 -my-2">
+            <Link href="/platform" className="text-muted-foreground hover:text-brand-navy transition-colors py-2 -my-2">
               {t('common.liveDemo')}
             </Link>
           </nav>
-          <p className="text-[#94a3b8] text-xs text-center">
+          <p className="text-slate-400 text-xs text-center">
             {t('footer.builtFor')}
           </p>
-          <p className="text-[#94a3b8] text-xs shrink-0">
+          <p className="text-slate-400 text-xs shrink-0">
             &copy; {new Date().getFullYear()} AnimaPro. {t('footer.rights')}
           </p>
         </div>

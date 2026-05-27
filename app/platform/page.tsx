@@ -19,6 +19,7 @@ import { ReportsModule } from '@/components/modules/reports'
 import { PerformanceModule } from '@/components/modules/performance'
 import { LeaveModule } from '@/components/modules/leave'
 import { RecruitmentModule } from '@/components/modules/recruitment'
+import { TicketsModule } from '@/components/modules/tickets'
 import { SettingsModule } from '@/components/modules/settings'
 import { COMPANIES, ALL_HOTELS } from '@/lib/mock-data'
 import { DEMO_USERS, canAccess, getAllowedSections, type AppUser, type Section } from '@/lib/roles'
@@ -74,6 +75,7 @@ export default function AnimaProApp() {
       case 'announcements': return <AnnouncementsModule   hotelId={selectedHotelId} searchQuery={searchQuery} />
       case 'leave':         return <LeaveModule           hotelId={selectedHotelId} currentUser={currentUser} searchQuery={searchQuery} />
       case 'recruitment':   return <RecruitmentModule     currentUser={currentUser} searchQuery={searchQuery} />
+      case 'tickets':       return <TicketsModule         currentUser={currentUser} />
       case 'reports':       return <ReportsModule         hotelId={selectedHotelId} />
       case 'performance':   return <PerformanceModule     hotelId={selectedHotelId} searchQuery={searchQuery} />
       case 'settings':      return <SettingsModule        hotel={selectedHotel} company={selectedCompany} currentUser={currentUser} />
@@ -89,7 +91,7 @@ export default function AnimaProApp() {
       {/* ── Demo banner ─────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between demo-banner text-white text-xs font-semibold px-3 sm:px-4 py-2 shrink-0">
         <div className="flex items-center gap-2 min-w-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#0e7490] animate-pulse-dot shrink-0" />
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse-dot shrink-0" />
           <span className="truncate text-white/80">Live Demo — AnimaPro Platform</span>
         </div>
         <Link href="/" className="flex items-center gap-1.5 text-white/50 hover:text-white transition-colors shrink-0 ml-2">

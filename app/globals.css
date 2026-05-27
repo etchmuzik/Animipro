@@ -3,20 +3,41 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   AnimaPro — Taste Skill Design System
-   Zinc/Slate neutrals · Singular teal accent · Geist typography
+   AnimaPro — Design System Tokens
+   Reconstructed from the May 2026 audit + handoff bundle.
+   Singular teal accent · Slate neutrals · Geist typography · Spring motion.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Dark mode palette — dark navy base */
+  /* ── Brand teal (cyan) — the singular hero color ───────────────────────── */
+  --brand-teal-50:   190 100% 96%;
+  --brand-teal-100:  185 96% 90%;
+  --brand-teal-200:  186 94% 82%;
+  --brand-teal-300:  187 92% 69%;
+  --brand-teal-400:  189 94% 53%;
+  --brand-teal-500:  192 91% 41%;
+  --brand-teal-600:  192 91% 36%;   /* cyan-600 — hover    */
+  --brand-teal:      192 72% 32%;   /* cyan-700 — primary  */
+  --brand-teal-800:  194 70% 27%;   /* cyan-800 — press    */
+  --brand-teal-900:  196 64% 24%;
+  --brand-teal-950:  197 78% 15%;
+
+  /* ── Brand navy — marketing surface ────────────────────────────────────── */
+  --brand-navy:        228 10% 9%;    /* #121318 */
+  --brand-navy-elev1:  221 51% 18%;   /* #1a2540 */
+  --brand-navy-elev2:  222 47% 11%;   /* #0f1729 */
+  --brand-navy-line:   215 19% 16%;   /* #1f2937 */
+
+  /* ── Default theme — DARK platform shell (audit) ───────────────────────── */
   --background: 228 10% 10%;
   --foreground: 0 0% 96%;
   --card: 228 10% 13%;
   --card-foreground: 0 0% 96%;
   --popover: 228 10% 13%;
   --popover-foreground: 0 0% 96%;
-  --primary: 0 0% 96%;
-  --primary-foreground: 228 10% 10%;
+  /* primary is teal (was white before — audit fix) */
+  --primary: var(--brand-teal);
+  --primary-foreground: 0 0% 100%;
   --secondary: 228 8% 18%;
   --secondary-foreground: 0 0% 96%;
   --muted: 228 8% 18%;
@@ -27,40 +48,89 @@
   --destructive-foreground: 0 0% 98%;
   --border: 228 8% 20%;
   --input: 228 8% 20%;
-  --ring: 192 72% 32%;
-  --chart-1: 192 72% 32%;
-  --chart-2: 152 60% 36%;
-  --chart-3: 220 14% 46%;
-  --chart-4: 38 80% 55%;
+  --ring: var(--brand-teal);
+  /* Chart palette — teal, amber, violet, emerald, red */
+  --chart-1: var(--brand-teal);
+  --chart-2: 38 92% 50%;
+  --chart-3: 262 83% 58%;
+  --chart-4: 152 60% 36%;
   --chart-5: 350 65% 55%;
   --radius: 0.75rem;
+
+  /* ── Status tokens — light tone (audit priority #2) ───────────────────── */
+  --status-pending-bg:  48 96% 89%;   /* amber-100 */
+  --status-pending-fg:  32 81% 29%;   /* amber-700 */
+  --status-pending-bd:  48 96% 76%;   /* amber-200 */
+
+  --status-progress-bg: 214 95% 93%;  /* blue-100  */
+  --status-progress-fg: 224 76% 48%;  /* blue-700  */
+  --status-progress-bd: 213 97% 87%;  /* blue-200  */
+
+  --status-success-bg:  142 76% 86%;  /* green-100 */
+  --status-success-fg:  142 71% 29%;  /* green-700 */
+  --status-success-bd:  141 84% 73%;  /* green-200 */
+
+  --status-danger-bg:   0 93% 94%;    /* red-100   */
+  --status-danger-fg:   0 74% 42%;    /* red-700   */
+  --status-danger-bd:   0 96% 89%;    /* red-200   */
+
+  --status-neutral-bg:  210 40% 96%;  /* slate-100 */
+  --status-neutral-fg:  215 25% 27%;  /* slate-700 */
+  --status-neutral-bd:  214 32% 91%;  /* slate-200 */
+
+  --status-info-bg:     var(--brand-teal-50);
+  --status-info-fg:     var(--brand-teal-800);
+  --status-info-bd:     var(--brand-teal-100);
+
+  /* ── Motion — single spring easing (audit) ─────────────────────────────── */
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:    120ms;
+  --dur-base:    200ms;
+  --dur-slow:    320ms;
+  --dur-slowest: 480ms;
+
+  /* ── Focus ring (used by interactive primitives) ───────────────────────── */
+  --shadow-focus: 0 0 0 3px hsl(var(--ring) / 0.35);
 }
 
+/* ── Dark mode toggle — for now identical to default (platform is dark by default) */
 .dark {
-  --background: 240 6% 6%;
+  /* Status tokens use translucent fills on dark surfaces */
+  --status-pending-bg:  rgb(245 158 11 / 0.20);
+  --status-pending-fg:  46 96% 76%;   /* amber-300 #fcd34d */
+  --status-pending-bd:  rgb(245 158 11 / 0.30);
+
+  --status-progress-bg: rgb(59 130 246 / 0.20);
+  --status-progress-fg: 213 94% 78%;  /* blue-300 #93c5fd */
+  --status-progress-bd: rgb(59 130 246 / 0.30);
+
+  --status-success-bg:  rgb(34 197 94 / 0.20);
+  --status-success-fg:  141 79% 75%;  /* green-300 #86efac */
+  --status-success-bd:  rgb(34 197 94 / 0.30);
+
+  --status-danger-bg:   rgb(239 68 68 / 0.20);
+  --status-danger-fg:   0 94% 82%;    /* red-300 #fca5a5 */
+  --status-danger-bd:   rgb(239 68 68 / 0.30);
+
+  --status-neutral-bg:  228 10% 18%;
+  --status-neutral-fg:  213 27% 84%;  /* slate-300 #cbd5e1 */
+  --status-neutral-bd:  228 10% 22%;
+
+  --status-info-bg:     rgb(14 116 144 / 0.25);
+  --status-info-fg:     var(--brand-teal-300);
+  --status-info-bd:     rgb(14 116 144 / 0.40);
+}
+
+/* ── Marketing surface override — navy "[#121318]" pages get their own bg */
+[data-surface="marketing"] {
+  --background: var(--brand-navy);
   --foreground: 0 0% 96%;
-  --card: 240 6% 8%;
+  --card: var(--brand-navy-elev1);
   --card-foreground: 0 0% 96%;
-  --popover: 240 6% 8%;
-  --popover-foreground: 0 0% 96%;
-  --primary: 0 0% 96%;
-  --primary-foreground: 240 6% 6%;
-  --secondary: 240 5% 14%;
-  --secondary-foreground: 0 0% 96%;
-  --muted: 240 5% 14%;
-  --muted-foreground: 240 4% 60%;
-  --accent: 240 5% 14%;
-  --accent-foreground: 0 0% 96%;
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 240 5% 16%;
-  --input: 240 5% 16%;
-  --ring: 192 72% 40%;
-  --chart-1: 192 72% 45%;
-  --chart-2: 152 50% 45%;
-  --chart-3: 38 70% 55%;
-  --chart-4: 280 55% 55%;
-  --chart-5: 350 65% 55%;
+  --border: var(--brand-navy-line);
+  --muted-foreground: 215 16% 65%;
 }
 
 * {
@@ -90,4 +160,30 @@ html[lang="ar"] {
    shown alongside Latin UI). Mirrors the Tailwind `font-arabic` token. */
 .font-arabic {
   font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif;
+}
+
+/* ── Motion presets (audit: copy-pasted across 6+ modules) ─────────────── */
+@keyframes ds-fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ds-fade-in {
+  from { opacity: 0; } to { opacity: 1; }
+}
+.anim-fade-in-up { animation: ds-fade-in-up var(--dur-slow) var(--ease-spring) both; }
+.anim-stagger > *  { animation: ds-fade-in-up var(--dur-slow) var(--ease-spring) both; }
+.anim-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.anim-stagger > *:nth-child(2) { animation-delay: 60ms; }
+.anim-stagger > *:nth-child(3) { animation-delay: 120ms; }
+.anim-stagger > *:nth-child(4) { animation-delay: 180ms; }
+.anim-stagger > *:nth-child(5) { animation-delay: 240ms; }
+.anim-stagger > *:nth-child(6) { animation-delay: 300ms; }
+
+/* ── Eyebrow text — small uppercase label used above section headings ─── */
+.text-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: hsl(var(--primary));
 }

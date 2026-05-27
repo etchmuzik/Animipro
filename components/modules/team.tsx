@@ -59,30 +59,30 @@ function AnimatorCard({ animator, onSelect, teamColor }: { animator: Animator; o
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-sm font-semibold text-foreground leading-none">{animator.firstName} {animator.lastName}</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">{animator.teamName}</p>
+                <p className="text-mini text-muted-foreground mt-0.5">{animator.teamName}</p>
               </div>
-              <Badge className={cn('text-[9px] px-1.5 py-0.5 border shrink-0', ROLE_COLORS[animator.role])}>
+              <Badge className={cn('text-tiny px-1.5 py-0.5 border shrink-0', ROLE_COLORS[animator.role])}>
                 {ROLE_LABELS[animator.role]}
               </Badge>
             </div>
             <div className="mt-2 flex items-center gap-2">
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-0.5">
-                  <span className="text-[9px] text-muted-foreground">Performance</span>
-                  <span className={cn('text-[10px] font-bold', PERF_COLOR(animator.performance))}>{animator.performance}%</span>
+                  <span className="text-tiny text-muted-foreground">Performance</span>
+                  <span className={cn('text-micro font-bold', PERF_COLOR(animator.performance))}>{animator.performance}%</span>
                 </div>
                 <Progress value={animator.performance} className="h-1" />
               </div>
             </div>
             <div className="mt-2 flex items-center gap-2 flex-wrap">
-              <Badge className={cn('text-[9px] px-1.5 py-0 border-0', CONTRACT_COLORS[animator.contractType])}>
+              <Badge className={cn('text-tiny px-1.5 py-0 border-0', CONTRACT_COLORS[animator.contractType])}>
                 {animator.contractType.replace('_', ' ')}
               </Badge>
-              <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-1 text-micro text-muted-foreground">
                 <Globe className="w-3 h-3" />
                 <span>{animator.nationality}</span>
               </div>
-              <div className="flex items-center gap-1 text-[10px] text-muted-foreground ml-auto">
+              <div className="flex items-center gap-1 text-micro text-muted-foreground ml-auto">
                 <Star className="w-3 h-3 text-accent" />
                 <span>{animator.attendanceRate}%</span>
               </div>
@@ -108,9 +108,9 @@ function AnimatorModal({ animator, teamColor, onClose }: { animator: Animator; t
               <CardTitle className="text-base">{animator.firstName} {animator.lastName}</CardTitle>
               <p className="text-sm text-muted-foreground">{animator.email}</p>
               <div className="flex items-center gap-2 mt-1">
-                <Badge className={cn('text-[10px] border', ROLE_COLORS[animator.role])}>{ROLE_LABELS[animator.role]}</Badge>
+                <Badge className={cn('text-micro border', ROLE_COLORS[animator.role])}>{ROLE_LABELS[animator.role]}</Badge>
                 <div className={cn('w-2 h-2 rounded-full', animator.isActive ? 'bg-green-500' : 'bg-gray-400')} />
-                <span className="text-[10px] text-muted-foreground">{animator.isActive ? 'Active' : 'Inactive'}</span>
+                <span className="text-micro text-muted-foreground">{animator.isActive ? 'Active' : 'Inactive'}</span>
               </div>
             </div>
           </div>
@@ -118,32 +118,32 @@ function AnimatorModal({ animator, teamColor, onClose }: { animator: Animator; t
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Team</p>
+              <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Team</p>
               <p className="font-semibold text-xs">{animator.teamName}</p>
             </div>
             <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Contract</p>
+              <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Contract</p>
               <p className="font-semibold text-xs">{animator.contractType.replace('_', ' ')}</p>
             </div>
             <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Nationality</p>
+              <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Nationality</p>
               <p className="font-semibold text-xs">{animator.nationality}</p>
             </div>
             <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Start Date</p>
+              <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Start Date</p>
               <p className="font-semibold text-xs">{new Date(animator.startDate).toLocaleDateString()}</p>
             </div>
           </div>
           <div>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Languages</p>
+            <p className="text-micro text-muted-foreground uppercase tracking-widest mb-2">Languages</p>
             <div className="flex flex-wrap gap-1.5">
-              {animator.languages.map(l => <Badge key={l} variant="secondary" className="text-[10px]">{l}</Badge>)}
+              {animator.languages.map(l => <Badge key={l} variant="secondary" className="text-micro">{l}</Badge>)}
             </div>
           </div>
           <div>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Specialties</p>
+            <p className="text-micro text-muted-foreground uppercase tracking-widest mb-2">Specialties</p>
             <div className="flex flex-wrap gap-1.5">
-              {animator.specialties.map(s => <Badge key={s} className="text-[10px] bg-primary/10 text-primary border-0">{s}</Badge>)}
+              {animator.specialties.map(s => <Badge key={s} className="text-micro bg-primary/10 text-primary border-0">{s}</Badge>)}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -182,31 +182,31 @@ function TeamCard({ team, allAnimators }: { team: Team; allAnimators: Animator[]
         <div className="flex items-start justify-between mb-3">
           <div>
             <p className="text-sm font-semibold">{team.name}</p>
-            <p className="text-[10px] text-muted-foreground">{team.type.replace(/_/g, ' ')}</p>
+            <p className="text-micro text-muted-foreground">{team.type.replace(/_/g, ' ')}</p>
           </div>
-          <Badge variant="secondary" className="text-[10px]">{members.length} members</Badge>
+          <Badge variant="secondary" className="text-micro">{members.length} members</Badge>
         </div>
-        <p className="text-[11px] text-muted-foreground mb-3">{team.description}</p>
+        <p className="text-mini text-muted-foreground mb-3">{team.description}</p>
         <div className="flex -space-x-1.5 mb-3">
           {members.slice(0, 6).map(m => (
-            <div key={m.id} className="w-6 h-6 rounded-full border-2 border-card flex items-center justify-center text-[9px] font-bold text-white"
+            <div key={m.id} className="w-6 h-6 rounded-full border-2 border-card flex items-center justify-center text-tiny font-bold text-white"
               style={{ background: team.color }}>
               {m.firstName[0]}
             </div>
           ))}
           {members.length > 6 && (
-            <div className="w-6 h-6 rounded-full border-2 border-card bg-muted flex items-center justify-center text-[9px] font-semibold text-muted-foreground">
+            <div className="w-6 h-6 rounded-full border-2 border-card bg-muted flex items-center justify-center text-tiny font-semibold text-muted-foreground">
               +{members.length - 6}
             </div>
           )}
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[10px] text-muted-foreground">Leader</p>
+            <p className="text-micro text-muted-foreground">Leader</p>
             <p className="text-xs font-semibold">{team.leaderName}</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] text-muted-foreground">Avg Performance</p>
+            <p className="text-micro text-muted-foreground">Avg Performance</p>
             <p className={cn('text-sm font-bold', PERF_COLOR(avgPerf))}>{avgPerf}%</p>
           </div>
         </div>

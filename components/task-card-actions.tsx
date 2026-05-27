@@ -226,7 +226,7 @@ export function TaskCardActions({ kind, id, originalStatus, compact, className }
           <Button
             size="sm"
             onClick={handleStart}
-            className={cn('h-7 gap-1.5 text-[11px] font-semibold', compact && 'h-6 text-[10px] px-2')}
+            className={cn('h-7 gap-1.5 text-mini font-semibold', compact && 'h-6 text-micro px-2')}
           >
             <Play className="w-3 h-3" />
             Start
@@ -237,7 +237,7 @@ export function TaskCardActions({ kind, id, originalStatus, compact, className }
           <Button
             size="sm"
             onClick={handleComplete}
-            className={cn('h-7 gap-1.5 text-[11px] font-semibold bg-green-600 hover:bg-green-700 text-white', compact && 'h-6 text-[10px] px-2')}
+            className={cn('h-7 gap-1.5 text-mini font-semibold bg-green-600 hover:bg-green-700 text-white', compact && 'h-6 text-micro px-2')}
           >
             <CheckCircle2 className="w-3 h-3" />
             Complete
@@ -251,7 +251,7 @@ export function TaskCardActions({ kind, id, originalStatus, compact, className }
               variant="outline"
               onClick={() => photoInputRef.current?.click()}
               disabled={busy}
-              className={cn('h-7 gap-1.5 text-[11px]', compact && 'h-6 text-[10px] px-2')}
+              className={cn('h-7 gap-1.5 text-mini', compact && 'h-6 text-micro px-2')}
             >
               {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Camera className="w-3 h-3" />}
               Photo
@@ -261,7 +261,7 @@ export function TaskCardActions({ kind, id, originalStatus, compact, className }
               variant="outline"
               onClick={() => videoInputRef.current?.click()}
               disabled={busy}
-              className={cn('h-7 gap-1.5 text-[11px]', compact && 'h-6 text-[10px] px-2')}
+              className={cn('h-7 gap-1.5 text-mini', compact && 'h-6 text-micro px-2')}
             >
               {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Video className="w-3 h-3" />}
               Video
@@ -273,7 +273,7 @@ export function TaskCardActions({ kind, id, originalStatus, compact, className }
           <button
             type="button"
             onClick={handleUndo}
-            className="text-[10px] text-muted-foreground hover:text-foreground underline underline-offset-2 ml-auto"
+            className="text-micro text-muted-foreground hover:text-foreground underline underline-offset-2 ml-auto"
           >
             Undo
           </button>
@@ -282,7 +282,7 @@ export function TaskCardActions({ kind, id, originalStatus, compact, className }
 
       {/* Status line */}
       {state.startedAt && (
-        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+        <div className="flex items-center gap-1.5 text-micro text-muted-foreground">
           <Clock className="w-3 h-3" />
           {state.completedAt ? (
             <>
@@ -310,7 +310,7 @@ export function TaskCardActions({ kind, id, originalStatus, compact, className }
       )}
 
       {error && (
-        <p className="text-[10px] text-red-500" role="alert">{error}</p>
+        <p className="text-micro text-red-500" role="alert">{error}</p>
       )}
 
       {/* Hidden file inputs.

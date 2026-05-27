@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Calendar, Star, TrendingUp, TrendingDown, Minus, CheckCircle2, MessageSquare, Award, AlertCircle } from 'lucide-react'
 import { getFeedbackSummary, subscribe as subscribeFeedback } from '@/lib/feedback'
+import { getBrand, subscribe as subscribeBrand } from '@/lib/brand-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -26,7 +27,7 @@ const STATUS_COLORS: Record<string, string> = {
   LATE: 'bg-amber-500',
   ABSENT: 'bg-red-500',
   SCHEDULED: 'bg-blue-500',
-  IN_PROGRESS: 'bg-[#0e7490]',
+  IN_PROGRESS: 'bg-primary',
   COMPLETED: 'bg-green-500',
   CANCELLED: 'bg-zinc-400',
 }
@@ -35,32 +36,32 @@ function StatCard({ icon: Icon, label, value, sub, trend, color = 'teal', gridSp
   icon: React.ElementType; label: string; value: string | number; sub?: string; trend?: string; color?: string; gridSpan?: string
 }) {
   const iconBg = {
-    teal: 'bg-[#0e7490]/10',
+    teal: 'bg-primary/10',
     green: 'bg-green-500/10',
     amber: 'bg-amber-500/10',
     blue: 'bg-blue-500/10',
-  }[color] ?? 'bg-[#0e7490]/10'
+  }[color] ?? 'bg-primary/10'
 
   const iconColor = {
-    teal: 'text-[#0e7490]',
+    teal: 'text-primary',
     green: 'text-green-500',
     amber: 'text-amber-500',
     blue: 'text-blue-500',
-  }[color] ?? 'text-[#0e7490]'
+  }[color] ?? 'text-primary'
 
   const trendColor = {
-    teal: 'text-[#0e7490]',
+    teal: 'text-primary',
     green: 'text-green-600',
     amber: 'text-amber-600',
     blue: 'text-blue-600',
-  }[color] ?? 'text-[#0e7490]'
+  }[color] ?? 'text-primary'
 
   const trendBg = {
-    teal: 'bg-[#0e7490]/5',
+    teal: 'bg-primary/5',
     green: 'bg-green-500/5',
     amber: 'bg-amber-500/5',
     blue: 'bg-blue-500/5',
-  }[color] ?? 'bg-[#0e7490]/5'
+  }[color] ?? 'bg-primary/5'
 
   return (
     <motion.div
@@ -81,7 +82,7 @@ function StatCard({ icon: Icon, label, value, sub, trend, color = 'teal', gridSp
       </div>
       {trend && (
         <div className={cn('mt-4 flex items-center gap-2 px-3 py-2 rounded-lg w-fit', trendBg)}>
-          <TrendingUp className="w-3.5 h-3.5" style={{ color: iconColor.split('-')[1] === 'teal' ? '#0e7490' : iconColor }} />
+          <TrendingUp className={cn('w-3.5 h-3.5', trendColor)} />
           <span className={cn('text-xs font-semibold', trendColor)}>{trend}</span>
         </div>
       )}
@@ -99,7 +100,7 @@ function StarRating({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'md
           key={i}
           className={cn(
             size === 'md' ? 'w-4 h-4' : 'w-3 h-3',
-            i <= full ? 'fill-[#0e7490] text-[#0e7490]' : i === full + 1 && half ? 'fill-[#0e7490]/50 text-[#0e7490]' : 'fill-zinc-700 text-zinc-600'
+            i <= full ? 'fill-primary text-primary' : i === full + 1 && half ? 'fill-primary/50 text-primary' : 'fill-zinc-700 text-zinc-600'
           )}
         />
       ))}
@@ -140,6 +141,16 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
     refresh()
     return subscribeFeedback(refresh)
   }, [])
+
+  // Live brand hex — Recharts SVG props need a real color string (not a CSS
+  // variable). Subscribing keeps the charts repainting in sync with the
+  // white-label colour picker in Settings.
+  const [brandHex, setBrandHex] = useState<string>(() => getBrand().primaryHex)
+  useEffect(() => {
+    const refresh = (): void => setBrandHex(getBrand().primaryHex)
+    refresh()
+    return subscribeBrand(refresh)
+  }, [])
   const guestAvg = feedback.count > 0 ? feedback.average : DASHBOARD_STATS.guestFeedbackAvg
   const schedule              = getHotelSchedule(hotelId)
   const animators             = getHotelAnimators(hotelId)
@@ -166,11 +177,11 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
           {/* TripAdvisor */}
           <div className="rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] flex flex-col">
             <div className="flex items-start justify-between mb-4">
-              <div className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: '#0e7490' }}>
+              <div className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: brandHex }}>
                 <svg viewBox="0 0 48 48" className="w-6 h-6 fill-white"><circle cx="12" cy="26" r="8"/><circle cx="36" cy="26" r="8"/><path d="M4 18c0-11 36-11 40 0"/><circle cx="12" cy="26" r="3.5" fill="#ffffff"/><circle cx="36" cy="26" r="3.5" fill="#ffffff"/></svg>
               </div>
               {hotel.tripAdvisorBadge && (
-                <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[#0e7490]/10 text-[#0e7490]">
+                <span className="text-xs font-semibold px-2 py-1 rounded-full bg-primary/10 text-primary">
                   {hotel.tripAdvisorBadge}
                 </span>
               )}
@@ -206,7 +217,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             </div>
             <p className="text-sm text-zinc-300 leading-relaxed mb-3">Based on guest reviews</p>
             <div className="flex items-center justify-between pt-3 border-t border-white/10">
-              <p className="text-xs text-[#0e7490] font-medium">Google Maps Profile</p>
+              <p className="text-xs text-primary font-medium">Google Maps Profile</p>
               <TrendingUp className="w-4 h-4 text-green-600" />
             </div>
           </div>
@@ -216,13 +227,13 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             <div className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ background: '#003580' }}>
               <span className="text-white font-black text-sm">B</span>
             </div>
-            <p className="text-xs text-zinc-300 font-semibold uppercase tracking-tight mb-1" style={{ color: '#0e7490' }}>Booking.com</p>
+            <p className="text-xs text-primary font-semibold uppercase tracking-tight mb-1">Booking.com</p>
             <div className="flex items-baseline gap-2 mb-1">
               <span className="text-3xl tabular-nums font-bold text-white">{hotel.bookingRating.toFixed(1)}</span>
               <span className="text-xs text-zinc-400">/ 10</span>
             </div>
             <span className={cn(
-              'text-[10px] font-bold px-2.5 py-1 rounded-full text-white inline-block mb-3 w-fit',
+              'text-micro font-bold px-2.5 py-1 rounded-full text-white inline-block mb-3 w-fit',
               hotel.bookingRating >= 9 ? 'bg-green-600' : hotel.bookingRating >= 8 ? 'bg-blue-600' : 'bg-amber-600'
             )}>
               {hotel.bookingRating >= 9 ? 'Exceptional' : hotel.bookingRating >= 8 ? 'Very Good' : 'Good'}
@@ -260,8 +271,8 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
               <AreaChart data={WEEKLY_ACTIVITY_DATA} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                 <defs>
                   <linearGradient id="gActivities" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0e7490" stopOpacity={0.2} />
-                    <stop offset="95%" stopColor="#0e7490" stopOpacity={0} />
+                    <stop offset="5%" stopColor={brandHex} stopOpacity={0.2} />
+                    <stop offset="95%" stopColor={brandHex} stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="gGuests" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.15} />
@@ -275,12 +286,12 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
                 <Tooltip
                   contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }}
                 />
-                <Area yAxisId="left" type="monotone" dataKey="activities" stroke="#0e7490" fill="url(#gActivities)" strokeWidth={2.5} name="Activities" dot={false} />
+                <Area yAxisId="left" type="monotone" dataKey="activities" stroke={brandHex} fill="url(#gActivities)" strokeWidth={2.5} name="Activities" dot={false} />
                 <Area yAxisId="right" type="monotone" dataKey="guests" stroke="#7c3aed" fill="url(#gGuests)" strokeWidth={2.5} name="Guests" dot={false} />
               </AreaChart>
             </ResponsiveContainer>
             <div className="flex items-center gap-6 mt-4 px-2">
-              <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full" style={{ background: '#0e7490' }} /><span className="text-xs text-zinc-300">Activities</span></div>
+              <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-primary" /><span className="text-xs text-zinc-300">Activities</span></div>
               <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full" style={{ background: '#7c3aed' }} /><span className="text-xs text-zinc-300">Guests</span></div>
             </div>
           </div>
@@ -298,7 +309,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
                 <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} />
                 <YAxis domain={[3.5, 5]} tick={{ fontSize: 12, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={40} />
                 <Tooltip contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }} />
-                <Line type="monotone" dataKey="rating" stroke="#0e7490" strokeWidth={3} dot={{ r: 4, fill: '#0e7490', strokeWidth: 0 }} name="Rating" />
+                <Line type="monotone" dataKey="rating" stroke={brandHex} strokeWidth={3} dot={{ r: 4, fill: brandHex, strokeWidth: 0 }} name="Rating" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -310,7 +321,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
         <div className="rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
           <div className="p-6 pb-4 border-b border-white/10 flex items-center justify-between">
             <h3 className="text-sm font-semibold tracking-tight text-white">Today&apos;s Schedule</h3>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#0e7490]/10 text-[#0e7490]">{todayEntries.length}</span>
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">{todayEntries.length}</span>
           </div>
           <div className="divide-y divide-white/5">
             {todayEntries.length === 0 ? (
@@ -319,12 +330,12 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
               todayEntries.map(entry => (
                 <div key={entry.id} className="flex items-center gap-4 p-4 hover:bg-white/5 transition-colors">
                   <div className="text-center w-14 shrink-0">
-                    <p className="text-xs font-mono font-bold text-[#0e7490] leading-tight">{entry.startTime}</p>
-                    <p className="text-[10px] text-zinc-400 leading-tight">{entry.endTime}</p>
+                    <p className="text-xs font-mono font-bold text-primary leading-tight">{entry.startTime}</p>
+                    <p className="text-micro text-zinc-400 leading-tight">{entry.endTime}</p>
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-white truncate">{entry.activityName ?? entry.type}</p>
-                    <p className="text-[10px] text-zinc-300 truncate">{entry.animatorName} · {entry.venue}</p>
+                    <p className="text-micro text-zinc-300 truncate">{entry.animatorName} · {entry.venue}</p>
                   </div>
                   <div className={cn('w-2.5 h-2.5 rounded-full shrink-0', STATUS_COLORS[entry.status])} />
                 </div>
@@ -345,7 +356,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
                 <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} />
                 <YAxis dataKey="team" type="category" tick={{ fontSize: 11, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={80} />
                 <Tooltip contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }} />
-                <Bar dataKey="performance" fill="#0e7490" radius={[0, 6, 6, 0]} name="Performance %" />
+                <Bar dataKey="performance" fill={brandHex} radius={[0, 6, 6, 0]} name="Performance %" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -355,7 +366,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
         <div className="rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
           <div className="p-6 pb-4 border-b border-white/10 flex items-center justify-between">
             <h3 className="text-sm font-semibold tracking-tight text-white">Top Performers</h3>
-            <Award className="w-4 h-4 text-[#0e7490]" />
+            <Award className="w-4 h-4 text-primary" />
           </div>
           <div className="divide-y divide-white/5">
             {topAnimators.map((a, i) => (
@@ -365,15 +376,15 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
                 )}>
                   {i + 1}
                 </div>
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: '#0e7490' }}>
+                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-primary-foreground shrink-0 bg-primary">
                   {a.firstName[0]}{a.lastName[0]}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-white truncate">{a.firstName} {a.lastName}</p>
-                  <p className="text-[10px] text-zinc-300">{a.teamName}</p>
+                  <p className="text-micro text-zinc-300">{a.teamName}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-xs tabular-nums font-bold text-[#0e7490]">{a.performance}%</p>
+                  <p className="text-xs tabular-nums font-bold text-primary">{a.performance}%</p>
                 </div>
               </div>
             ))}
@@ -386,7 +397,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
         <div className="rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
           <div className="p-6 pb-4 border-b border-white/10 flex items-center justify-between">
             <h3 className="text-sm font-semibold tracking-tight text-white">Upcoming Events</h3>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#0e7490]/10 text-[#0e7490]">{upcomingEvents.length}</span>
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">{upcomingEvents.length}</span>
           </div>
           <div className="divide-y divide-white/5">
             {upcomingEvents.length === 0 ? (
@@ -394,17 +405,17 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             ) : (
               upcomingEvents.map(ev => (
                 <div key={ev.id} className="flex items-start gap-4 p-4 hover:bg-white/5 transition-colors">
-                  <div className="text-center bg-[#0e7490]/10 rounded-lg p-2.5 shrink-0 w-14">
-                    <p className="text-[9px] font-semibold text-[#0e7490] uppercase">{new Date(ev.date).toLocaleDateString('en', { month: 'short' })}</p>
-                    <p className="text-lg font-mono font-bold text-[#0e7490] leading-none">{new Date(ev.date).getDate()}</p>
+                  <div className="text-center bg-primary/10 rounded-lg p-2.5 shrink-0 w-14">
+                    <p className="text-tiny font-semibold text-primary uppercase">{new Date(ev.date).toLocaleDateString('en', { month: 'short' })}</p>
+                    <p className="text-lg font-mono font-bold text-primary leading-none">{new Date(ev.date).getDate()}</p>
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-white leading-tight">{ev.name}</p>
-                    <p className="text-[10px] text-zinc-300 mt-1">{ev.venue} · {ev.startTime}–{ev.endTime}</p>
-                    <p className="text-[10px] text-zinc-300">{ev.expectedGuests} guests · {ev.assignedAnimators.length} animators</p>
+                    <p className="text-micro text-zinc-300 mt-1">{ev.venue} · {ev.startTime}–{ev.endTime}</p>
+                    <p className="text-micro text-zinc-300">{ev.expectedGuests} guests · {ev.assignedAnimators.length} animators</p>
                   </div>
-                  <span className={cn('text-[10px] font-semibold px-2.5 py-1 rounded-full shrink-0',
-                    ev.status === 'CONFIRMED' ? 'bg-green-500/10 text-green-600' : 'bg-[#0e7490]/10 text-[#0e7490]'
+                  <span className={cn('text-micro font-semibold px-2.5 py-1 rounded-full shrink-0',
+                    ev.status === 'CONFIRMED' ? 'bg-green-500/10 text-green-600' : 'bg-primary/10 text-primary'
                   )}>
                     {ev.status}
                   </span>
@@ -425,14 +436,14 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             ) : (
               latestAnnouncements.map(ann => (
                 <div key={ann.id} className="flex items-start gap-4 p-4 hover:bg-white/5 transition-colors"
-                  style={{ borderLeft: `3px solid ${ann.priority === 'URGENT' ? '#ef4444' : ann.priority === 'HIGH' ? '#0e7490' : '#10b981'}` }}>
+                  style={{ borderLeft: `3px solid ${ann.priority === 'URGENT' ? '#ef4444' : ann.priority === 'HIGH' ? brandHex : '#10b981'}` }}>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <p className="text-xs font-semibold text-white leading-tight">{ann.title}</p>
                       {ann.priority === 'URGENT' && <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />}
                     </div>
-                    <p className="text-[10px] text-zinc-300 mt-2 line-clamp-2 leading-relaxed">{ann.content}</p>
-                    <p className="text-[9px] text-zinc-400 mt-2">{ann.authorName} · {new Date(ann.createdAt).toLocaleDateString()}</p>
+                    <p className="text-micro text-zinc-300 mt-2 line-clamp-2 leading-relaxed">{ann.content}</p>
+                    <p className="text-tiny text-zinc-400 mt-2">{ann.authorName} · {new Date(ann.createdAt).toLocaleDateString()}</p>
                   </div>
                 </div>
               ))

@@ -80,7 +80,7 @@ export function LanguageSwitcher({ variant = 'dark', className }: LanguageSwitch
                   >
                     <span
                       className={cn(
-                        'grid h-6 w-7 shrink-0 place-items-center rounded text-[11px] font-bold',
+                        'grid h-6 w-7 shrink-0 place-items-center rounded text-mini font-bold',
                         isLight ? 'bg-[oklch(0.5_0.1_212_/_0.1)] text-[oklch(0.45_0.09_210)]' : 'bg-white/10 text-white/80',
                       )}
                     >

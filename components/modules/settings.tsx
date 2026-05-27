@@ -178,7 +178,7 @@ export function SettingsModule({ hotel, company, currentUser }: SettingsModulePr
                   ].map(r => (
                     <div key={r.label} className="bg-muted/50 rounded-lg p-3 text-center">
                       <p className={cn('text-xl font-black', r.color)}>{r.value}<span className="text-xs text-muted-foreground font-normal">{r.sub}</span></p>
-                      <p className="text-[11px] text-muted-foreground mt-0.5">{r.label}</p>
+                      <p className="text-mini text-muted-foreground mt-0.5">{r.label}</p>
                     </div>
                   ))}
                 </div>
@@ -285,7 +285,7 @@ export function SettingsModule({ hotel, company, currentUser }: SettingsModulePr
                   <div key={r.role} className="flex items-center gap-3 p-3 rounded-lg border border-border/60 bg-muted/20">
                     <div className={cn('w-2 h-8 rounded-full shrink-0', r.color)} />
                     <div className="flex-1 min-w-0">
-                      <span className={cn('text-[11px] font-bold px-2 py-0.5 rounded border', r.badge)}>
+                      <span className={cn('text-mini font-bold px-2 py-0.5 rounded border', r.badge)}>
                         {r.role.replace('_', ' ')}
                       </span>
                       <p className="text-xs text-muted-foreground mt-1">{r.desc}</p>
@@ -361,7 +361,7 @@ export function SettingsModule({ hotel, company, currentUser }: SettingsModulePr
                   })}
                   {/* Custom colour */}
                   <label className={cn('relative w-9 h-9 rounded-lg ring-1 ring-black/10 overflow-hidden cursor-pointer', !perms.canEditSettings && 'opacity-50 cursor-not-allowed')}>
-                    <span className="absolute inset-0 grid place-items-center text-[9px] font-bold text-foreground/60 pointer-events-none">+</span>
+                    <span className="absolute inset-0 grid place-items-center text-tiny font-bold text-foreground/60 pointer-events-none">+</span>
                     <input
                       type="color"
                       value={brand.primaryHex}

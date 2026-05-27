@@ -56,27 +56,27 @@ function EventCard({ event, allAnimators, onEdit }: { event: EventItem; allAnima
           <div className="flex-1 min-w-0">
             <div className="flex items-start gap-2">
               <p className="text-sm font-bold leading-tight flex-1">{event.name}</p>
-              <Badge className={cn('text-[9px] border shrink-0', sc.cls)}>{sc.label}</Badge>
+              <Badge className={cn('text-tiny border shrink-0', sc.cls)}>{sc.label}</Badge>
             </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">{event.description}</p>
+            <p className="text-mini text-muted-foreground mt-0.5 line-clamp-2">{event.description}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-y-1.5 mb-3">
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-mini text-muted-foreground">
             <Calendar className="w-3 h-3 shrink-0" />
             <span>{new Date(event.date).toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short' })}</span>
             {isToday && <span className="text-primary font-semibold">Today</span>}
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-mini text-muted-foreground">
             <Clock className="w-3 h-3 shrink-0" />
             <span>{event.startTime} – {event.endTime}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-mini text-muted-foreground">
             <MapPin className="w-3 h-3 shrink-0" />
             <span className="truncate">{event.venue}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-mini text-muted-foreground">
             <Users className="w-3 h-3 shrink-0" />
             <span>{event.expectedGuests} guests</span>
           </div>
@@ -84,23 +84,23 @@ function EventCard({ event, allAnimators, onEdit }: { event: EventItem; allAnima
 
         <div className="flex items-center justify-between pt-3 border-t border-border">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-muted-foreground">Crew:</span>
+            <span className="text-micro text-muted-foreground">Crew:</span>
             <div className="flex -space-x-1">
               {assignedAnimators.slice(0, 5).map(a => (
-                <div key={a.id} className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-[8px] font-bold text-primary-foreground border border-card">
+                <div key={a.id} className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-tiny font-bold text-primary-foreground border border-card">
                   {a.firstName[0]}
                 </div>
               ))}
               {assignedAnimators.length > 5 && (
-                <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[8px] font-semibold text-muted-foreground border border-card">
+                <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-tiny font-semibold text-muted-foreground border border-card">
                   +{assignedAnimators.length - 5}
                 </div>
               )}
             </div>
           </div>
           <div className="flex gap-1">
-            <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2" onClick={() => onEdit(event)}>Edit</Button>
-            <Button size="sm" className="h-6 text-[10px] px-2" onClick={() => onEdit(event)}>Manage</Button>
+            <Button variant="ghost" size="sm" className="h-6 text-micro px-2" onClick={() => onEdit(event)}>Edit</Button>
+            <Button size="sm" className="h-6 text-micro px-2" onClick={() => onEdit(event)}>Manage</Button>
           </div>
         </div>
 
@@ -158,10 +158,10 @@ export function EventsModule({ hotelId, searchQuery }: { hotelId: string; search
 
       {/* Timeline summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black text-primary">{EVENTS.filter(e => e.date === new Date().toISOString().split('T')[0]).length}</p><p className="text-[11px] text-muted-foreground">Today</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black text-accent">{EVENTS.filter(e => new Date(e.date) > new Date()).length}</p><p className="text-[11px] text-muted-foreground">Upcoming</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black text-green-600">{EVENTS.filter(e => e.status === 'CONFIRMED').length}</p><p className="text-[11px] text-muted-foreground">Confirmed</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black text-foreground">{EVENTS.reduce((s, e) => s + e.expectedGuests, 0)}</p><p className="text-[11px] text-muted-foreground">Total Guests</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black text-primary">{EVENTS.filter(e => e.date === new Date().toISOString().split('T')[0]).length}</p><p className="text-mini text-muted-foreground">Today</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black text-accent">{EVENTS.filter(e => new Date(e.date) > new Date()).length}</p><p className="text-mini text-muted-foreground">Upcoming</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black text-green-600">{EVENTS.filter(e => e.status === 'CONFIRMED').length}</p><p className="text-mini text-muted-foreground">Confirmed</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black text-foreground">{EVENTS.reduce((s, e) => s + e.expectedGuests, 0)}</p><p className="text-mini text-muted-foreground">Total Guests</p></CardContent></Card>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -182,19 +182,19 @@ export function EventsModule({ hotelId, searchQuery }: { hotelId: string; search
             <div className="space-y-3 text-sm">
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-muted/50 rounded-lg p-3">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Status</p>
+                  <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Status</p>
                   <p className="font-semibold">{STATUS_CONFIG[editingEvent.status]?.label}</p>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-3">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Time</p>
+                  <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Time</p>
                   <p className="font-semibold">{editingEvent.startTime} – {editingEvent.endTime}</p>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-3">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Expected Guests</p>
+                  <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Expected Guests</p>
                   <p className="font-semibold">{editingEvent.expectedGuests}</p>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-3">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Crew Size</p>
+                  <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Crew Size</p>
                   <p className="font-semibold">{editingEvent.assignedAnimators.length} animators</p>
                 </div>
               </div>
