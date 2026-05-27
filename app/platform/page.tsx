@@ -88,6 +88,15 @@ export default function AnimaProApp() {
     // where the address bar resizes the viewport
     <div className="flex flex-col bg-background overflow-hidden" style={{ height: '100dvh' }}>
 
+      {/* Skip-link — keyboard users (Tab as first action) land here and can
+          jump past the demo banner + sidebar straight to the active module. */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-primary focus:text-primary-foreground focus:px-3 focus:py-2 focus:rounded-md focus:text-sm focus:font-semibold"
+      >
+        Skip to main content
+      </a>
+
       {/* ── Demo banner ─────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between demo-banner text-white text-xs font-semibold px-3 sm:px-4 py-2 shrink-0">
         <div className="flex items-center gap-2 min-w-0">
@@ -135,7 +144,7 @@ export default function AnimaProApp() {
           />
 
           {/* Scrollable content — add pb-16 on mobile to clear the bottom nav */}
-          <main className="flex-1 overflow-y-auto scrollbar-thin p-3 sm:p-5 pb-20 md:pb-5 bg-zinc-950/40">
+          <main id="main" className="flex-1 overflow-y-auto scrollbar-thin p-3 sm:p-5 pb-20 md:pb-5 bg-zinc-950/40">
             <div key={activeSection} className="page-enter">
               {renderModule()}
             </div>

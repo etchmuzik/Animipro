@@ -29,6 +29,7 @@ export function MobileNav({ activeSection, onSectionChange, onMenuOpen, allowedS
 
   return (
     <nav
+      aria-label="Mobile primary"
       className="md:hidden fixed bottom-0 left-0 right-0 z-30 mobile-nav-glass border-t border-black/[0.04]"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >

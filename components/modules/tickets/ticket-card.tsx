@@ -12,6 +12,7 @@ import { Calendar, Clock, MapPin, User, Printer, Copy, Check, Ban } from 'lucide
 import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { cn } from '@/lib/utils'
+import { getBrand, subscribe as subscribeBrand } from '@/lib/brand-store'
 import {
   buildQrPayload,
   formatEgp,
@@ -31,6 +32,14 @@ interface TicketCardProps {
 export function TicketCard({ ticket, onAfterAction, canRefund = true }: TicketCardProps): React.ReactElement | null {
   const [qrUrl, setQrUrl] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  // Live brand hex — QR + print template need a real color string. Subscribing
+  // keeps the QR/print honoring the white-label colour the buyer chose.
+  const [brandHex, setBrandHex] = useState<string>(() => getBrand().primaryHex)
+  useEffect(() => {
+    const refresh = (): void => setBrandHex(getBrand().primaryHex)
+    refresh()
+    return subscribeBrand(refresh)
+  }, [])
   const club = getClub(getClubNight(ticket.clubNightId)?.clubId ?? '')
   const night = getClubNight(ticket.clubNightId)
 
@@ -39,7 +48,7 @@ export function TicketCard({ ticket, onAfterAction, canRefund = true }: TicketCa
     return buildQrPayload(ticket, window.location.origin)
   }, [ticket])
 
-  // Generate the QR as a data-URL once payload is ready.
+  // Generate the QR as a data-URL once payload is ready. Re-runs on brand change.
   useEffect(() => {
     if (!payload) return
     let cancelled = false
@@ -47,12 +56,12 @@ export function TicketCard({ ticket, onAfterAction, canRefund = true }: TicketCa
       errorCorrectionLevel: 'M',
       margin: 1,
       width: 320,
-      color: { dark: '#0e7490', light: '#ffffff' },
+      color: { dark: brandHex, light: '#ffffff' },
     })
       .then(url => { if (!cancelled) setQrUrl(url) })
       .catch(() => { if (!cancelled) setQrUrl(null) })
     return () => { cancelled = true }
-  }, [payload])
+  }, [payload, brandHex])
 
   if (!club || !night) return null
 
@@ -72,13 +81,17 @@ export function TicketCard({ ticket, onAfterAction, canRefund = true }: TicketCa
     const dateStr = new Date(night.date).toLocaleDateString('en', {
       weekday: 'long', day: 'numeric', month: 'long',
     })
+    // Print template needs literal color strings — derive a darker shade for
+    // the gradient end from the live brand hex.
+    const heroStart = brandHex
+    const heroEnd = darkenHex(brandHex, 0.15)
     w.document.write(`
       <!DOCTYPE html><html><head><title>Ticket — ${escapeHtml(club.name)}</title>
       <meta charset="utf-8"/>
       <style>
         body { font-family: ui-sans-serif, system-ui, sans-serif; margin: 0; background: #f8fafc; color: #0f172a; }
         .ticket { max-width: 360px; margin: 24px auto; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
-        .hero { padding: 24px; color: #fff; background: linear-gradient(135deg, #0e7490, #155e75); }
+        .hero { padding: 24px; color: #fff; background: linear-gradient(135deg, ${heroStart}, ${heroEnd}); }
         .hero h1 { margin: 0 0 4px; font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
         .hero p  { margin: 0; opacity: 0.9; font-size: 13px; }
         .body { padding: 20px 24px; }
@@ -200,4 +213,18 @@ function Row({ icon: Icon, k, v }: { icon?: React.ElementType; k: string; v: str
 
 function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c)
+}
+
+// Multiply each RGB channel by (1 - amount) to produce a darker shade.
+// Used by the print gradient end-stop so the hero band looks 3-dimensional.
+function darkenHex(hex: string, amount: number): string {
+  const clean = hex.replace('#', '')
+  const full = clean.length === 3 ? clean.split('').map(c => c + c).join('') : clean
+  if (!/^[0-9a-fA-F]{6}$/.test(full)) return hex
+  const factor = Math.max(0, Math.min(1, 1 - amount))
+  const ch = (i: number): string => {
+    const v = Math.round(parseInt(full.slice(i, i + 2), 16) * factor)
+    return v.toString(16).padStart(2, '0')
+  }
+  return `#${ch(0)}${ch(2)}${ch(4)}`
 }

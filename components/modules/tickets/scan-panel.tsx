@@ -26,11 +26,7 @@ import type { AppUser } from '@/lib/roles'
 
 // Lazy-load html5-qrcode only when the camera is started. The package is
 // fairly heavy (~50KB) and isn't needed if the user only types codes.
-type Html5Qrcode = {
-  start: (cameraId: string | { facingMode: string }, config: object, onSuccess: (decoded: string) => void, onFailure?: (err: string) => void) => Promise<void>
-  stop: () => Promise<void>
-  clear: () => void
-}
+import type { Html5Qrcode as Html5QrcodeT } from 'html5-qrcode'
 
 interface ScanPanelProps {
   currentUser: AppUser
@@ -45,7 +41,7 @@ export function ScanPanel({ currentUser }: ScanPanelProps): React.ReactElement {
   const [cameraError, setCameraError] = useState<string | null>(null)
   const [manualInput, setManualInput] = useState('')
   const [result, setResult] = useState<ScanResult | null>(null)
-  const scannerRef = useRef<Html5Qrcode | null>(null)
+  const scannerRef = useRef<Html5QrcodeT | null>(null)
   const resetTimerRef = useRef<number | null>(null)
 
   const handleResult = useCallback((res: ScanResult) => {
@@ -82,13 +78,13 @@ export function ScanPanel({ currentUser }: ScanPanelProps): React.ReactElement {
     import('html5-qrcode')
       .then(mod => {
         if (cancelled) return
-        const Html5Qrcode = (mod as { Html5Qrcode: new (id: string) => Html5Qrcode }).Html5Qrcode
-        const inst = new Html5Qrcode(SCANNER_ELEMENT_ID)
+        const inst = new mod.Html5Qrcode(SCANNER_ELEMENT_ID)
         scannerRef.current = inst
         return inst.start(
           { facingMode: 'environment' },
           { fps: 10, qrbox: 240 },
           (decoded: string) => onScanned(decoded),
+          undefined,
         ).then(() => {
           if (!cancelled) {
             setCameraActive(true)

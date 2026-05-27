@@ -3,19 +3,14 @@
 import { useState } from 'react'
 import { Plus, Calendar, Clock, MapPin, Users, PartyPopper } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { getHotelEvents, getHotelAnimators, type EventItem } from '@/lib/mock-data'
+import { getHotelEvents, getHotelAnimators, type EventItem, type EventStatus } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
 import { TaskCardActions } from '@/components/task-card-actions'
+import { StatusBadge } from '@/components/ui/status-badge'
+import { getStatusVisual } from '@/lib/status-config'
 
-const STATUS_CONFIG: Record<string, { cls: string; label: string }> = {
-  PLANNED: { cls: 'bg-blue-100 text-blue-700 border-blue-200', label: 'Planned' },
-  CONFIRMED: { cls: 'bg-green-100 text-green-700 border-green-200', label: 'Confirmed' },
-  IN_PROGRESS: { cls: 'bg-primary/10 text-primary border-primary/20', label: 'Live' },
-  COMPLETED: { cls: 'bg-gray-100 text-gray-700 border-gray-200', label: 'Completed' },
-  CANCELLED: { cls: 'bg-red-100 text-red-600 border-red-200', label: 'Cancelled' },
-}
+const EVENT_STATUSES: EventStatus[] = ['PLANNED', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']
 
 const TYPE_ICONS: Record<string, string> = {
   GALA_DINNER: '🎭',
@@ -40,7 +35,6 @@ const TYPE_COLORS: Record<string, string> = {
 }
 
 function EventCard({ event, allAnimators, onEdit }: { event: EventItem; allAnimators: ReturnType<typeof getHotelAnimators>; onEdit: (e: EventItem) => void }) {
-  const sc = STATUS_CONFIG[event.status]
   const assignedAnimators = allAnimators.filter(a => event.assignedAnimators.includes(a.id))
   const isToday = event.date === new Date().toISOString().split('T')[0]
   const isFuture = new Date(event.date) > new Date()
@@ -56,7 +50,7 @@ function EventCard({ event, allAnimators, onEdit }: { event: EventItem; allAnima
           <div className="flex-1 min-w-0">
             <div className="flex items-start gap-2">
               <p className="text-sm font-bold leading-tight flex-1">{event.name}</p>
-              <Badge className={cn('text-tiny border shrink-0', sc.cls)}>{sc.label}</Badge>
+              <StatusBadge domain="event" status={event.status} size="sm" />
             </div>
             <p className="text-mini text-muted-foreground mt-0.5 line-clamp-2">{event.description}</p>
           </div>
@@ -125,10 +119,10 @@ export function EventsModule({ hotelId, searchQuery }: { hotelId: string; search
     return matchSearch && matchStatus
   }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
-  const statusCounts = Object.keys(STATUS_CONFIG).reduce((acc, s) => {
+  const statusCounts = EVENT_STATUSES.reduce<Record<string, number>>((acc, s) => {
     acc[s] = EVENTS.filter(e => e.status === s).length
     return acc
-  }, {} as Record<string, number>)
+  }, {})
 
   return (
     <div className="space-y-4">
@@ -140,13 +134,13 @@ export function EventsModule({ hotelId, searchQuery }: { hotelId: string; search
             )}>
             All ({EVENTS.length})
           </button>
-          {Object.entries(STATUS_CONFIG).map(([s, c]) => (
+          {EVENT_STATUSES.map(s => (
             statusCounts[s] > 0 && (
               <button key={s} onClick={() => setFilterStatus(filterStatus === s ? 'ALL' : s)}
                 className={cn('px-3 py-1.5 rounded-full text-xs font-medium border transition-all',
                   filterStatus === s ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:border-primary/40'
                 )}>
-                {c.label} ({statusCounts[s]})
+                {getStatusVisual('event', s).label} ({statusCounts[s]})
               </button>
             )
           ))}
@@ -183,7 +177,7 @@ export function EventsModule({ hotelId, searchQuery }: { hotelId: string; search
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-muted/50 rounded-lg p-3">
                   <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Status</p>
-                  <p className="font-semibold">{STATUS_CONFIG[editingEvent.status]?.label}</p>
+                  <p className="font-semibold">{getStatusVisual('event', editingEvent.status).label}</p>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-3">
                   <p className="text-micro text-muted-foreground uppercase tracking-widest mb-1">Time</p>

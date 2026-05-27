@@ -2,17 +2,18 @@
 
 import { useState } from 'react'
 import { Check, X, Clock, Calendar, Plus, ChevronDown, AlertCircle } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { getHotelLeaveRequests, getHotelAnimators, type LeaveRequest } from '@/lib/mock-data'
 import { getPermissions, type AppUser } from '@/lib/roles'
+import { StatusBadge } from '@/components/ui/status-badge'
+import { getStatusVisual } from '@/lib/status-config'
 
-const STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  PENDING:   { label: 'Pending',   cls: 'bg-yellow-50 text-yellow-700 border-yellow-200', dot: 'bg-yellow-400' },
-  APPROVED:  { label: 'Approved',  cls: 'bg-green-50  text-green-700  border-green-200',  dot: 'bg-green-500'  },
-  REJECTED:  { label: 'Rejected',  cls: 'bg-red-50    text-red-600    border-red-200',    dot: 'bg-red-500'    },
-  CANCELLED: { label: 'Cancelled', cls: 'bg-gray-50   text-gray-700   border-gray-200',   dot: 'bg-gray-400'   },
+// Filter-chip dot only — the row badge itself uses <StatusBadge domain="leave" />.
+const FILTER_DOT_CLS: Record<'PENDING' | 'APPROVED' | 'REJECTED', string> = {
+  PENDING:  'bg-yellow-400',
+  APPROVED: 'bg-green-500',
+  REJECTED: 'bg-red-500',
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -189,9 +190,9 @@ export function LeaveModule({ hotelId, currentUser, searchQuery }: LeaveModulePr
             )}
           >
             {s !== 'ALL' && (
-              <span className={cn('w-1.5 h-1.5 rounded-full', STATUS_CONFIG[s]?.dot)} />
+              <span className={cn('w-1.5 h-1.5 rounded-full', FILTER_DOT_CLS[s])} />
             )}
-            {s === 'ALL' ? 'All' : STATUS_CONFIG[s].label}
+            {s === 'ALL' ? 'All' : getStatusVisual('leave', s).label}
             <span className="ml-0.5 bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full text-micro font-bold">
               {counts[s]}
             </span>
@@ -212,7 +213,6 @@ export function LeaveModule({ hotelId, currentUser, searchQuery }: LeaveModulePr
         <div className="space-y-3">
           {filtered.map(req => {
             const animator = animators.find(a => a.id === req.animatorId)
-            const cfg = STATUS_CONFIG[req.status] ?? STATUS_CONFIG.PENDING
             const start  = new Date(req.startDate)
             const end    = new Date(req.endDate)
             const days   = Math.ceil((end.getTime() - start.getTime()) / 86400000) + 1
@@ -238,9 +238,7 @@ export function LeaveModule({ hotelId, currentUser, searchQuery }: LeaveModulePr
                       </p>
                       <p className="text-xs text-muted-foreground">{animator?.role ?? ''}</p>
                     </div>
-                    <span className={cn('text-micro font-semibold px-2 py-1 rounded-full border', cfg.cls)}>
-                      {cfg.label}
-                    </span>
+                    <StatusBadge domain="leave" status={req.status} size="sm" />
                   </div>
 
                   <div className="flex items-center gap-3 mt-2 flex-wrap">

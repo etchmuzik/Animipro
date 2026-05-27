@@ -239,7 +239,7 @@ function SidebarContent({
       </div>
 
       {/* ── Navigation ───────────────────────────────────────────────────── */}
-      <nav className="flex-1 overflow-y-auto scrollbar-thin py-3 px-2 space-y-0.5 mt-2">
+      <nav aria-label="Primary" className="flex-1 overflow-y-auto scrollbar-thin py-3 px-2 space-y-0.5 mt-2">
         {navItems.map(({ icon: Icon, section, badge }) => {
           const isActive = activeSection === section
           return (

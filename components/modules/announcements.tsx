@@ -7,7 +7,12 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { getHotelAnnouncements, getHotelLeaveRequests, type Announcement, type LeaveRequest } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
+import { StatusBadge } from '@/components/ui/status-badge'
+import { getStatusVisual } from '@/lib/status-config'
 
+// ANN_TYPE_CONFIG is announcement-type theming (not a status mapping), so it
+// stays local — there's no equivalent in status-config.ts and it carries its
+// own colour-coded icon + bar-colour conventions for the announcement cards.
 const ANN_TYPE_CONFIG: Record<string, { icon: React.ElementType; cls: string; barColor: string }> = {
   GENERAL: { icon: Info, cls: 'bg-blue-50 border-blue-100', barColor: 'bg-blue-400' },
   URGENT: { icon: AlertCircle, cls: 'bg-red-50 border-red-100', barColor: 'bg-red-500' },
@@ -15,13 +20,6 @@ const ANN_TYPE_CONFIG: Record<string, { icon: React.ElementType; cls: string; ba
   TRAINING: { icon: GraduationCap, cls: 'bg-green-50 border-green-100', barColor: 'bg-green-500' },
   POLICY: { icon: FileText, cls: 'bg-gray-50 border-gray-100', barColor: 'bg-gray-400' },
   EVENT: { icon: PartyPopper, cls: 'bg-purple-50 border-purple-100', barColor: 'bg-purple-500' },
-}
-
-const LEAVE_STATUS_CONFIG: Record<string, { cls: string; label: string }> = {
-  PENDING: { cls: 'bg-yellow-100 text-yellow-700 border-yellow-200', label: 'Pending' },
-  APPROVED: { cls: 'bg-green-100 text-green-700 border-green-200', label: 'Approved' },
-  REJECTED: { cls: 'bg-red-100 text-red-600 border-red-200', label: 'Rejected' },
-  CANCELLED: { cls: 'bg-gray-100 text-gray-700 border-gray-200', label: 'Cancelled' },
 }
 
 const LEAVE_TYPE_LABELS: Record<string, string> = {
@@ -73,7 +71,6 @@ function AnnouncementCard({ ann }: { ann: Announcement }) {
 }
 
 function LeaveCard({ req, onAction }: { req: LeaveRequest; onAction: (id: string, action: 'APPROVED' | 'REJECTED') => void }) {
-  const sc = LEAVE_STATUS_CONFIG[req.status]
   const days = Math.ceil((new Date(req.endDate).getTime() - new Date(req.startDate).getTime()) / 86400000) + 1
   return (
     <Card className="hover:shadow-sm transition-all">
@@ -83,7 +80,7 @@ function LeaveCard({ req, onAction }: { req: LeaveRequest; onAction: (id: string
             <p className="text-sm font-semibold">{req.animatorName}</p>
             <p className="text-mini text-muted-foreground">{LEAVE_TYPE_LABELS[req.type]}</p>
           </div>
-          <Badge className={cn('text-micro border shrink-0', sc.cls)}>{sc.label}</Badge>
+          <StatusBadge domain="leave" status={req.status} size="sm" />
         </div>
         <p className="text-mini text-muted-foreground mb-2 italic">&ldquo;{req.reason}&rdquo;</p>
         <div className="flex items-center justify-between text-micro text-muted-foreground">
@@ -217,7 +214,7 @@ export function AnnouncementsModule({ hotelId, searchQuery }: { hotelId: string;
             {(['PENDING', 'APPROVED', 'REJECTED', 'CANCELLED'] as const).map(s => (
               <Card key={s}><CardContent className="p-3 text-center">
                 <p className="text-2xl font-black text-foreground">{LEAVE_REQUESTS.filter(r => r.status === s).length}</p>
-                <p className="text-mini text-muted-foreground">{LEAVE_STATUS_CONFIG[s].label}</p>
+                <p className="text-mini text-muted-foreground">{getStatusVisual('leave', s).label}</p>
               </CardContent></Card>
             ))}
           </div>

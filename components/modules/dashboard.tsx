@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Users, Calendar, Star, TrendingUp, TrendingDown, Minus, CheckCircle2, MessageSquare, Award, AlertCircle } from 'lucide-react'
 import { getFeedbackSummary, subscribe as subscribeFeedback } from '@/lib/feedback'
 import { getBrand, subscribe as subscribeBrand } from '@/lib/brand-store'
+import { stagger, fadeInUp } from '@/lib/motion-presets'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -108,26 +109,6 @@ function StarRating({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'md
   )
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, type: 'spring' as const, bounce: 0.3 },
-  },
-}
-
 export function DashboardModule({ hotelId }: { hotelId: string }) {
   const DASHBOARD_STATS       = getDashboardStats(hotelId)
   const TEAM_PERFORMANCE_DATA = getTeamPerformanceData(hotelId)
@@ -163,7 +144,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
   return (
     <motion.div
       className="space-y-6"
-      variants={containerVariants}
+      variants={stagger}
       initial="hidden"
       animate="visible"
     >
@@ -171,7 +152,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
       {/* TripAdvisor & Ratings Row */}
       {hotel && (
         <motion.div
-          variants={itemVariants}
+          variants={fadeInUp}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         >
           {/* TripAdvisor */}
@@ -252,7 +233,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
       )}
 
       {/* KPI Stats - Bento 2.0 Asymmetric Layout */}
-      <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-max">
+      <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-max">
         <StatCard icon={Users} label="Total Animators" value={DASHBOARD_STATS.totalAnimators} sub={`${DASHBOARD_STATS.activeToday} active today`} trend="+2 this season" color="teal" gridSpan="lg:col-span-1" />
         <StatCard icon={Calendar} label="Today's Activities" value={DASHBOARD_STATS.activitiesScheduled} sub={`${DASHBOARD_STATS.activitiesCompleted} completed`} color="blue" gridSpan="lg:col-span-1" />
         <StatCard icon={Star} label="Avg Performance" value={`${DASHBOARD_STATS.avgPerformance}%`} sub="This week" trend="+3% vs last week" color="amber" gridSpan="lg:col-span-1" />
@@ -260,7 +241,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
         <StatCard icon={MessageSquare} label="Guest Feedback" value={`${guestAvg}/5`} sub={feedback.count > 0 ? `${feedback.count} guest ratings` : 'This month'} trend="↑ 0.2 vs last month" color="teal" gridSpan="md:col-span-2 lg:col-span-1" />
       </motion.div>
 
-      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <motion.div variants={fadeInUp} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Activity Chart */}
         <div className="lg:col-span-2 rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
           <div className="p-6 pb-4 border-b border-white/10">
@@ -316,7 +297,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
         </div>
       </motion.div>
 
-      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <motion.div variants={fadeInUp} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Today's Schedule */}
         <div className="rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
           <div className="p-6 pb-4 border-b border-white/10 flex items-center justify-between">
@@ -392,7 +373,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
         </div>
       </motion.div>
 
-      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <motion.div variants={fadeInUp} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Upcoming Events */}
         <div className="rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
           <div className="p-6 pb-4 border-b border-white/10 flex items-center justify-between">
