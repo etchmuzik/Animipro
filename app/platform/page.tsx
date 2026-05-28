@@ -63,10 +63,10 @@ export default function AnimiproApp() {
 
   function renderModule() {
     if (!canAccess(currentUser.role, activeSection)) {
-      return <DashboardModule hotelId={selectedHotelId} />
+      return <DashboardModule hotelId={selectedHotelId} currentUser={currentUser} />
     }
     switch (activeSection) {
-      case 'dashboard':     return <DashboardModule      hotelId={selectedHotelId} />
+      case 'dashboard':     return <DashboardModule      hotelId={selectedHotelId} currentUser={currentUser} />
       case 'team':          return <TeamModule            hotelId={selectedHotelId} searchQuery={searchQuery} />
       case 'schedule':      return <ScheduleModule        hotelId={selectedHotelId} searchQuery={searchQuery} />
       case 'activities':    return <ActivitiesModule                                searchQuery={searchQuery} />
