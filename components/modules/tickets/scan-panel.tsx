@@ -1,4 +1,4 @@
-// ─── AnimaPro — Tickets · Scan tab ──────────────────────────────────────────
+// ─── Animipro — Tickets · Scan tab ──────────────────────────────────────────
 //
 // Door staff hit this tab to validate guest QR codes. Two paths:
 //   1. Camera scanner (html5-qrcode) — preferred on mobile.

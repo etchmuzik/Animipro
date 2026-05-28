@@ -1,4 +1,4 @@
-// ─── AnimaPro — Reminder scheduling ─────────────────────────────────────────
+// ─── Animipro — Reminder scheduling ─────────────────────────────────────────
 //
 // Schedules browser notifications X minutes before each upcoming activity.
 //

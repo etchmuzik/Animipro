@@ -1,4 +1,4 @@
-// ─── AnimaPro — Arabic message catalog (RTL) ─────────────────────────────────
+// ─── Animipro — Arabic message catalog (RTL) ─────────────────────────────────
 // Typed as Messages so the structure stays in lockstep with en.ts.
 
 import type { Messages } from './en'
@@ -99,9 +99,9 @@ export const ar: Messages = {
     titleLead: 'مصمَّم ليترك ضيوفك',
     titleAccent: 'تقييمات خمس نجوم.',
     subtitle:
-      'AnimaPro هي منصة التشغيل لفرق التنشيط في منتجعات مصر. جدول كل نشاط، والتقط دليلاً على تنفيذه فعلاً، وشاهد تقييمك على TripAdvisor يرتفع، عبر كل فنادقك.',
+      'Animipro هي منصة التشغيل لفرق التنشيط في منتجعات مصر. جدول كل نشاط، والتقط دليلاً على تنفيذه فعلاً، وشاهد تقييمك على TripAdvisor يرتفع، عبر كل فنادقك.',
     ctaPrimary: 'امتلكها للأبد، ابتداءً من {price}',
-    ctaSecondary: 'جرّب العرض التجريبي',
+    ctaSecondary: 'افتح المنصة المباشرة',
     proof: '{count} منشّط على رأس العمل في شرم والغردقة والجونة و٥ وجهات أخرى.',
     demoLive: 'هذه البطاقة تعمل فعلاً. اضغط {action} وجرّبها.',
     demoStart: 'ابدأ',
@@ -150,7 +150,7 @@ export const ar: Messages = {
     formCvAttach: 'أرفق ملف PDF أو صورة أو فيديو قصير',
     formSubmit: 'إرسال الطلب',
     formSubmitting: 'جارٍ الإرسال…',
-    formDemoNote: 'هذا عرض تجريبي. تُحفظ الطلبات محلياً في متصفحك لشاشة التوظيف في AnimaPro.',
+    formDemoNote: 'هذا عرض تجريبي. تُحفظ الطلبات محلياً في متصفحك لشاشة التوظيف في Animipro.',
     formError: 'حدث خطأ أثناء حفظ طلبك. حاول مرة أخرى.',
     successTitle: 'تم استلام الطلب',
     successBody: 'شكراً {name}. سيراجع فريق التوظيف لدينا طلبك ويتواصل معك عبر البريد أو واتساب. حظاً موفقاً!',
@@ -162,16 +162,16 @@ export const ar: Messages = {
   footer: {
     hiring: 'نحن نوظّف',
     partners: 'كن شريكاً',
-    builtFor: 'مصمَّم لفنادق ومنتجعات مصر — شرم الشيخ والغردقة والجونة ومرسى علم ودهب والعين السخنة وطابا وأكثر',
+    builtFor: 'مصمَّم لفنادق ومنتجعات مصر، شرم الشيخ والغردقة والجونة ومرسى علم ودهب والعين السخنة وطابا وأكثر',
     rights: 'جميع الحقوق محفوظة.',
   },
 
   partners: {
     kicker: 'برنامج الشركاء',
-    titleLead: 'شغّل AnimaPro',
+    titleLead: 'شغّل Animipro',
     titleAccent: 'تحت علامتك التجارية.',
     intro:
-      'وكالات وشركات إدارة فنادق وموزّعون على مستوى الدولة: قدّم AnimaPro لعملائك كمنتجك الخاص. نحن نوفّر المنصة والدعم، وأنت تملك علاقة العميل.',
+      'وكالات وشركات إدارة فنادق وموزّعون على مستوى الدولة: قدّم Animipro لعملائك كمنتجك الخاص. نحن نوفّر المنصة والدعم، وأنت تملك علاقة العميل.',
     applyAsPartner: 'انضم إلينا',
     seeTiers: 'شاهد فئات الشراكة',
     tiersKicker: 'فئات الشراكة',
@@ -203,8 +203,8 @@ export const ar: Messages = {
     formCountry: 'الدولة',
     formHotelsServed: 'عدد الفنادق التي تخدمها حالياً',
     formTier: 'فئة الشراكة التي تهتم بها',
-    formPitch: 'كيف ستبيع AnimaPro؟',
-    formPitchPlaceholder: 'حدّثنا عن عملائك الحاليين، عرضك، ولماذا يناسبك AnimaPro.',
+    formPitch: 'كيف ستبيع Animipro؟',
+    formPitchPlaceholder: 'حدّثنا عن عملائك الحاليين، عرضك، ولماذا يناسبك Animipro.',
     formWebsite: 'الموقع الإلكتروني (اختياري)',
     formSubmit: 'إرسال الطلب',
     formSubmitting: 'جارٍ الإرسال…',
@@ -268,14 +268,18 @@ export const ar: Messages = {
       processing: 'جارٍ المعالجة…',
       confirmedTitle: 'تم الحجز.',
       confirmedSubtitle: 'أظهر هذا الرمز عند الباب.',
+      screenshotHint: 'التقط صورة للشاشة للحفاظ عليها.',
+      viewTickets: 'عرض تذاكري',
       done: 'تم',
-      simNotice: 'عرض تجريبي — لا يتم خصم مبلغ فعلي.',
+      simNotice: 'عرض تجريبي. لا يتم خصم مبلغ فعلي.',
+      roomPlaceholder: 'مثلاً 412',
     },
     tickets: {
       heading: 'تذاكري',
       empty: {
         title: 'لا توجد تذاكر بعد',
         body: 'اشترِ تذكرة نادٍ وستظهر هنا برمز QR.',
+        cta: 'تصفح ليالي النوادي',
       },
     },
     footer: {

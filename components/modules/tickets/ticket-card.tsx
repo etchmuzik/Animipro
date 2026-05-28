@@ -1,4 +1,4 @@
-// ─── AnimaPro — Issued ticket card (with QR + print button) ─────────────────
+// ─── Animipro — Issued ticket card (with QR + print button) ─────────────────
 //
 // Renders a freshly sold ticket: club / night / guest details + a generated
 // QR image. The print button opens a clean print-friendly view in a new
@@ -124,7 +124,7 @@ export function TicketCard({ ticket, onAfterAction, canRefund = true }: TicketCa
           </div>
           <div class="footer">
             Issued ${new Date(ticket.soldAt).toLocaleString('en')} by ${escapeHtml(ticket.sellerName)}<br/>
-            Powered by AnimaPro · animapro-saas.netlify.app
+            Powered by Animipro · animipro.online
           </div>
         </div>
       </body></html>

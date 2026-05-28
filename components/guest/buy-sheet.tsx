@@ -1,4 +1,4 @@
-// ─── AnimaPro — Guest buy sheet ───────────────────────────────────────────────
+// ─── Animipro — Guest buy sheet ───────────────────────────────────────────────
 //
 // Simulated checkout. Reuses sellTicket() unchanged — the staff sales-panel +
 // door scanner work transparently with guest-bought tickets. The seller is
@@ -31,6 +31,7 @@ interface BuySheetProps {
   night: ClubNight
   hotelId: string
   onClose: () => void
+  onViewTickets?: () => void
 }
 
 const PAY_METHODS: { value: PaymentMethod; icon: React.ElementType; key: string }[] = [
@@ -40,7 +41,7 @@ const PAY_METHODS: { value: PaymentMethod; icon: React.ElementType; key: string 
   { value: 'ROOM_CHARGE', icon: BedDouble,  key: 'guest.buy.pay.room' },
 ]
 
-export function BuySheet({ night, hotelId, onClose }: BuySheetProps): React.ReactElement {
+export function BuySheet({ night, hotelId, onClose, onViewTickets }: BuySheetProps): React.ReactElement {
   const { t } = useTranslation()
   const club = CLUBS.find(c => c.id === night.clubId)
   const [name, setName] = useState('')
@@ -107,6 +108,12 @@ export function BuySheet({ night, hotelId, onClose }: BuySheetProps): React.Reac
                 <p className="text-sm text-muted-foreground mt-0.5">{t('guest.buy.confirmedSubtitle')}</p>
               </div>
               <TicketCard ticket={confirmed} canRefund={false} />
+              <p className="text-tiny text-muted-foreground text-center">{t('guest.buy.screenshotHint')}</p>
+              {onViewTickets && (
+                <Button className="w-full" onClick={() => { onViewTickets(); onClose() }}>
+                  {t('guest.buy.viewTickets')}
+                </Button>
+              )}
               <Button variant="outline" className="w-full" onClick={onClose}>
                 {t('guest.buy.done')}
               </Button>
@@ -144,7 +151,7 @@ export function BuySheet({ night, hotelId, onClose }: BuySheetProps): React.Reac
                     inputMode="numeric"
                     value={room}
                     onChange={e => setRoom(e.target.value)}
-                    placeholder="e.g. 412"
+                    placeholder={t('guest.buy.roomPlaceholder')}
                     className="w-full h-10 px-3 rounded-md border border-input bg-background text-13 focus:outline-none focus:ring-2 focus:ring-ring/40"
                   />
                 </div>

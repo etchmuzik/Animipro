@@ -1,4 +1,4 @@
-// ─── AnimaPro — useMediaQuery hook ────────────────────────────────────────────
+// ─── Animipro — useMediaQuery hook ────────────────────────────────────────────
 //
 // SSR-safe matchMedia subscription. Returns `false` during SSR/initial render
 // (the conservative default — "we don't know yet, assume narrow/mobile") and

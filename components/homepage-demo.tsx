@@ -1,4 +1,4 @@
-// ─── AnimaPro — Homepage interactive mini-demo ──────────────────────────────
+// ─── Animipro — Homepage interactive mini-demo ──────────────────────────────
 //
 // A self-contained mock animator card that lets visitors try the new task
 // flow (Start → live timer → Photo proof → Complete) without leaving the
@@ -25,18 +25,17 @@ interface DemoProof {
   kind: 'photo' | 'video'
   // Tailwind gradient classes for the fake thumbnail
   gradient: string
-  emoji: string
 }
 
 const FAKE_PHOTO_GRADIENTS = [
-  { gradient: 'from-amber-400 via-orange-500 to-pink-500', emoji: '🌅' },
-  { gradient: 'from-cyan-400 via-blue-500 to-indigo-600', emoji: '🏊' },
-  { gradient: 'from-teal-400 via-emerald-500 to-cyan-600', emoji: '🤸' },
-  { gradient: 'from-purple-400 via-pink-500 to-rose-500', emoji: '🎉' },
+  { gradient: 'from-amber-400 via-orange-500 to-pink-500' },
+  { gradient: 'from-cyan-400 via-blue-500 to-indigo-600' },
+  { gradient: 'from-teal-400 via-emerald-500 to-cyan-600' },
+  { gradient: 'from-purple-400 via-pink-500 to-rose-500' },
 ]
 const FAKE_VIDEO_GRADIENTS = [
-  { gradient: 'from-slate-600 via-zinc-700 to-slate-900', emoji: '🎬' },
-  { gradient: 'from-rose-500 via-red-600 to-orange-700', emoji: '🔥' },
+  { gradient: 'from-slate-600 via-zinc-700 to-slate-900' },
+  { gradient: 'from-rose-500 via-red-600 to-orange-700' },
 ]
 
 function formatElapsed(ms: number): string {
@@ -97,7 +96,7 @@ export function HomepageDemo() {
     proofIdRef.current++
     setProofs(prev => [
       ...prev,
-      { id: `proof-${proofIdRef.current}`, kind, gradient: pick.gradient, emoji: pick.emoji },
+      { id: `proof-${proofIdRef.current}`, kind, gradient: pick.gradient },
     ])
   }, [status])
 
@@ -285,16 +284,14 @@ export function HomepageDemo() {
                     className="relative group"
                   >
                     <div className={cn(
-                      'w-14 h-14 rounded-lg overflow-hidden bg-gradient-to-br shadow-md flex items-center justify-center text-2xl',
+                      'w-14 h-14 rounded-lg overflow-hidden bg-gradient-to-br shadow-md flex items-center justify-center text-white',
                       p.gradient,
                     )}>
-                      <span aria-hidden="true">{p.emoji}</span>
+                      {p.kind === 'video'
+                        ? <Play className="w-5 h-5 drop-shadow" />
+                        : <Camera className="w-5 h-5 drop-shadow opacity-90" />
+                      }
                     </div>
-                    {p.kind === 'video' && (
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <Play className="w-5 h-5 text-white drop-shadow" />
-                      </div>
-                    )}
                     <button
                       type="button"
                       onClick={() => removeProof(p.id)}
@@ -320,7 +317,7 @@ export function HomepageDemo() {
                 className="mt-3 text-mini text-zinc-400 flex items-center gap-1"
               >
                 <Sparkles className="w-3 h-3 text-amber-500" />
-                Try it — tap <span className="font-bold text-cyan-600">Start</span> to begin the activity
+                Try it. Tap <span className="font-bold text-cyan-600">Start</span> to begin the activity
               </motion.p>
             )}
             {status === 'completed' && proofs.length === 0 && (

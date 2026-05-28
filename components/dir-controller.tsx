@@ -1,4 +1,4 @@
-// ─── AnimaPro — <html lang/dir> controller ───────────────────────────────────
+// ─── Animipro — <html lang/dir> controller ───────────────────────────────────
 //
 // Keeps the document's `lang` and `dir` attributes in sync with the selected
 // locale so RTL (Arabic) flips the whole layout and the Arabic web font applies

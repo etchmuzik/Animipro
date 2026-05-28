@@ -1,4 +1,4 @@
-# AnimaPro — Mobile App Guide
+# Animipro — Mobile App Guide
 
 ## Current Status: PWA (Progressive Web App) ✅
 
@@ -9,7 +9,7 @@ Your app is now a **fully installable PWA**. Users can install it directly from 
 - **Desktop**: Chrome/Edge show install button in the address bar
 
 ### What the PWA gives you:
-- ✅ Home screen icon with your AnimaPro branding
+- ✅ Home screen icon with your Animipro branding
 - ✅ Full-screen mode (no browser chrome)
 - ✅ Offline caching (pages load even without internet)
 - ✅ Fast launch (service worker pre-caches assets)
@@ -34,7 +34,7 @@ When you're ready to publish to the **Apple App Store** and **Google Play Store*
 ```bash
 cd saas-platform-build
 npm install @capacitor/core @capacitor/cli
-npx cap init "AnimaPro" "io.animapro.app" --web-dir=out
+npx cap init "Animipro" "io.animapro.app" --web-dir=out
 ```
 
 ### Step 2: Configure Static Export
@@ -78,7 +78,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.animapro.app',
-  appName: 'AnimaPro',
+  appName: 'Animipro',
   webDir: 'out',
   server: {
     // For development, point to your dev server:
@@ -195,13 +195,13 @@ npx cap run ios --livereload --external
 
 ## Recommended App Store Metadata
 
-**App Name:** AnimaPro — Resort Animation Manager
+**App Name:** Animipro — Resort Animation Manager
 **Category:** Business / Productivity
 **Subtitle:** Hotel animation team management
 **Keywords:** hotel animation, resort management, Egypt, TripAdvisor, scheduling, team management, Sharm El Sheikh, Hurghada
 
 **Description:**
-> AnimaPro is the #1 management platform built for Egyptian resort hotel animation teams. Schedule your teams, track TripAdvisor scores, manage performance — across all your properties. Used by 150+ hotels in Sharm El Sheikh, Hurghada, Marsa Alam, Dahab, El Gouna, and more.
+> Animipro is the #1 management platform built for Egyptian resort hotel animation teams. Schedule your teams, track TripAdvisor scores, manage performance — across all your properties. Used by 150+ hotels in Sharm El Sheikh, Hurghada, Marsa Alam, Dahab, El Gouna, and more.
 
 ---
 

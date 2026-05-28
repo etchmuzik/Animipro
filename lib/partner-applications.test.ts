@@ -21,7 +21,7 @@ function makeInput(overrides: Partial<NewPartnerInput> = {}): NewPartnerInput {
     country: 'Egypt',
     hotelsServed: 5,
     tier: 'STUDIO',
-    pitch: 'We want to resell AnimaPro.',
+    pitch: 'We want to resell Animipro.',
     ...overrides,
   }
 }

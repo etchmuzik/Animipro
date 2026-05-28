@@ -1,4 +1,4 @@
-// ─── AnimaPro — Animator task state (localStorage-backed) ────────────────────
+// ─── Animipro — Animator task state (localStorage-backed) ────────────────────
 //
 // Persists per-task runtime state (started_at, completed_at, list of proof
 // media references) for the three actionable card types in the app:

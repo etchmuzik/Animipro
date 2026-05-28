@@ -1,4 +1,4 @@
-// ─── AnimaPro — Onboarding checklist store (localStorage-backed) ─────────────
+// ─── Animipro — Onboarding checklist store (localStorage-backed) ─────────────
 //
 // Bridges Recruitment → Team: once an application is ACCEPTED, the new hire gets
 // an onboarding checklist (contract, uniform, training, system access, added to

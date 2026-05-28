@@ -1,4 +1,4 @@
-// ─── AnimaPro — Partner applications store (localStorage-backed) ──────────────
+// ─── Animipro — Partner applications store (localStorage-backed) ──────────────
 //
 // The reseller-programme inbox. Mirrors lib/applications.ts exactly: localStorage
 // store + immutable updates + subscribe/emit pub-sub + cross-tab sync + seed data
@@ -42,7 +42,7 @@ const SEED_PARTNERS: PartnerApplication[] = [
     country: 'Egypt',
     hotelsServed: 12,
     tier: 'COUNTRY',
-    pitch: 'We already run marketing and IT for 12 resorts across Sharm and Hurghada. Country licence would let us bundle AnimaPro into our existing GM-tier contracts.',
+    pitch: 'We already run marketing and IT for 12 resorts across Sharm and Hurghada. Country licence would let us bundle Animipro into our existing GM-tier contracts.',
     websiteUrl: 'https://redseadigital.eg',
     status: 'IN_CONVERSATION',
   },

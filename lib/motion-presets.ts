@@ -1,4 +1,4 @@
-// ─── AnimaPro — framer-motion presets ───────────────────────────────────────
+// ─── Animipro — framer-motion presets ───────────────────────────────────────
 //
 // The audit found `containerVariants` / `itemVariants` copy-pasted in 6+ modules
 // with the same spring physics. This file is the single source of truth.

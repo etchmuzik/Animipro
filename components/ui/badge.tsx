@@ -1,4 +1,4 @@
-// ─── AnimaPro — Badge primitive ─────────────────────────────────────────────
+// ─── Animipro — Badge primitive ─────────────────────────────────────────────
 //
 // Base shadcn Badge — kept for non-status pills (filter chips, counts, "+3
 // more" indicators). For status pills (Pending/InProgress/Completed/etc.)

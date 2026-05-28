@@ -1,4 +1,4 @@
-// ─── AnimaPro — English message catalog (source of truth) ────────────────────
+// ─── Animipro — English message catalog (source of truth) ────────────────────
 //
 // `en` defines the canonical shape. The Messages type is inferred from it, so
 // the other locales (ar/ru/it) are checked structurally and a catalog-parity
@@ -104,9 +104,9 @@ export const en = {
     titleLead: 'Built so your guests',
     titleAccent: 'leave 5-star reviews.',
     subtitle:
-      'AnimaPro is the operations platform for Egyptian resort animation teams. Schedule every activity, capture proof it actually happened, and watch your TripAdvisor score climb, across all your hotels.',
+      'Animipro is the operations platform for Egyptian resort animation teams. Schedule every activity, capture proof it actually happened, and watch your TripAdvisor score climb, across all your hotels.',
     ctaPrimary: 'Own it forever, from {price}',
-    ctaSecondary: 'Try the live demo',
+    ctaSecondary: 'Open the live platform',
     proof: '{count} animators on shift across Sharm, Hurghada, El Gouna & 5 more destinations.',
     demoLive: 'This card is live. Tap {action} and try it.',
     demoStart: 'Start',
@@ -157,7 +157,7 @@ export const en = {
     formCvAttach: 'Attach a PDF, photo or short video',
     formSubmit: 'Submit application',
     formSubmitting: 'Submitting…',
-    formDemoNote: 'This is a demo. Applications are stored locally in your browser for the AnimaPro recruitment screen.',
+    formDemoNote: 'This is a demo. Applications are stored locally in your browser for the Animipro recruitment screen.',
     formError: 'Something went wrong saving your application. Please try again.',
     successTitle: 'Application received',
     successBody: 'Thanks, {name}. Our hiring team will review your application and reach out by email or WhatsApp. Good luck!',
@@ -169,16 +169,16 @@ export const en = {
   footer: {
     hiring: "We're hiring",
     partners: 'Become a partner',
-    builtFor: 'Built for Egyptian resort hotels — Sharm El Sheikh, Hurghada, El Gouna, Marsa Alam, Dahab, Ain Sokhna, Taba & more',
+    builtFor: 'Built for Egyptian resort hotels: Sharm El Sheikh, Hurghada, El Gouna, Marsa Alam, Dahab, Ain Sokhna, Taba & more',
     rights: 'All rights reserved.',
   },
 
   partners: {
     kicker: 'Reseller programme',
-    titleLead: 'Run AnimaPro',
+    titleLead: 'Run Animipro',
     titleAccent: 'under your brand.',
     intro:
-      'Agencies, hotel-group operators and country-level resellers: ship AnimaPro to your clients as your own product. We provide the platform and the support. You own the relationship.',
+      'Agencies, hotel-group operators and country-level resellers: ship Animipro to your clients as your own product. We provide the platform and the support. You own the relationship.',
     applyAsPartner: 'Apply to join',
     seeTiers: 'See partner tiers',
     tiersKicker: 'Partner tiers',
@@ -212,8 +212,8 @@ export const en = {
     formCountry: 'Country',
     formHotelsServed: 'Hotels you serve today',
     formTier: 'Partner tier you are interested in',
-    formPitch: 'How would you sell AnimaPro?',
-    formPitchPlaceholder: 'Tell us about your current clients, your pitch, and why AnimaPro fits.',
+    formPitch: 'How would you sell Animipro?',
+    formPitchPlaceholder: 'Tell us about your current clients, your pitch, and why Animipro fits.',
     formWebsite: 'Website (optional)',
     formSubmit: 'Submit application',
     formSubmitting: 'Submitting…',
@@ -238,7 +238,7 @@ export const en = {
     },
     tabs: {
       today: 'Today',
-      clubs: 'Tonight\'s clubs',
+      clubs: 'Club nights',
       tickets: 'My tickets',
     },
     today: {
@@ -278,14 +278,18 @@ export const en = {
       processing: 'Processing…',
       confirmedTitle: 'You\'re in.',
       confirmedSubtitle: 'Show this QR at the door.',
+      screenshotHint: 'Screenshot this for safekeeping.',
+      viewTickets: 'View my tickets',
       done: 'Done',
-      simNotice: 'Demo only — no real payment is processed.',
+      simNotice: 'Demo only. No real payment is processed.',
+      roomPlaceholder: 'e.g. 412',
     },
     tickets: {
       heading: 'My tickets',
       empty: {
         title: 'No tickets yet',
         body: 'Buy a club ticket and it\'ll appear here with a QR code.',
+        cta: 'Browse club nights',
       },
     },
     footer: {

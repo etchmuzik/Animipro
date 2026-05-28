@@ -1,4 +1,4 @@
-// ─── AnimaPro — Notifications center ──────────────────────────────────────────
+// ─── Animipro — Notifications center ──────────────────────────────────────────
 //
 // Replaces the inert topbar bell with a live dropdown that aggregates signals
 // already in the app: new job applications (applications store), pending leave

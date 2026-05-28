@@ -1,4 +1,4 @@
-// ─── AnimaPro — Job applications store (localStorage-backed) ──────────────────
+// ─── Animipro — Job applications store (localStorage-backed) ──────────────────
 //
 // The hiring "inbox" for the demo. Prospective animators submit applications on
 // the public /careers page; Admins review them in the platform's Recruitment

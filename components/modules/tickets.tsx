@@ -1,4 +1,4 @@
-// ─── AnimaPro — Tickets module (top-level) ──────────────────────────────────
+// ─── Animipro — Tickets module (top-level) ──────────────────────────────────
 //
 // Routes the four sub-views (Sell · Scan · Sales · Clubs) based on the
 // user's role. Door scanners ONLY see Scan; animation staff see Sell + Scan;

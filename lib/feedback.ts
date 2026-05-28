@@ -1,4 +1,4 @@
-// ─── AnimaPro — Guest feedback store (localStorage-backed) ───────────────────
+// ─── Animipro — Guest feedback store (localStorage-backed) ───────────────────
 //
 // Lets guests leave a 1-5 star rating + optional comment on an activity. Drives
 // an average-satisfaction figure on the dashboard, reinforcing the platform's

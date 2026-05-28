@@ -1,4 +1,4 @@
-// ─── AnimaPro — Brand theme applier ──────────────────────────────────────────
+// ─── Animipro — Brand theme applier ──────────────────────────────────────────
 //
 // Applies the stored white-label brand colour to the CSS custom properties on
 // mount and whenever it changes, so a saved brand survives reloads and stays in

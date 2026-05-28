@@ -1,4 +1,4 @@
-// ─── AnimaPro — Language switcher ────────────────────────────────────────────
+// ─── Animipro — Language switcher ────────────────────────────────────────────
 //
 // Dropdown to change the UI language. Used in two themes: `light` on the sunlit
 // marketing navbar, `dark` on the platform topbar. Writes to the locale store;

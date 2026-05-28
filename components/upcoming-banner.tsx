@@ -1,4 +1,4 @@
-// ─── AnimaPro — In-app "upcoming activity" banner ───────────────────────────
+// ─── Animipro — In-app "upcoming activity" banner ───────────────────────────
 //
 // Renders a thin sticky banner near the top of the platform shell when the
 // next reminder item is within the configured lead-time window. Tap-dismiss

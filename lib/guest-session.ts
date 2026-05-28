@@ -1,4 +1,4 @@
-// ─── AnimaPro — Guest session id (client-only) ────────────────────────────────
+// ─── Animipro — Guest session id (client-only) ────────────────────────────────
 //
 // Tags every ticket a guest buys with an opaque per-device id so the "My
 // tickets" view can filter the shared sales store down to "tickets I bought

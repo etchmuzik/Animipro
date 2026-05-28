@@ -1,4 +1,4 @@
-// ─── AnimaPro — StatusBadge ─────────────────────────────────────────────────
+// ─── Animipro — StatusBadge ─────────────────────────────────────────────────
 //
 // The single visual primitive for status pills. Replaces the per-module
 // inline color maps that the design audit flagged. Six visual kinds × two

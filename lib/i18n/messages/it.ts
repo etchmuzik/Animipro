@@ -1,4 +1,4 @@
-// ─── AnimaPro — Italian message catalog ──────────────────────────────────────
+// ─── Animipro — Italian message catalog ──────────────────────────────────────
 import type { Messages } from './en'
 
 export const it: Messages = {
@@ -97,9 +97,9 @@ export const it: Messages = {
     titleLead: 'Costruito perché i tuoi ospiti',
     titleAccent: 'lascino recensioni a 5 stelle.',
     subtitle:
-      'AnimaPro è la piattaforma operativa per i team di animazione dei resort egiziani. Pianifica ogni attività, raccogli la prova che è stata svolta e guarda salire il tuo punteggio TripAdvisor, in tutti i tuoi hotel.',
+      'Animipro è la piattaforma operativa per i team di animazione dei resort egiziani. Pianifica ogni attività, raccogli la prova che è stata svolta e guarda salire il tuo punteggio TripAdvisor, in tutti i tuoi hotel.',
     ctaPrimary: 'Tuo per sempre, da {price}',
-    ctaSecondary: 'Prova la demo',
+    ctaSecondary: 'Apri la piattaforma live',
     proof: '{count} animatori in servizio tra Sharm, Hurghada, El Gouna e altre 5 destinazioni.',
     demoLive: 'Questa scheda è reale. Tocca {action} e provala.',
     demoStart: 'Avvia',
@@ -148,7 +148,7 @@ export const it: Messages = {
     formCvAttach: 'Allega un PDF, una foto o un breve video',
     formSubmit: 'Invia candidatura',
     formSubmitting: 'Invio…',
-    formDemoNote: 'Questa è una demo. Le candidature sono salvate localmente nel tuo browser per la schermata di selezione di AnimaPro.',
+    formDemoNote: 'Questa è una demo. Le candidature sono salvate localmente nel tuo browser per la schermata di selezione di Animipro.',
     formError: 'Si è verificato un errore nel salvataggio. Riprova.',
     successTitle: 'Candidatura ricevuta',
     successBody: 'Grazie, {name}. Il nostro team esaminerà la candidatura e ti contatterà via email o WhatsApp. In bocca al lupo!',
@@ -160,16 +160,16 @@ export const it: Messages = {
   footer: {
     hiring: 'Stiamo assumendo',
     partners: 'Diventa partner',
-    builtFor: 'Creato per hotel e resort egiziani — Sharm El Sheikh, Hurghada, El Gouna, Marsa Alam, Dahab, Ain Sokhna, Taba e altro',
+    builtFor: 'Creato per hotel e resort egiziani: Sharm El Sheikh, Hurghada, El Gouna, Marsa Alam, Dahab, Ain Sokhna, Taba e altro',
     rights: 'Tutti i diritti riservati.',
   },
 
   partners: {
     kicker: 'Programma rivenditori',
-    titleLead: 'Lancia AnimaPro',
+    titleLead: 'Lancia Animipro',
     titleAccent: 'con il tuo brand.',
     intro:
-      "Agenzie, operatori di gruppi alberghieri e rivenditori nazionali: porta AnimaPro ai tuoi clienti come prodotto tuo. Noi mettiamo piattaforma e supporto. La relazione col cliente è tua.",
+      "Agenzie, operatori di gruppi alberghieri e rivenditori nazionali: porta Animipro ai tuoi clienti come prodotto tuo. Noi mettiamo piattaforma e supporto. La relazione col cliente è tua.",
     applyAsPartner: 'Candidati',
     seeTiers: 'Vedi i livelli',
     tiersKicker: 'Livelli partner',
@@ -201,8 +201,8 @@ export const it: Messages = {
     formCountry: 'Paese',
     formHotelsServed: 'Hotel che servi oggi',
     formTier: 'Livello partner che ti interessa',
-    formPitch: 'Come venderesti AnimaPro?',
-    formPitchPlaceholder: 'Parlaci dei clienti attuali, della tua proposta e perché AnimaPro è adatto a te.',
+    formPitch: 'Come venderesti Animipro?',
+    formPitchPlaceholder: 'Parlaci dei clienti attuali, della tua proposta e perché Animipro è adatto a te.',
     formWebsite: 'Sito web (facoltativo)',
     formSubmit: 'Invia candidatura',
     formSubmitting: 'Invio…',
@@ -266,14 +266,18 @@ export const it: Messages = {
       processing: 'Elaborazione…',
       confirmedTitle: 'Sei dentro.',
       confirmedSubtitle: 'Mostra questo QR all\'ingresso.',
+      screenshotHint: 'Fai uno screenshot per ricordarlo.',
+      viewTickets: 'I miei biglietti',
       done: 'Fatto',
-      simNotice: 'Demo — nessun pagamento reale viene elaborato.',
+      simNotice: 'Demo. Nessun pagamento reale viene elaborato.',
+      roomPlaceholder: 'es. 412',
     },
     tickets: {
       heading: 'I miei biglietti',
       empty: {
         title: 'Nessun biglietto',
         body: 'Compra un biglietto del club e apparirà qui con il QR.',
+        cta: 'Serate al club',
       },
     },
     footer: {

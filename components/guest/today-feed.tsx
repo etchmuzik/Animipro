@@ -1,4 +1,4 @@
-// ─── AnimaPro — Guest "What's on today" feed ──────────────────────────────────
+// ─── Animipro — Guest "What's on today" feed ──────────────────────────────────
 //
 // Read-only daily timetable. Source: hotel schedule entries filtered to today,
 // sorted by start time. Cards are guest-friendly — no animator contact, no
@@ -6,7 +6,7 @@
 
 'use client'
 
-import { Clock, MapPin, User } from 'lucide-react'
+import { CalendarX, Clock, MapPin, User } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n'
 import { getHotelSchedule } from '@/lib/mock-data'
 
@@ -25,9 +25,12 @@ export function TodayFeed({ hotelId }: TodayFeedProps): React.ReactElement {
 
   if (entries.length === 0) {
     return (
-      <div className="text-center py-16">
-        <p className="font-semibold">{t('guest.today.empty.title')}</p>
-        <p className="text-sm text-muted-foreground mt-1">{t('guest.today.empty.body')}</p>
+      <div className="text-center py-20 space-y-3">
+        <CalendarX className="w-10 h-10 text-muted-foreground/40 mx-auto" />
+        <div>
+          <p className="font-semibold">{t('guest.today.empty.title')}</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('guest.today.empty.body')}</p>
+        </div>
       </div>
     )
   }

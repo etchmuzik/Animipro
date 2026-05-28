@@ -1,0 +1,65 @@
+# ─── Animipro on Hostinger (Apache) ─────────────────────────────────────────
+#
+# Next.js builds with `output: 'export'` emit one .html file per route under
+# `out/`. Apache's default behaviour is to 404 if you visit `/platform` (it
+# wants `/platform.html`). These rules make extensionless URLs work, force
+# HTTPS, and add a proper SPA-style 404 fallback.
+#
+# Drop this file at the document root of the Hostinger site (it's already
+# bundled into the build because it lives in /public/).
+
+# ── Disable directory auto-indexing and auto-slash ──────────────────────────
+# Server is LiteSpeed on Hostinger; these may be partially honored.
+DirectorySlash Off
+Options -Indexes -MultiViews
+
+RewriteEngine On
+
+# ── HTTPS redirect ──────────────────────────────────────────────────────────
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ── Block Next.js internal metadata files ───────────────────────────────────
+# Next 16's export emits __next.*.txt RSC payload files alongside the HTML.
+# They're not meant to be served to browsers and they create same-named
+# directories that confuse the server's index handling. Hide them.
+RewriteRule (^|/)__next\. - [F,L]
+
+# ── /platform → /platform.html  (BEFORE -d check) ───────────────────────────
+# Next 16 emits BOTH `platform.html` AND a `platform/` directory full of
+# metadata. We must prefer the .html file, ignoring the directory's existence.
+# This rule runs first and checks only for the .html file's presence.
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^([^/.]+)/?$ /$1.html [L]
+
+# ── Nested routes: /guest/h1 → /guest/h1.html ───────────────────────────────
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.+?)/?$ /$1.html [L]
+
+# Fallback 404 (Next.js export emits _not-found.html)
+ErrorDocument 404 /_not-found.html
+
+# ── Long cache for static assets ────────────────────────────────────────────
+# Anything under /_next/static/ is fingerprinted, safe to cache forever.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(?:js|css|woff2?|png|jpg|jpeg|gif|svg|webp|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # HTML should re-validate so a deploy is picked up immediately.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ── Gzip / brotli ───────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# ── Security headers (mirrors netlify.toml) ─────────────────────────────────
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "camera=(self), microphone=(), geolocation=()"
+</IfModule>

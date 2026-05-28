@@ -1,4 +1,4 @@
-// ─── AnimaPro — Brand store (localStorage-backed, white-label runtime) ────────
+// ─── Animipro — Brand store (localStorage-backed, white-label runtime) ────────
 //
 // Overlays a buyer's brand choices on top of DEFAULT_BRAND and applies the
 // chosen primary colour to the live theme by rewriting the CSS custom properties

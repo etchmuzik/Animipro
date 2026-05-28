@@ -1,4 +1,4 @@
-// ─── AnimaPro — i18n hook + translator ───────────────────────────────────────
+// ─── Animipro — i18n hook + translator ───────────────────────────────────────
 //
 // Dependency-free i18n for a static-export app. `useTranslation()` reads the
 // locale store, subscribes for live re-render on language change, and returns a

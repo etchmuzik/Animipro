@@ -1,4 +1,4 @@
-// ─── AnimaPro — Tickets · Sales report tab (managers only) ──────────────────
+// ─── Animipro — Tickets · Sales report tab (managers only) ──────────────────
 //
 // Today's revenue totals + per-seller leaderboard + recent tickets table.
 // Date range picker (today / week / all-time).

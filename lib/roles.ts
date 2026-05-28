@@ -1,4 +1,4 @@
-// ─── AnimaPro — Role & Permission System ─────────────────────────────────────
+// ─── Animipro — Role & Permission System ─────────────────────────────────────
 
 import type { UserRole } from './mock-data'
 

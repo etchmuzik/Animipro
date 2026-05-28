@@ -1,4 +1,4 @@
-// ─── AnimaPro — Guest layout (per-hotel) ───────────────────────────────────────
+// ─── Animipro — Guest layout (per-hotel) ───────────────────────────────────────
 //
 // Wrapper that hosts the guest experience for one hotel. Deliberately minimal:
 // no platform Sidebar, no role/user switcher, no admin chrome. The layout file

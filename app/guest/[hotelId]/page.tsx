@@ -1,4 +1,4 @@
-// ─── AnimaPro — Guest hotel page (per-hotel route) ─────────────────────────────
+// ─── Animipro — Guest hotel page (per-hotel route) ─────────────────────────────
 //
 // Server component shell: emits the static-export route + delegates the
 // interactive surface to the client GuestShell. `generateStaticParams()` is

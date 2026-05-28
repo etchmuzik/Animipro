@@ -1,4 +1,4 @@
-// ─── AnimaPro — Locale store (localStorage-backed) ───────────────────────────
+// ─── Animipro — Locale store (localStorage-backed) ───────────────────────────
 //
 // Holds the currently selected UI language. Mirrors the lib/task-state.ts
 // pattern: SSR-safe, immutable, with a subscribe()/emit() pub-sub so every

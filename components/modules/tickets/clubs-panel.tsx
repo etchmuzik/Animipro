@@ -1,4 +1,4 @@
-// ─── AnimaPro — Tickets · Clubs catalog tab ─────────────────────────────────
+// ─── Animipro — Tickets · Clubs catalog tab ─────────────────────────────────
 //
 // Read-only catalog of the partner clubs and their upcoming nights.
 // Hotel admins will eventually be able to edit this; for v1 it's a browse.

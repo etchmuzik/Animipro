@@ -13,7 +13,7 @@ beforeEach(() => {
 
 describe('hexToHsl', () => {
   it('converts known hex values to HSL channels', () => {
-    // #0e7490 (the AnimaPro teal) ≈ hsl(192, 82%, 31%)
+    // #0e7490 (the Animipro teal) ≈ hsl(192, 82%, 31%)
     const teal = hexToHsl('#0e7490')
     expect(teal.h).toBeGreaterThanOrEqual(188)
     expect(teal.h).toBeLessThanOrEqual(196)

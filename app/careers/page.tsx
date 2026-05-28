@@ -293,7 +293,7 @@ export default function CareersPage() {
           {/* Top bar */}
           <div className="flex items-center justify-between">
             <Link href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-[oklch(0.42_0.03_220)] transition-colors hover:text-[oklch(0.27_0.055_220)]">
-              <ArrowLeft className="h-4 w-4" /> AnimaPro
+              <ArrowLeft className="h-4 w-4" /> Animipro
             </Link>
             <div className="flex items-center gap-1">
               <LanguageSwitcher variant="light" />

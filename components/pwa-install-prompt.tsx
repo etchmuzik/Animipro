@@ -104,7 +104,7 @@ export function PWAInstallPrompt() {
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold leading-tight">Install AnimaPro</p>
+              <p className="text-sm font-bold leading-tight">Install Animipro</p>
               <p className="text-xs text-white/50 mt-1 leading-relaxed">
                 Add to your home screen for the full app experience — offline access, instant launch, no browser bar.
               </p>
@@ -143,7 +143,7 @@ export function PWAInstallPrompt() {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleDismiss} />
           <div className="relative bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden mb-4 animate-in slide-in-from-bottom-8 duration-300">
             <div className="bg-brand-navy-elev2 px-5 py-4 flex items-center justify-between">
-              <p className="text-white font-bold text-sm">Install AnimaPro on iPhone</p>
+              <p className="text-white font-bold text-sm">Install Animipro on iPhone</p>
               <button onClick={handleDismiss} aria-label="Close" className="text-white/40 hover:text-white transition-colors grid place-items-center -m-2 p-2 w-10 h-10">
                 <X className="w-4 h-4" />
               </button>
@@ -152,7 +152,7 @@ export function PWAInstallPrompt() {
               {[
                 { step: '1', text: 'Tap the Share button', sub: 'The square with an arrow at the bottom of Safari' },
                 { step: '2', text: 'Scroll down and tap "Add to Home Screen"', sub: 'You may need to scroll the action sheet' },
-                { step: '3', text: 'Tap "Add" in the top right', sub: 'AnimaPro will appear on your home screen' },
+                { step: '3', text: 'Tap "Add" in the top right', sub: 'Animipro will appear on your home screen' },
               ].map(s => (
                 <div key={s.step} className="flex items-start gap-3">
                   <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center shrink-0">

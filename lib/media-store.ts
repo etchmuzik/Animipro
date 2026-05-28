@@ -1,4 +1,4 @@
-// ─── AnimaPro — Media store (IndexedDB-backed) ───────────────────────────────
+// ─── Animipro — Media store (IndexedDB-backed) ───────────────────────────────
 //
 // Proof uploads (photo / video) live in IndexedDB as Blobs. IndexedDB is the
 // right choice here — localStorage caps at ~5 MB per origin and only stores

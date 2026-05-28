@@ -1,4 +1,4 @@
-// ─── AnimaPro — mobile-hygiene smoke test ─────────────────────────────────────
+// ─── Animipro — mobile-hygiene smoke test ─────────────────────────────────────
 //
 // Enforces rule #2 of MOBILE.md: every Tailwind grid declared with a wider
 // breakpoint (`md:` / `lg:` / `xl:` / `2xl:`) must ALSO declare a mobile base

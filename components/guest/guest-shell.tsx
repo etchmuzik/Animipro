@@ -1,4 +1,4 @@
-// ─── AnimaPro — Guest shell (per-hotel) ───────────────────────────────────────
+// ─── Animipro — Guest shell (per-hotel) ───────────────────────────────────────
 //
 // Top-level client tree for /guest/[hotelId]. Renders a slim topbar (hotel
 // name + language switcher) and a three-tab content area: Today's activities,
@@ -29,7 +29,7 @@ export function GuestShell({ hotelId, hotelName }: GuestShellProps): React.React
   const [tab, setTab] = useState<Tab>('today')
 
   return (
-    <div className="min-h-[100dvh] bg-background text-foreground flex flex-col">
+    <div data-theme="guest" className="min-h-[100dvh] bg-background text-foreground flex flex-col">
 
       {/* Topbar — hotel name + language switcher only. No staff chrome. */}
       <header className="sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-border">
@@ -65,12 +65,12 @@ export function GuestShell({ hotelId, hotelName }: GuestShellProps): React.React
       {/* Active panel */}
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-5 py-5">
         {tab === 'today' && <TodayFeed hotelId={hotelId} />}
-        {tab === 'clubs' && <ClubsBrowser hotelId={hotelId} />}
-        {tab === 'tickets' && <MyTickets />}
+        {tab === 'clubs' && <ClubsBrowser hotelId={hotelId} onViewTickets={() => setTab('tickets')} />}
+        {tab === 'tickets' && <MyTickets onBrowseClubs={() => setTab('clubs')} />}
       </main>
 
       <footer className="border-t border-border py-4 text-center text-tiny text-muted-foreground">
-        {t('guest.footer.poweredBy')} <Link href="/" className="text-primary hover:underline">AnimaPro</Link>
+        {t('guest.footer.poweredBy')} <Link href="/" className="text-primary hover:underline">Animipro</Link>
       </footer>
       <PWAInstallPrompt />
     </div>

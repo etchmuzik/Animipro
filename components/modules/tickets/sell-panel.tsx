@@ -1,4 +1,4 @@
-// ─── AnimaPro — Tickets · Sell tab ──────────────────────────────────────────
+// ─── Animipro — Tickets · Sell tab ──────────────────────────────────────────
 //
 // Three-step sale: pick a club night → guest details + payment → review.
 // On submit, sells the ticket and renders the issued <TicketCard> with QR.
@@ -85,7 +85,7 @@ export function SellPanel({ currentUser }: SellPanelProps): React.ReactElement {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-eyebrow">Ticket issued</p>
-            <h2 className="text-xl font-bold text-foreground">Hand this to the guest 👋</h2>
+            <h2 className="text-xl font-bold text-foreground">Hand this to the guest</h2>
           </div>
           <Button size="sm" variant="outline" onClick={resetAll} className="gap-1.5">
             <RotateCcw className="w-3.5 h-3.5" /> Sell another

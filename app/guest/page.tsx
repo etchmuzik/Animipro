@@ -1,4 +1,4 @@
-// ─── AnimaPro — Guest hotel picker ─────────────────────────────────────────────
+// ─── Animipro — Guest hotel picker ─────────────────────────────────────────────
 //
 // Public landing for a guest who arrives without a hotel pre-selected (e.g. via
 // the marketing CTA). Lists every hotel and routes to /guest/[hotelId]. A real
@@ -16,11 +16,11 @@ import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
 export default function GuestHotelPicker(): React.ReactElement {
   const { t } = useTranslation()
   return (
-    <div className="min-h-[100dvh] bg-background text-foreground">
+    <div data-theme="guest" className="min-h-[100dvh] bg-background text-foreground">
       <header className="border-b border-border">
         <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
           <Link href="/" className="font-display font-extrabold text-lg tracking-tight">
-            AnimaPro
+            Animipro
           </Link>
           <p className="text-mini text-muted-foreground uppercase tracking-wide">{t('guest.picker.eyebrow')}</p>
         </div>

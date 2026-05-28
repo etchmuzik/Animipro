@@ -1,4 +1,4 @@
-// ─── AnimaPro — canonical status → visual-tone map ─────────────────────────
+// ─── Animipro — canonical status → visual-tone map ─────────────────────────
 //
 // The audit found `STATUS_CONFIG` duplicated in 5 modules (schedule,
 // assignments, events, announcements, leave), each maintaining its own

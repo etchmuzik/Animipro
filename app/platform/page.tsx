@@ -26,7 +26,7 @@ import { DEMO_USERS, canAccess, getAllowedSections, type AppUser, type Section }
 
 const DEFAULT_USER: AppUser = DEMO_USERS.find(u => u.role === 'ANIMATION_CHIEF') ?? DEMO_USERS[0]
 
-export default function AnimaProApp() {
+export default function AnimiproApp() {
   const [currentUser,       setCurrentUser]      = useState<AppUser>(DEFAULT_USER)
   const [searchQuery,       setSearchQuery]       = useState('')
   const [selectedCompanyId, setSelectedCompanyId] = useState(DEFAULT_USER.companyId)
@@ -101,7 +101,7 @@ export default function AnimaProApp() {
       <div className="flex items-center justify-between demo-banner text-white text-xs font-semibold px-3 sm:px-4 py-2 shrink-0">
         <div className="flex items-center gap-2 min-w-0">
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse-dot shrink-0" />
-          <span className="truncate text-white/80">Live Demo — AnimaPro Platform</span>
+          <span className="truncate text-white/80">Live Demo — Animipro Platform</span>
         </div>
         <Link href="/" className="flex items-center gap-1.5 text-white/50 hover:text-white transition-colors shrink-0 ml-2">
           <ArrowLeft className="w-3 h-3" />

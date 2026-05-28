@@ -1,4 +1,4 @@
-// ─── AnimaPro — Guest clubs browser ───────────────────────────────────────────
+// ─── Animipro — Guest clubs browser ───────────────────────────────────────────
 //
 // Lists upcoming ClubNights. The hotelAllocation field on ClubNight is a
 // count (tickets reserved for hotel guests), not an allow-list — so every
@@ -8,7 +8,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Calendar, Clock, Sparkles } from 'lucide-react'
+import { Calendar, Clock, MoonStar, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
@@ -22,9 +22,10 @@ import { BuySheet } from '@/components/guest/buy-sheet'
 
 interface ClubsBrowserProps {
   hotelId: string
+  onViewTickets?: () => void
 }
 
-export function ClubsBrowser({ hotelId }: ClubsBrowserProps): React.ReactElement {
+export function ClubsBrowser({ hotelId, onViewTickets }: ClubsBrowserProps): React.ReactElement {
   const { t } = useTranslation()
   const [pendingNight, setPendingNight] = useState<ClubNight | null>(null)
   const [nights, setNights] = useState<ClubNight[]>([])
@@ -37,9 +38,12 @@ export function ClubsBrowser({ hotelId }: ClubsBrowserProps): React.ReactElement
 
   if (nights.length === 0) {
     return (
-      <div className="text-center py-16">
-        <p className="font-semibold">{t('guest.clubs.empty.title')}</p>
-        <p className="text-sm text-muted-foreground mt-1">{t('guest.clubs.empty.body')}</p>
+      <div className="text-center py-20 space-y-3">
+        <MoonStar className="w-10 h-10 text-muted-foreground/40 mx-auto" />
+        <div>
+          <p className="font-semibold">{t('guest.clubs.empty.title')}</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('guest.clubs.empty.body')}</p>
+        </div>
       </div>
     )
   }
@@ -81,6 +85,7 @@ export function ClubsBrowser({ hotelId }: ClubsBrowserProps): React.ReactElement
           night={pendingNight}
           hotelId={hotelId}
           onClose={() => setPendingNight(null)}
+          onViewTickets={onViewTickets}
         />
       )}
     </section>

@@ -1,4 +1,4 @@
-// ─── AnimaPro — Task card actions (Start / Complete / Proof upload) ─────────
+// ─── Animipro — Task card actions (Start / Complete / Proof upload) ─────────
 //
 // Drop this into any card that represents an animator-actionable item:
 //   - ScheduleEntry  (kind='schedule')

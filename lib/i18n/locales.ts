@@ -1,4 +1,4 @@
-// ─── AnimaPro — Supported locales ────────────────────────────────────────────
+// ─── Animipro — Supported locales ────────────────────────────────────────────
 //
 // Four languages, chosen to match the resort-staff reality: Arabic (the local
 // language, right-to-left), English (lingua franca), Russian and Italian (the

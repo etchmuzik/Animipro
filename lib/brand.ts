@@ -1,8 +1,8 @@
-// ─── AnimaPro — Brand configuration (white-label) ────────────────────────────
+// ─── Animipro — Brand configuration (white-label) ────────────────────────────
 //
 // Single source of truth for everything a white-label buyer rebrands: app name,
 // tagline, the primary brand colour, and contact details. The DEFAULTS reproduce
-// today's AnimaPro identity so nothing changes visually out of the box.
+// today's Animipro identity so nothing changes visually out of the box.
 //
 // At runtime the brand-store overlays a buyer's choices on top of these defaults
 // and writes the chosen colour into the theme's CSS custom properties, so the
@@ -23,12 +23,12 @@ export interface BrandConfig {
 }
 
 export const DEFAULT_BRAND: BrandConfig = {
-  appName: 'AnimaPro',
+  appName: 'Animipro',
   tagline: 'Resort Animation Management',
-  primaryHex: '#0e7490', // the AnimaPro teal
+  primaryHex: '#0e7490', // the Animipro teal
   contact: {
     whatsapp: '+20 100 000 0000',
-    email: 'sales@animapro.io',
+    email: 'sales@animipro.online',
     offices: 'Sharm El Sheikh & Hurghada',
   },
 }

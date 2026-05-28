@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight, Check, Menu, X, Star, Users, Calendar,
   BarChart3, Bell, Shield, ChevronRight, Building2,
@@ -62,7 +62,7 @@ const FEATURES = [
   {
     icon: Play,
     title: 'One-Tap Activity Start',
-    desc: 'Animators tap Start when they begin — every shift gets a real timestamp. No paper sign-in, no excuses.',
+    desc: 'Animators tap Start when they begin. Every shift gets a real timestamp. No paper sign-in, no excuses.',
   },
   {
     icon: Camera,
@@ -72,12 +72,12 @@ const FEATURES = [
   {
     icon: UserPlus,
     title: 'End-to-end hiring, in the platform',
-    desc: 'Public careers page collects applications with CVs. Hotel admins review, shortlist, accept, then walk new hires through an onboarding checklist — contract, uniform, training, system access, added to the team. The whole hiring loop in one tool.',
+    desc: 'Public careers page collects applications with CVs. Hotel admins review, shortlist, accept, then walk new hires through an onboarding checklist: contract, uniform, training, system access, added to the team. The whole hiring loop, one tool.',
   },
   {
     icon: BellRing,
     title: 'Smart Pre-Shift Reminders',
-    desc: '15-minute and 5-minute browser notifications before every activity. Installed PWA — no missed shifts.',
+    desc: '15-minute and 5-minute browser notifications before every activity. Installed PWA. No missed shifts.',
   },
   {
     icon: CalendarCheck,
@@ -92,7 +92,7 @@ const FEATURES = [
   {
     icon: ListChecks,
     title: 'Onboarding Checklists',
-    desc: 'Accepted candidates get a real onboarding checklist tied to their application. Track contract, uniform, training, and access in one place — bridges hiring straight into the team roster.',
+    desc: 'Accepted candidates get a real onboarding checklist tied to their application. Track contract, uniform, training, and access in one place, bridging hiring straight into the team roster.',
   },
   {
     icon: Building2,
@@ -112,161 +112,108 @@ const FEATURES = [
   {
     icon: Zap,
     title: 'Live White-Label + Reseller Programme',
-    desc: 'Change app name, brand colour, and contact details from the Settings screen and watch the whole platform reskin instantly. Run it as your own agency product — see our partner tiers.',
+    desc: 'Change app name, brand colour, and contact details from the Settings screen and watch the whole platform reskin instantly. Run it as your own agency product. See our partner tiers.',
   },
 ]
 
 // Approx FX used for EGP-equivalent display below the USD price.
 // Update once if the rate moves significantly; the marketing copy isn't a
-// real quote — checkout pulls the live amount.
+// real quote. Checkout pulls the live amount.
 const USD_TO_EGP = 49
 
 interface PricingTier {
   id: string
   name: string
-  desc: string
-  monthlyUsd: number     // per hotel / month
-  annualUsd: number      // per hotel / year — sold as "2 months free"
-  oneTimeUsd: number     // one-time licence (self-hosted)
+  tagline: string          // one punchy line under the name
+  desc: string             // 1-sentence who-it's-for
+  monthlyUsd: number       // per hotel / month (billed monthly)
+  annualMonthlyUsd: number // per hotel / month when billed annually (= annualUsd/12)
+  annualUsd: number        // per hotel / year total
+  oneTimeUsd: number       // one-time licence (self-hosted)
   highlight: boolean
   badge?: string
-  features: string[]
-  // Annual-only bonuses shown ONLY when Annual is the active mode — these
-  // are why someone picks annual over monthly. Treat them as a "what you get
-  // free with annual" pack, with dollar values to anchor the perceived gain.
-  annualBonuses?: { label: string; valueUsd?: number }[]
-  // Lifetime-specific perks for the Own-forever mode.
-  oneTimePerks?: string[]
+  features: string[]       // up to 5 — keep it short
+  annualPerk: string       // single bonus shown on annual toggle
+  oneTimePerk: string      // single perk for one-time mode
 }
 
 const PRICING_TIERS: PricingTier[] = [
   {
     id: 'single',
     name: 'Single Hotel',
-    desc: 'One property, small team. Perfect for a boutique resort.',
-    monthlyUsd: 149,
-    annualUsd: 1490,       // = 149 × 10 → 2 months free
-    oneTimeUsd: 1990,
-    highlight: false,
+    tagline: 'One resort, fully managed.',
+    desc: 'Perfect for a boutique or independent property.',
+    monthlyUsd: 150,
+    annualMonthlyUsd: 125,   // 1,500 / 12 = 125
+    annualUsd: 1500,
+    oneTimeUsd: 2000,
+    highlight: true,
+    badge: 'Best place to start',
     features: [
-      'One hotel property',
       'Up to 20 animators',
-      'All 4 languages (EN / AR / RU / IT)',
-      'Smart schedule builder',
-      'Attendance, leave & announcements',
-      'TripAdvisor live dashboard',
-      'Guest feedback & ratings',
+      'Schedule, attendance & leave',
+      'Photo/video proof of activities',
+      'Guest feedback & TripAdvisor dashboard',
+      'EN / AR / RU / IT — full RTL support',
     ],
-    annualBonuses: [
-      { label: 'Live 1:1 onboarding call', valueUsd: 200 },
-      { label: 'Free data migration from your sheets', valueUsd: 150 },
-      { label: '90-day money-back guarantee' },
-    ],
-    oneTimePerks: [
-      'Yours forever — no recurring fee',
-      'Optional hosted add-on from $29/mo',
-      '12 months free updates',
-    ],
+    annualPerk: 'Free 1:1 onboarding call + 90-day money-back guarantee',
+    oneTimePerk: 'Pay once, yours forever. Optional hosting from $30/mo.',
   },
   {
     id: 'group',
     name: 'Hotel Group',
-    desc: 'Multiple hotels, one platform. The sweet spot for chains.',
-    monthlyUsd: 399,
-    annualUsd: 3990,
-    oneTimeUsd: 4990,
-    highlight: true,
-    badge: 'Most Popular',
+    tagline: 'All your properties, one view.',
+    desc: 'For chains and management companies running 2-10 hotels.',
+    monthlyUsd: 400,
+    annualMonthlyUsd: 333,   // 4,000 / 12 ≈ 333
+    annualUsd: 4000,
+    oneTimeUsd: 5000,
+    highlight: false,
     features: [
       'Up to 10 hotel properties',
       'Unlimited animators',
-      'Everything in Single Hotel',
-      'Cross-hotel analytics',
-      'Company-level reports',
+      'Cross-hotel analytics & reports',
       'Role-based access control',
-      'Custom branding pack included',
+      'Custom branding included',
     ],
-    annualBonuses: [
-      { label: '2-hour onboarding workshop for your chiefs', valueUsd: 600 },
-      { label: 'White-glove data migration', valueUsd: 400 },
-      { label: 'Custom subdomain (yourchain.animapro.io)', valueUsd: 250 },
-      { label: 'Quarterly review with our team' },
-    ],
-    oneTimePerks: [
-      'Yours forever — no recurring fee',
-      'Optional hosted add-on from $79/mo',
-      '18 months free updates',
-    ],
+    annualPerk: 'White-glove migration + custom subdomain + quarterly review',
+    oneTimePerk: 'Pay once, yours forever. Optional hosting from $80/mo.',
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    desc: 'Unlimited hotels, dedicated support, on-site setup.',
-    monthlyUsd: 999,
-    annualUsd: 9990,
-    oneTimeUsd: 12990,
+    tagline: 'No limits. On-site setup.',
+    desc: 'Unlimited hotels, a dedicated manager, and 2-day on-site training.',
+    monthlyUsd: 1000,
+    annualMonthlyUsd: 833,   // 10,000 / 12 ≈ 833
+    annualUsd: 10000,
+    oneTimeUsd: 15000,
     highlight: false,
     features: [
       'Unlimited hotels & animators',
-      'Everything in Hotel Group',
       'Dedicated onboarding manager',
       '2-day on-site setup & training',
+      'WhatsApp SLA — 1h response',
       'Custom integrations available',
     ],
-    annualBonuses: [
-      { label: '2-day on-site training (your team flies us)', valueUsd: 3000 },
-      { label: 'Phone + WhatsApp SLA — 1h response', valueUsd: 1200 },
-      { label: 'Custom domain + SSL + Arabic localisation review', valueUsd: 800 },
-      { label: '24/7 on-call for outages' },
-    ],
-    oneTimePerks: [
-      'Yours forever — no recurring fee',
-      'Optional hosted add-on from $149/mo',
-      '24 months free updates',
-    ],
+    annualPerk: '2-day on-site training included + 24/7 on-call for outages',
+    oneTimePerk: 'Pay once, yours forever. Optional hosting from $150/mo.',
   },
 ]
 
-// ─── Billing modes ─────────────────────────────────────────────────────────
+// ─── Billing modes ────────────────────────────────────────────────────────────
 //
-// Three pill options shown above the pricing grid. Each tier carries the
-// price for all three; the active mode just picks which price to render.
+// Two top-level modes: hosted (pay-as-you-go) or one-time licence.
+// Within hosted, a toggle between monthly and annual commitment.
 
 type BillingMode = 'monthly' | 'annual' | 'oneTime'
-
-interface BillingOption {
-  id: BillingMode
-  label: string
-  hint?: string  // e.g. "save 17%"
-  badge?: string // little corner badge
-}
-
-// Order matters — Annual is the recommended default and renders first.
-const BILLING_OPTIONS: BillingOption[] = [
-  { id: 'annual',  label: 'Annual',      hint: 'best value · 2 months free' },
-  { id: 'monthly', label: 'Monthly',     hint: 'no commitment' },
-  { id: 'oneTime', label: 'Own forever', hint: 'pay once' },
-]
 
 function getTierPriceUsd(tier: PricingTier, mode: BillingMode): number {
   switch (mode) {
     case 'monthly': return tier.monthlyUsd
-    case 'annual':  return tier.annualUsd
+    case 'annual':  return tier.annualMonthlyUsd   // show per-month feel
     case 'oneTime': return tier.oneTimeUsd
   }
-}
-
-function getTierPeriodLabel(mode: BillingMode): string {
-  switch (mode) {
-    case 'monthly': return '/ hotel / month · cancel anytime'
-    case 'annual':  return '/ hotel / year · billed yearly'
-    case 'oneTime': return 'one-time · self-host'
-  }
-}
-
-/** Total $ value of the annual bonus stack. Shown as a "+ $X value" tag. */
-function getAnnualBonusValue(tier: PricingTier): number {
-  return (tier.annualBonuses ?? []).reduce((s, b) => s + (b.valueUsd ?? 0), 0)
 }
 
 function formatUsd(n: number): string {
@@ -280,14 +227,14 @@ function formatEgpApprox(usd: number): string {
 
 const TESTIMONIALS = [
   {
-    quote: 'Before AnimaPro we managed 40 animators on WhatsApp groups. Now everything is in one place — schedules, attendance, scores. Our TripAdvisor rating went from 4.2 to 4.7 in one season.',
+    quote: 'Before Animipro we managed 40 animators on WhatsApp groups. Now everything is in one place: schedules, attendance, scores. Our TripAdvisor rating went from 4.2 to 4.7 in one season.',
     name: 'Mohamed El-Sayed',
     title: 'Animation Director',
     hotel: 'Rixos Premium Seagate, Sharm El Sheikh',
     initials: 'ME',
   },
   {
-    quote: 'We manage 3 hotels and 90 animators. AnimaPro gives us the full picture across all properties in real time. The white-label option is exactly what we needed for our group.',
+    quote: 'We manage 3 hotels and 90 animators. Animipro gives us the full picture across all properties in real time. The white-label option is exactly what we needed for our group.',
     name: 'Katarzyna Wojcik',
     title: 'HR & Operations Manager',
     hotel: 'Pickalbatros Palace Resort, Hurghada',
@@ -343,12 +290,12 @@ function CheckoutModal({
             <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-1">Order Summary</p>
             <p className="text-white font-black text-xl leading-tight">{tier.name}</p>
             <p className="text-white/40 text-xs mt-1">
-              {mode === 'oneTime' ? 'Licence — yours forever' : mode === 'annual' ? 'Annual subscription · 2 months free' : 'Monthly subscription · cancel anytime'}
+              {mode === 'oneTime' ? 'Licence, yours forever' : mode === 'annual' ? 'Annual subscription · 2 months free' : 'Monthly subscription · cancel anytime'}
             </p>
           </div>
           <div className="text-right">
             <p className="text-white font-black text-2xl tabular-nums">{formatUsd(getTierPriceUsd(tier, mode))}</p>
-            <p className="text-white/50 text-sm font-semibold">USD <span className="text-white/30">({formatEgpApprox(getTierPriceUsd(tier, mode))})</span></p>
+            <p className="text-white/50 text-sm font-semibold">USD</p>
           </div>
           <button
             onClick={onClose}
@@ -400,7 +347,7 @@ function CheckoutModal({
                 </div>
               ))}
 
-              {/* Hosted Edition — optional, defaults to self-hosted (free). */}
+              {/* Hosted Edition: optional, defaults to self-hosted (free). */}
               <div className="pt-2">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-xs font-bold text-slate-600">Hosted Edition (optional)</p>
@@ -455,9 +402,9 @@ function CheckoutModal({
             <div className="space-y-3">
               <p className="text-sm font-bold text-brand-navy mb-4">Choose your payment method</p>
               {[
-                { label: 'InstaPay / Bank Transfer', sub: 'Instant EGP bank transfer — license delivered in 2 hours', icon: Banknote },
-                { label: 'Vodafone Cash',             sub: 'Mobile wallet — license delivered instantly',              icon: Smartphone },
-                { label: 'Credit / Debit Card',       sub: 'Visa or Mastercard — secure online payment',              icon: CreditCard },
+                { label: 'InstaPay / Bank Transfer', sub: 'Instant EGP bank transfer. License in 2 hours.', icon: Banknote },
+                { label: 'Vodafone Cash',             sub: 'Mobile wallet. License delivered instantly.',     icon: Smartphone },
+                { label: 'Credit / Debit Card',       sub: 'Visa or Mastercard, secure online payment',      icon: CreditCard },
               ].map(m => (
                 <button
                   key={m.label}
@@ -562,7 +509,7 @@ function Navbar({ onBuy }: { onBuy: () => void }) {
           <div className="w-7 h-7 rounded-lg bg-[oklch(0.5_0.1_212)] flex items-center justify-center shadow-sm">
             <Zap className="w-4 h-4 text-white" />
           </div>
-          <span className="font-display font-extrabold text-lg tracking-tight text-[oklch(0.27_0.055_220)]">AnimaPro</span>
+          <span className="font-display font-extrabold text-lg tracking-tight text-[oklch(0.27_0.055_220)]">Animipro</span>
           <span className="hidden sm:inline-block text-micro font-bold text-[oklch(0.45_0.09_210)] bg-[oklch(0.5_0.1_212_/_0.1)] border border-[oklch(0.5_0.1_212_/_0.25)] px-2 py-0.5 rounded-full">for Egypt</span>
         </Link>
 
@@ -647,7 +594,7 @@ function Navbar({ onBuy }: { onBuy: () => void }) {
 
 // ─── HERO ──────────────────────────────────────────────────────────────────────
 
-// Exponential ease-out — the brand-law curve. No spring bounce on the hero.
+// Exponential ease-out: the brand-law curve. No spring bounce on the hero.
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const
 
 function Hero({ onBuy }: { onBuy: () => void }) {
@@ -675,7 +622,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
         <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-x-12 gap-y-16 items-center">
           {/* ── Left: the message ───────────────────────────────────────────── */}
           <div className="max-w-2xl">
-            {/* Live status — a real signal, not a tracked-caps label */}
+            {/* Live status: a real signal, not a tracked-caps label */}
             <motion.div
               {...rise(0.05)}
               className="inline-flex items-center gap-2.5 rounded-full bg-white/70 ring-1 ring-[oklch(0.52_0.1_210_/_0.18)] backdrop-blur-sm pl-2.5 pr-4 py-1.5 mb-8 shadow-sm"
@@ -689,7 +636,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
               </span>
             </motion.div>
 
-            {/* Headline — the hero. Display face, one phrase carries the coral. */}
+            {/* Headline: the hero. Display face, one phrase carries the coral. */}
             <motion.h1
               {...rise(0.12)}
               className="font-display font-extrabold tracking-[-0.03em] leading-[0.95] text-[oklch(0.27_0.055_220)] text-balance"
@@ -723,12 +670,12 @@ function Hero({ onBuy }: { onBuy: () => void }) {
                 href="/platform"
                 className="group inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-semibold text-[oklch(0.36_0.05_215)] ring-1 ring-[oklch(0.4_0.04_215_/_0.2)] transition-colors hover:bg-white/60 hover:ring-[oklch(0.4_0.04_215_/_0.35)]"
               >
-                <Play className="h-3.5 w-3.5 fill-current" />
+                <LayoutDashboard className="h-4 w-4" />
                 {t('hero.ctaSecondary')}
               </Link>
             </motion.div>
 
-            {/* Proof line — numbers + cities woven into one confident sentence */}
+            {/* Proof line: numbers + cities woven into one confident sentence */}
             <motion.div {...rise(0.36)} className="mt-12">
               <div className="flex items-center gap-5">
                 <div className="flex -space-x-2.5">
@@ -765,7 +712,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
               className="hero-sun pointer-events-none absolute -right-10 -top-14 h-72 w-72 rounded-full sm:h-80 sm:w-80"
             />
 
-            {/* Floating proof satellite — a captured photo */}
+            {/* Floating proof satellite: a captured photo */}
             <motion.div
               aria-hidden
               initial={{ opacity: 0, scale: 0.8 }}
@@ -773,8 +720,8 @@ function Hero({ onBuy }: { onBuy: () => void }) {
               transition={{ duration: 0.6, ease: EASE_OUT_EXPO, delay: 1 }}
               className="hero-float-a absolute -left-3 top-10 z-20 hidden sm:flex items-center gap-2 rounded-2xl bg-white/95 px-3 py-2 shadow-[0_18px_40px_-16px_oklch(0.3_0.05_220_/_0.45)] ring-1 ring-black/5 backdrop-blur"
             >
-              <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[oklch(0.75_0.14_60)] to-[oklch(0.6_0.18_30)] text-lg">
-                🏊
+              <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[oklch(0.75_0.14_60)] to-[oklch(0.6_0.18_30)] text-white">
+                <Camera className="w-4 h-4" />
               </div>
               <div className="leading-tight">
                 <p className="text-mini font-bold text-[oklch(0.3_0.05_220)]">Proof captured</p>
@@ -782,7 +729,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
               </div>
             </motion.div>
 
-            {/* Floating proof satellite — a fired reminder */}
+            {/* Floating proof satellite: a fired reminder */}
             <motion.div
               aria-hidden
               initial={{ opacity: 0, scale: 0.8 }}
@@ -797,7 +744,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
               </div>
             </motion.div>
 
-            {/* The interactive demo — real working proof, not a fake screenshot.
+            {/* The interactive demo: real working proof, not a fake screenshot.
                 A subtle 3D tilt on large screens that straightens on hover to
                 invite touch; flat on mobile where the card is full-width. */}
             <div className="relative z-10 transition-transform duration-500 ease-out lg:[transform:perspective(1400px)_rotateY(-7deg)_rotateX(3deg)] lg:hover:[transform:perspective(1400px)_rotateY(0deg)_rotateX(0deg)]">
@@ -933,7 +880,7 @@ function AnimatorWorkflowSection() {
             Built for the animator&apos;s pocket.
           </h2>
           <p className="mt-6 text-zinc-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Three changes that turn every activity into accountable, measurable work — without adding paperwork.
+            Three changes that turn every activity into accountable, measurable work, without adding paperwork.
           </p>
         </motion.div>
 
@@ -985,7 +932,7 @@ function AnimatorWorkflowSection() {
             className="lg:sticky lg:top-24"
           >
             <p className="text-center text-mini font-bold uppercase tracking-widest text-cyan-300/80 mb-3">
-              ↓ Live — tap it yourself
+              ↓ Live. Tap it yourself
             </p>
             <HomepageDemo />
             <p className="mt-4 text-center text-xs text-zinc-500">
@@ -1027,7 +974,7 @@ function FeaturesSection() {
             Everything your team needs.
           </h2>
           <p className="text-muted-foreground text-lg mt-6 max-w-[55ch] leading-relaxed">
-            Built specifically for Egyptian resort hotels. Not a generic tool — a platform that understands your industry.
+            Built specifically for Egyptian resort hotels. Not a generic tool. A platform that understands your industry.
           </p>
         </div>
 
@@ -1285,7 +1232,7 @@ function CitiesSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-muted-foreground text-lg max-w-[60ch] font-medium leading-relaxed"
           >
-            From the Red Sea Riviera to the Mediterranean coast — AnimaPro runs across all of Egypt's tourist zones.
+            From the Red Sea Riviera to the Mediterranean coast, Animipro runs across all of Egypt's tourist zones.
           </motion.p>
         </motion.div>
 
@@ -1422,319 +1369,276 @@ interface PricingSectionProps {
 }
 
 function PricingSection({ onBuy }: PricingSectionProps) {
-  const [billingMode, setBillingMode] = useState<BillingMode>('annual')
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-    },
-  }
+  // Two top-level modes. Within "hosted", a sub-toggle for billing cadence.
+  const [payMode, setPayMode] = useState<'hosted' | 'oneTime'>('hosted')
+  const [hostedCadence, setHostedCadence] = useState<'annual' | 'monthly'>('annual')
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: 'spring' as const, stiffness: 100, damping: 20 },
-    },
-  }
-
-  const headingVariants = {
-    hidden: { opacity: 0, x: -30 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.6 },
-    },
-  }
+  const billingMode: BillingMode = payMode === 'oneTime' ? 'oneTime' : hostedCadence
 
   return (
     <section id="pricing" className="bg-white py-16 sm:py-24 lg:py-32">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8">
+
+        {/* ── Heading ─────────────────────────────────────────────────────── */}
         <motion.div
-          className="text-left max-w-2xl mb-16"
-          initial="hidden"
-          whileInView="visible"
+          className="mb-14"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          variants={headingVariants}
+          transition={{ duration: 0.5 }}
         >
-          <motion.p
-            variants={headingVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-primary text-xs font-black uppercase tracking-[0.15em] mb-4"
-          >
-            Pricing
-          </motion.p>
-          <motion.h2
-            variants={headingVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl sm:text-6xl font-black text-brand-navy leading-tight tracking-tighter text-balance mb-6"
-          >
-            Pricing that fits your shape.
-          </motion.h2>
-          <motion.p
-            variants={headingVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-muted-foreground text-lg font-medium"
-          >
-            Pay monthly to start, switch to annual and get two months free, or buy the licence forever.
-          </motion.p>
+          <p className="text-primary text-xs font-black uppercase tracking-[0.15em] mb-4">Pricing</p>
+          <h2 className="text-5xl sm:text-6xl font-black text-brand-navy leading-tight tracking-tighter text-balance mb-5">
+            Simple pricing.<br />No surprises.
+          </h2>
+          <p className="text-muted-foreground text-lg font-medium max-w-xl">
+            Choose how you pay. Hosted plans include everything. Buy once and self-host if you prefer no recurring fees.
+          </p>
         </motion.div>
 
-        {/* ── Billing-mode pill toggle ─────────────────────────────────────── */}
+        {/* ── Top-level pay-mode switch ────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
-          className="flex flex-wrap items-center gap-2 mb-10 p-1.5 bg-slate-100 rounded-2xl w-fit"
-          role="tablist"
-          aria-label="Choose how you pay"
+          className="flex flex-wrap items-center gap-3 mb-10"
         >
-          {BILLING_OPTIONS.map(opt => {
-            const isActive = billingMode === opt.id
-            return (
-              <button
-                key={opt.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setBillingMode(opt.id)}
-                className={cn(
-                  'group relative inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-bold transition-all',
-                  isActive
-                    ? 'bg-white text-brand-navy shadow-sm ring-1 ring-slate-200'
-                    : 'text-muted-foreground hover:text-brand-navy',
-                )}
+          {/* Hosted / Buy-once toggle */}
+          <div className="flex items-center p-1 bg-slate-100 rounded-xl gap-1" role="tablist" aria-label="Payment type">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={payMode === 'hosted'}
+              onClick={() => setPayMode('hosted')}
+              className={cn(
+                'px-5 py-2 rounded-lg text-sm font-bold transition-all',
+                payMode === 'hosted'
+                  ? 'bg-white text-brand-navy shadow-sm ring-1 ring-slate-200'
+                  : 'text-slate-500 hover:text-brand-navy',
+              )}
+            >
+              Hosted — pay monthly
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={payMode === 'oneTime'}
+              onClick={() => setPayMode('oneTime')}
+              className={cn(
+                'px-5 py-2 rounded-lg text-sm font-bold transition-all',
+                payMode === 'oneTime'
+                  ? 'bg-white text-brand-navy shadow-sm ring-1 ring-slate-200'
+                  : 'text-slate-500 hover:text-brand-navy',
+              )}
+            >
+              Buy once — own forever
+            </button>
+          </div>
+
+          {/* Annual / Monthly sub-toggle — only visible in hosted mode */}
+          <AnimatePresence>
+            {payMode === 'hosted' && (
+              <motion.div
+                key="cadence"
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.2 }}
+                className="flex items-center p-1 bg-green-50 border border-green-200 rounded-xl gap-1"
+                role="tablist"
+                aria-label="Billing cadence"
               >
-                {opt.label}
-                {opt.hint && (
-                  <span className={cn(
-                    'hidden sm:inline text-mini font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md',
-                    isActive ? 'bg-primary/10 text-primary' : 'bg-slate-200 text-slate-600 group-hover:bg-primary/10 group-hover:text-primary'
-                  )}>
-                    {opt.hint}
-                  </span>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={hostedCadence === 'annual'}
+                  onClick={() => setHostedCadence('annual')}
+                  className={cn(
+                    'px-4 py-1.5 rounded-lg text-sm font-bold transition-all',
+                    hostedCadence === 'annual'
+                      ? 'bg-green-600 text-white shadow-sm'
+                      : 'text-green-800 hover:bg-green-100',
+                  )}
+                >
+                  Annual
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={hostedCadence === 'monthly'}
+                  onClick={() => setHostedCadence('monthly')}
+                  className={cn(
+                    'px-4 py-1.5 rounded-lg text-sm font-bold transition-all',
+                    hostedCadence === 'monthly'
+                      ? 'bg-white text-brand-navy shadow-sm ring-1 ring-slate-200'
+                      : 'text-green-800 hover:bg-green-100',
+                  )}
+                >
+                  Monthly
+                </button>
+                {hostedCadence === 'annual' && (
+                  <span className="pr-3 text-xs font-black text-green-700">2 months free</span>
                 )}
-              </button>
-            )
-          })}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
-        {/* Asymmetric pricing grid: 2fr 1fr emphasis */}
+        {/* ── Pricing cards ────────────────────────────────────────────────── */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-[2fr_1fr] lg:grid-cols-[1fr_1.2fr_0.9fr] gap-6 max-w-5xl"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          {PRICING_TIERS.map(tier => {
+          {PRICING_TIERS.map((tier, i) => {
             const priceUsd = getTierPriceUsd(tier, billingMode)
-            const periodLabel = getTierPeriodLabel(billingMode)
-            const bonusValueUsd = getAnnualBonusValue(tier)
-            const monthlyAnnualSaving = tier.monthlyUsd * 12 - tier.annualUsd
-            const ctaLabel = billingMode === 'oneTime' ? 'Buy licence' : billingMode === 'annual' ? 'Start annual plan' : 'Start monthly'
+            const isOneTime = billingMode === 'oneTime'
+            const isAnnual = billingMode === 'annual'
+            const ctaLabel = isOneTime ? 'Buy licence' : isAnnual ? 'Start annual plan' : 'Start monthly'
+            const breakEvenMonths = Math.ceil(tier.oneTimeUsd / tier.annualMonthlyUsd)
+
             return (
               <motion.div
                 key={tier.id}
-                variants={itemVariants}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.07 }}
                 className={cn(
-                  'relative rounded-2xl p-8 flex flex-col transition-all',
+                  'relative rounded-2xl flex flex-col overflow-hidden',
                   tier.highlight
-                    ? 'bg-brand-navy text-white ring-2 ring-primary shadow-[0_20px_40px_-15px_rgba(14,116,144,0.2)]'
-                    : 'bg-white border border-border shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]'
+                    ? 'bg-brand-navy ring-2 ring-primary shadow-[0_20px_50px_-15px_rgba(14,116,144,0.25)]'
+                    : 'bg-white border border-border shadow-sm hover:shadow-md transition-shadow',
                 )}
               >
+                {/* Badge */}
                 {tier.badge && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-mini font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg whitespace-nowrap">
+                  <div className="absolute top-4 right-4 bg-primary text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest">
                     {tier.badge}
                   </div>
                 )}
 
-                <div className="mb-6">
-                  <p className={cn('text-xs font-black uppercase tracking-widest mb-3', tier.highlight ? 'text-primary' : 'text-slate-400')}>
+                {/* Card top */}
+                <div className="p-7 pb-5">
+                  <p className={cn('text-[11px] font-black uppercase tracking-[0.12em] mb-1', tier.highlight ? 'text-primary' : 'text-slate-400')}>
                     {tier.name}
                   </p>
-
-                  {/* Price headline */}
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className={cn('font-black tabular-nums', tier.highlight ? 'text-white' : 'text-brand-navy', billingMode === 'annual' ? 'text-6xl' : 'text-5xl')}>
-                      {formatUsd(priceUsd)}
-                    </span>
-                    <span className={cn('text-sm font-semibold', tier.highlight ? 'text-white/60' : 'text-slate-400')}>
-                      USD
-                    </span>
-                  </div>
-                  <p className={cn('text-mini font-semibold', tier.highlight ? 'text-white/60' : 'text-slate-500')}>
-                    {periodLabel} · <span className="tabular-nums">{formatEgpApprox(priceUsd)}</span>
+                  <p className={cn('text-sm font-semibold mb-5', tier.highlight ? 'text-white/60' : 'text-slate-500')}>
+                    {tier.tagline}
                   </p>
 
-                  {/* ── Annual mode — big "save" callout + tiny monthly compare ─ */}
-                  {billingMode === 'annual' && monthlyAnnualSaving > 0 && (
-                    <>
-                      <div className={cn(
-                        'mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-mini font-black uppercase tracking-wide',
-                        tier.highlight ? 'bg-primary/20 text-primary' : 'bg-green-100 text-green-700'
+                  {/* Price block */}
+                  <div className="flex items-end gap-2 mb-1">
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={priceUsd}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.18 }}
+                        className={cn('text-5xl font-black tabular-nums leading-none', tier.highlight ? 'text-white' : 'text-brand-navy')}
+                      >
+                        {formatUsd(priceUsd)}
+                      </motion.span>
+                    </AnimatePresence>
+                    <span className={cn('text-sm font-semibold pb-1', tier.highlight ? 'text-white/50' : 'text-slate-400')}>
+                      {isOneTime ? 'one-time' : '/mo'}
+                    </span>
+                  </div>
+
+                  {/* Period / savings line */}
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    {isAnnual && (
+                      <span className={cn(
+                        'inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full',
+                        tier.highlight ? 'bg-green-500/20 text-green-300' : 'bg-green-100 text-green-700'
                       )}>
-                        ✨ Save {formatUsd(monthlyAnnualSaving)} · 2 months free
-                      </div>
-                      <p className={cn('text-mini mt-2', tier.highlight ? 'text-white/40' : 'text-slate-400')}>
-                        Or pay monthly: <span className="font-bold tabular-nums">{formatUsd(tier.monthlyUsd)}/mo</span>
-                      </p>
-                    </>
-                  )}
+                        Save {formatUsd(tier.monthlyUsd * 2)} · 2 months free
+                      </span>
+                    )}
+                    {!isAnnual && !isOneTime && (
+                      <button
+                        type="button"
+                        onClick={() => setHostedCadence('annual')}
+                        className={cn(
+                          'text-xs font-bold underline underline-offset-2 transition-colors',
+                          tier.highlight ? 'text-white/50 hover:text-white/80' : 'text-slate-400 hover:text-primary'
+                        )}
+                      >
+                        Switch to annual → save {formatUsd(tier.monthlyUsd * 2)}/yr
+                      </button>
+                    )}
+                    {isOneTime && (
+                      <span className={cn('text-xs font-medium', tier.highlight ? 'text-white/40' : 'text-slate-400')}>
+                        Pays off in {breakEvenMonths} months vs hosted
+                      </span>
+                    )}
+                  </div>
 
-                  {/* ── Monthly mode — nudge toward annual ─────────────────────── */}
-                  {billingMode === 'monthly' && (
-                    <button
-                      type="button"
-                      onClick={() => setBillingMode('annual')}
-                      className={cn(
-                        'mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-mini font-bold transition-colors',
-                        tier.highlight ? 'bg-white/10 text-white hover:bg-white/15' : 'bg-amber-50 text-amber-800 hover:bg-amber-100'
-                      )}
-                    >
-                      💡 Switch to annual → save {formatUsd(monthlyAnnualSaving)}/yr
-                    </button>
-                  )}
-
-                  {/* ── Own-forever mode — tiny annual compare ────────────────── */}
-                  {billingMode === 'oneTime' && (
-                    <p className={cn('text-mini mt-3', tier.highlight ? 'text-white/40' : 'text-slate-400')}>
-                      Pays back in {Math.ceil(tier.oneTimeUsd / tier.annualUsd * 12)} months vs annual hosted.
-                    </p>
-                  )}
-
-                  <p className={cn('text-sm mt-4', tier.highlight ? 'text-white/70' : 'text-muted-foreground')}>
-                    {tier.desc}
+                  <p className={cn('text-xs tabular-nums', tier.highlight ? 'text-white/30' : 'text-slate-400')}>
+                    {isOneTime ? 'one-time total' : isAnnual ? `${formatUsd(tier.annualUsd)}/yr billed annually` : '/mo billed monthly'}
                   </p>
                 </div>
 
-                {/* ── Annual-only bonuses (this is what makes annual cool) ───── */}
-                {billingMode === 'annual' && tier.annualBonuses && tier.annualBonuses.length > 0 && (
-                  <div className={cn(
-                    'rounded-xl p-3 mb-5',
-                    tier.highlight ? 'bg-white/[0.08] ring-1 ring-primary/30' : 'bg-amber-50 ring-1 ring-amber-200',
-                  )}>
-                    <div className="flex items-center justify-between mb-2">
-                      <p className={cn('text-tiny font-black uppercase tracking-widest', tier.highlight ? 'text-primary' : 'text-amber-700')}>
-                        🎁 Free with annual
-                      </p>
-                      {bonusValueUsd > 0 && (
-                        <span className={cn('text-tiny font-bold tabular-nums', tier.highlight ? 'text-white/70' : 'text-amber-700')}>
-                          + {formatUsd(bonusValueUsd)} value
-                        </span>
-                      )}
-                    </div>
-                    <ul className="space-y-1.5">
-                      {tier.annualBonuses.map(b => (
-                        <li key={b.label} className={cn(
-                          'flex items-start gap-2 text-13 font-semibold',
-                          tier.highlight ? 'text-white/85' : 'text-brand-navy',
-                        )}>
-                          <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
-                          <span>{b.label}{b.valueUsd ? ` (${formatUsd(b.valueUsd)})` : ''}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                {/* Divider */}
+                <div className={cn('mx-7 border-t', tier.highlight ? 'border-white/10' : 'border-border')} />
 
-                {/* ── Own-forever perks ──────────────────────────────────────── */}
-                {billingMode === 'oneTime' && tier.oneTimePerks && tier.oneTimePerks.length > 0 && (
-                  <ul className={cn(
-                    'rounded-xl p-3 mb-5 space-y-1.5',
-                    tier.highlight ? 'bg-white/[0.06]' : 'bg-slate-50',
-                  )}>
-                    {tier.oneTimePerks.map(f => (
-                      <li key={f} className={cn(
-                        'flex items-start gap-2 text-13 font-semibold',
-                        tier.highlight ? 'text-white/85' : 'text-brand-navy',
-                      )}>
-                        <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                {/* ── Always-on feature list ─────────────────────────────────── */}
-                <ul className="space-y-3 flex-1 mb-8">
+                {/* Features */}
+                <ul className="px-7 pt-5 pb-5 space-y-3 flex-1">
                   {tier.features.map(f => (
-                    <li key={f} className="flex items-start gap-3 text-sm">
-                      <Check className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
+                    <li key={f} className="flex items-start gap-2.5 text-sm">
+                      <Check className={cn('w-4 h-4 mt-0.5 shrink-0', tier.highlight ? 'text-primary' : 'text-primary')} />
                       <span className={tier.highlight ? 'text-white/75' : 'text-slate-700'}>{f}</span>
                     </li>
                   ))}
                 </ul>
 
-                <button
-                  onClick={() => onBuy(tier, billingMode)}
-                  className={cn(
-                    'w-full py-4 rounded-xl font-black text-sm transition-all active:scale-[0.98]',
-                    tier.highlight
-                      ? 'bg-primary text-white hover:bg-primary/90 shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)]'
-                      : 'bg-brand-navy text-white hover:bg-brand-navy-elev1'
-                  )}
-                >
-                  {ctaLabel} <span className="tabular-nums">— {formatUsd(priceUsd)}</span>
-                </button>
+                {/* Perk line (annual bonus or one-time perk) */}
+                {(isAnnual || isOneTime) && (
+                  <div className={cn('mx-5 mb-5 rounded-xl px-4 py-3', tier.highlight ? 'bg-white/[0.07]' : 'bg-slate-50')}>
+                    <p className={cn('text-xs font-semibold leading-snug', tier.highlight ? 'text-white/60' : 'text-slate-500')}>
+                      {isAnnual ? tier.annualPerk : tier.oneTimePerk}
+                    </p>
+                  </div>
+                )}
+
+                {/* CTA */}
+                <div className="px-5 pb-6">
+                  <button
+                    onClick={() => onBuy(tier, billingMode)}
+                    className={cn(
+                      'w-full py-3.5 rounded-xl font-black text-sm transition-all active:scale-[0.98]',
+                      tier.highlight
+                        ? 'bg-primary text-white hover:bg-primary/90 shadow-[0_10px_30px_-10px_rgba(14,116,144,0.4)]'
+                        : 'bg-brand-navy text-white hover:bg-brand-navy-elev1'
+                    )}
+                  >
+                    {ctaLabel} <span className="font-semibold opacity-70 tabular-nums">· {formatUsd(priceUsd)}</span>
+                  </button>
+                </div>
               </motion.div>
             )
           })}
         </motion.div>
 
-        {/* ── What's in every plan (replaces the old Hosted Edition strip) ── */}
+        {/* ── What's included note + payment methods ───────────────────────── */}
         <motion.div
-          className="mt-16 max-w-5xl"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {[
-              { icon: Cloud,    title: 'Hosted on your domain',  desc: 'A subdomain (yourhotel.animapro.io) or your own custom one. Zero DevOps.' },
-              { icon: Zap,      title: 'Updates auto-deploy',    desc: 'New features and fixes land in your tenant the moment they ship.' },
-              { icon: Shield,   title: 'Daily backups',          desc: 'Point-in-time restore on request. We keep 30 days rolling.' },
-              { icon: Phone,    title: 'WhatsApp + email support', desc: '4-hour response on business days. 24/7 on Enterprise.' },
-            ].map(item => (
-              <div key={item.title} className="rounded-xl bg-slate-50 border border-border p-4">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 grid place-items-center text-primary mb-2.5">
-                  <item.icon className="w-4 h-4" />
-                </div>
-                <p className="font-bold text-brand-navy text-sm mb-1">{item.title}</p>
-                <p className="text-mini text-muted-foreground leading-snug">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-          <p className="text-center text-slate-500 text-13 mt-5">
-            <span className="font-bold text-brand-navy">Included in every Monthly &amp; Annual plan.</span>{' '}
-            On <span className="font-semibold">Own forever</span>, hosting is an optional add-on. Group of 10+ hotels?{' '}
-            <Link href="/partners" className="text-primary font-bold hover:underline">Talk to us about partner pricing →</Link>
-          </p>
-        </motion.div>
-
-        <motion.div
-          className="mt-16 text-center"
+          className="mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 py-5 border-t border-border"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <p className="text-slate-400 text-sm font-semibold mb-4">Egyptian payment methods accepted</p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {['InstaPay', 'Vodafone Cash', 'Bank Transfer', 'Visa / Mastercard'].map(m => (
-              <span key={m} className="bg-[#f8fafc] border border-border text-muted-foreground text-xs font-bold px-4 py-2 rounded-xl">
+          <p className="text-slate-500 text-sm max-w-md">
+            <span className="font-bold text-brand-navy">Every hosted plan includes</span> daily backups, auto-updates, WhatsApp support, and hosting on your domain.{' '}
+            <Link href="/partners" className="text-primary font-bold hover:underline">10+ hotels? See partner pricing →</Link>
+          </p>
+          <div className="flex flex-wrap gap-2 shrink-0">
+            {['InstaPay', 'Vodafone Cash', 'Bank Transfer', 'Visa / MC'].map(m => (
+              <span key={m} className="bg-slate-50 border border-border text-slate-500 text-xs font-bold px-3 py-1.5 rounded-lg">
                 {m}
               </span>
             ))}
@@ -1804,7 +1708,7 @@ function ContactSection() {
             <div className="space-y-5">
               {[
                 { icon: Phone,     label: 'WhatsApp',  value: '+20 100 000 0000',          href: 'https://wa.me/20100000000' },
-                { icon: Mail,      label: 'Email',     value: 'sales@animapro.io',          href: 'mailto:sales@animapro.io' },
+                { icon: Mail,      label: 'Email',     value: 'sales@animipro.online',          href: 'mailto:sales@animipro.online' },
                 { icon: Building2, label: 'Offices',   value: 'Sharm El Sheikh & Hurghada', href: undefined },
               ].map(c => (
                 <div key={c.label} className="flex items-center gap-4">
@@ -1909,7 +1813,7 @@ function FinalCTA({ onBuy }: { onBuy: () => void }) {
               onClick={onBuy}
               className="group flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-black px-8 py-4 rounded-xl transition-all shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)] text-base active:-translate-y-[1px]"
             >
-              Buy Now — From <span className="tabular-nums">$1,000</span>
+              Buy Now. From <span className="tabular-nums">$1,000</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <Link href="/platform" className="flex items-center justify-center gap-1.5 text-white/60 hover:text-white text-sm font-semibold transition-colors border border-white/[0.12] hover:border-white/30 rounded-xl px-6 py-4">
@@ -1943,11 +1847,11 @@ function Footer() {
               <Zap className="w-4 h-4 text-white" />
             </div>
             <div>
-              <span className="text-brand-navy font-black text-base tracking-tight">AnimaPro</span>
+              <span className="text-brand-navy font-black text-base tracking-tight">Animipro</span>
               <p className="text-slate-400 text-xs mt-0.5">Resort Animation Management</p>
             </div>
           </div>
-          {/* py-2 on each link gives a 44px+ tap target without changing visual size — important for mobile. */}
+          {/* py-2 on each link gives a 44px+ tap target without changing visual size, important for mobile. */}
           <nav className="flex items-center gap-5 text-xs font-semibold">
             <Link href="/partners" className="text-primary hover:text-primary/90 transition-colors py-2 -my-2">
               {t('footer.partners')}
@@ -1963,7 +1867,7 @@ function Footer() {
             {t('footer.builtFor')}
           </p>
           <p className="text-slate-400 text-xs shrink-0">
-            &copy; {new Date().getFullYear()} AnimaPro. {t('footer.rights')}
+            &copy; {new Date().getFullYear()} Animipro. {t('footer.rights')}
           </p>
         </div>
       </div>

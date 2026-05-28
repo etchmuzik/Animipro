@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   AnimaPro — Design System Tokens
+   Animipro — Design System Tokens
    Reconstructed from the May 2026 audit + handoff bundle.
    Singular teal accent · Slate neutrals · Geist typography · Spring motion.
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -93,6 +93,24 @@
 
   /* ── Focus ring (used by interactive primitives) ───────────────────────── */
   --shadow-focus: 0 0 0 3px hsl(var(--ring) / 0.35);
+}
+
+/* ── Guest surface — warm light override ───────────────────────────────────── */
+[data-theme="guest"] {
+  --background:         30 20% 98%;
+  --foreground:         222 15% 15%;
+  --card:               0 0% 100%;
+  --card-foreground:    222 15% 15%;
+  --popover:            0 0% 100%;
+  --popover-foreground: 222 15% 15%;
+  --secondary:          210 20% 96%;
+  --secondary-foreground: 222 15% 15%;
+  --muted:              210 20% 96%;
+  --muted-foreground:   215 16% 47%;
+  --accent:             210 20% 93%;
+  --accent-foreground:  222 15% 15%;
+  --border:             220 13% 91%;
+  --input:              220 13% 91%;
 }
 
 /* ── Dark mode toggle — for now identical to default (platform is dark by default) */

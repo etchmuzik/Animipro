@@ -1,4 +1,4 @@
-// ─── AnimaPro — Club ticket sales (Sharm-style) ─────────────────────────────
+// ─── Animipro — Club ticket sales (Sharm-style) ─────────────────────────────
 //
 // Hotels in Sharm resell tickets to local nightclubs (Pacha, Hard Rock,
 // Naama Bay venues, etc.) to their guests. This file owns:
