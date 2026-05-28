@@ -20,6 +20,7 @@ import {
   getHotelSchedule, getHotelAnimators, getHotelEvents, getHotelAnnouncements,
   getHotelById,
 } from '@/lib/mock-data'
+import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
 const fmt = (d: Date) => d.toISOString().split('T')[0]
@@ -141,9 +142,14 @@ export function DashboardModule({ hotelId, currentUser }: { hotelId: string; cur
                 <span className="text-mini font-bold uppercase tracking-[0.14em] text-muted-foreground">Tripadvisor</span>
               </div>
               {hotel.tripAdvisorBadge && (
-                <span className="text-tiny font-bold px-2 py-0.5 rounded-full bg-[#00aa6c]/10 text-[#00aa6c]">
+                <Badge
+                  variant="soft"
+                  size="sm"
+                  className="border-transparent"
+                  style={{ backgroundColor: 'rgb(0 170 108 / 0.12)', color: '#00aa6c' }}
+                >
                   {hotel.tripAdvisorBadge}
-                </span>
+                </Badge>
               )}
             </div>
             <div className="flex items-baseline gap-2">
@@ -197,12 +203,15 @@ export function DashboardModule({ hotelId, currentUser }: { hotelId: string; cur
               <span className="font-display text-4xl font-extrabold tabular-nums leading-none">{hotel.bookingRating.toFixed(1)}</span>
               <span className="text-mini text-white/70 font-semibold">/ 10</span>
             </div>
-            <span className={cn(
-              'text-tiny font-bold px-2 py-0.5 rounded-full w-fit',
-              hotel.bookingRating >= 9 ? 'bg-emerald-500 text-white' : hotel.bookingRating >= 8 ? 'bg-sky-500 text-white' : 'bg-amber-500 text-white',
-            )}>
+            <Badge
+              size="sm"
+              className={cn(
+                'border-transparent w-fit',
+                hotel.bookingRating >= 9 ? 'bg-emerald-500 text-white' : hotel.bookingRating >= 8 ? 'bg-sky-500 text-white' : 'bg-amber-500 text-white',
+              )}
+            >
               {hotel.bookingRating >= 9 ? 'Exceptional' : hotel.bookingRating >= 8 ? 'Very Good' : 'Good'}
-            </span>
+            </Badge>
             <div className="mt-auto pt-2 border-t border-white/15 space-y-1">
               <div className="flex items-center justify-between text-mini">
                 <span className="text-white/70">Animation team</span>
@@ -309,15 +318,15 @@ export function DashboardModule({ hotelId, currentUser }: { hotelId: string; cur
           {topAnimators.map((a, i) => (
             <div key={a.id} className="flex items-center gap-3 px-5 py-3 hover:bg-accent/40 transition-colors">
               <span className={cn(
-                'w-6 h-6 rounded-full flex items-center justify-center text-tiny font-extrabold shrink-0 tabular-nums',
-                i === 0 ? 'bg-amber-400/20 text-amber-500 ring-1 ring-amber-400/40' :
+                'w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-extrabold shrink-0 tabular-nums leading-none',
+                i === 0 ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400' :
                 i === 1 ? 'bg-muted text-muted-foreground' :
-                i === 2 ? 'bg-orange-400/20 text-orange-500 ring-1 ring-orange-400/40' :
+                i === 2 ? 'bg-orange-500/15 text-orange-600 dark:text-orange-400' :
                 'bg-muted text-muted-foreground',
               )}>
                 {i + 1}
               </span>
-              <span className="w-7 h-7 rounded-full flex items-center justify-center text-mini font-bold shrink-0 bg-primary/10 text-primary">
+              <span className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 bg-primary/12 text-primary">
                 {a.firstName[0]}{a.lastName[0]}
               </span>
               <div className="flex-1 min-w-0">
@@ -348,12 +357,14 @@ export function DashboardModule({ hotelId, currentUser }: { hotelId: string; cur
                   <p className="text-mini text-muted-foreground mt-0.5">{ev.venue} · {ev.startTime}–{ev.endTime}</p>
                   <p className="text-mini text-muted-foreground">{ev.expectedGuests} guests · {ev.assignedAnimators.length} animators</p>
                 </div>
-                <span className={cn(
-                  'text-tiny font-bold px-2 py-0.5 rounded-full shrink-0 uppercase tracking-wide',
-                  ev.status === 'CONFIRMED' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-primary/10 text-primary',
-                )}>
+                <Badge
+                  variant="soft"
+                  size="sm"
+                  tone={ev.status === 'CONFIRMED' ? 'emerald' : 'primary'}
+                  className="shrink-0 uppercase tracking-wide"
+                >
                   {ev.status}
-                </span>
+                </Badge>
               </div>
             ))
           )}
@@ -454,7 +465,7 @@ function ListCard({ title, badge, iconRight, children }: {
       <div className="px-5 py-4 border-b border-border flex items-center justify-between gap-2">
         <h3 className="text-sm font-bold tracking-tight">{title}</h3>
         {badge !== undefined && (
-          <span className="text-tiny font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary tabular-nums">{badge}</span>
+          <Badge variant="soft" tone="primary" size="sm" className="tabular-nums">{badge}</Badge>
         )}
         {iconRight}
       </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Building2, ChevronDown, Check, Users, Menu, X } from 'lucide-react'
+import { Badge, type BadgeTone } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { DEMO_USERS, ROLE_META, type AppUser, type Section } from '@/lib/roles'
@@ -48,13 +49,13 @@ export function Topbar({
   const today = new Date().toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' })
   const roleMeta = ROLE_META[currentUser.role]
 
-  const levelColor = (level: number) => ({
-    1: 'bg-rose-500/20 text-rose-300 border border-rose-500/20',
-    2: 'bg-violet-500/20 text-violet-300 border border-violet-500/20',
-    3: 'bg-blue-500/20 text-blue-300 border border-blue-500/20',
-    4: 'bg-teal-500/20 text-teal-300 border border-teal-500/20',
-    5: 'bg-green-500/20 text-green-300 border border-green-500/20',
-  }[level] ?? 'bg-muted text-muted-foreground')
+  const levelTone = (level: number): BadgeTone => ({
+    1: 'rose' as const,
+    2: 'violet' as const,
+    3: 'sky' as const,
+    4: 'primary' as const,
+    5: 'emerald' as const,
+  }[level] ?? 'muted')
 
   const avatarGradient = (level: number) => ({
     1: 'from-rose-500 to-rose-600',
@@ -131,11 +132,11 @@ export function Topbar({
               <div className={cn('w-7 h-7 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.3)]', avatarGradient(roleMeta.level))}>
                 <span className="text-micro font-bold text-white">{currentUser.initials}</span>
               </div>
-              <div className="hidden sm:block text-start">
+              <div className="hidden sm:flex flex-col items-start gap-1">
                 <p className="text-xs font-semibold text-white leading-none">{currentUser.name}</p>
-                <span className={cn('inline-block text-mini font-bold px-2 py-0.5 rounded-full mt-0.5 leading-tight', levelColor(roleMeta.level))}>
+                <Badge variant="soft" size="xs" tone={levelTone(roleMeta.level)}>
                   {roleMeta.label}
-                </span>
+                </Badge>
               </div>
               <ChevronDown className={cn('w-3.5 h-3.5 text-white/50 hidden sm:block transition-transform', roleMenuOpen && 'rotate-180')} />
             </button>
@@ -176,7 +177,7 @@ export function Topbar({
                               {user.teamName && <p className="text-mini text-teal-400/70 mt-0.5">{user.teamName}</p>}
                             </div>
                             <div className="flex flex-col items-end gap-1 shrink-0">
-                              <span className={cn('text-mini font-bold px-2 py-0.5 rounded-full', levelColor(meta.level))}>{meta.label}</span>
+                              <Badge variant="soft" size="xs" tone={levelTone(meta.level)}>{meta.label}</Badge>
                               {isActive && <Check className="w-3 h-3 text-teal-500" />}
                             </div>
                           </button>

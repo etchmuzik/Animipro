@@ -259,10 +259,10 @@ function SidebarContent({
                   <span className="text-sm leading-none flex-1">{t(`sections.${section}`)}</span>
                   {badge && (
                     <span className={cn(
-                      'text-mini h-5 min-w-[20px] px-1.5 rounded-full flex items-center justify-center font-mono font-bold',
+                      'inline-flex items-center justify-center h-5 min-w-[20px] px-1.5 rounded-full text-[10px] font-bold tabular-nums leading-none',
                       isActive
                         ? 'bg-white/20 text-white'
-                        : 'bg-teal-500/20 text-teal-400'
+                        : 'bg-primary/12 text-primary',
                     )}>{badge}</span>
                   )}
                 </>
