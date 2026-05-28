@@ -218,6 +218,7 @@ export const it: Messages = {
       eyebrow: 'Accesso ospiti',
       title: 'Scegli il tuo hotel',
       subtitle: 'Seleziona dove alloggi per vedere le attività di oggi e le serate al club.',
+      enterCta: 'Entra',
     },
     shell: {
       eyebrow: 'Concierge ospite',
@@ -237,7 +238,9 @@ export const it: Messages = {
       },
     },
     clubs: {
-      heading: 'Prossime serate al club',
+      heading: 'Stasera e le prossime serate',
+      subheading: 'Salta la coda. Paghi qui, mostri il QR.',
+      perTicket: '/ biglietto',
       dateLabel: 'Data',
       doorsLabel: 'Porte',
       priceLabel: 'Prezzo',
@@ -261,6 +264,7 @@ export const it: Messages = {
         cash:   'Contanti',
         room:   'Addebito in camera',
       },
+      currency: 'Valuta',
       totalLabel: 'Totale',
       confirmCta: 'Conferma acquisto',
       processing: 'Elaborazione…',

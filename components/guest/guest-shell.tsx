@@ -26,7 +26,7 @@ interface GuestShellProps {
 
 export function GuestShell({ hotelId, hotelName }: GuestShellProps): React.ReactElement {
   const { t } = useTranslation()
-  const [tab, setTab] = useState<Tab>('today')
+  const [tab, setTab] = useState<Tab>('clubs')
 
   return (
     <div data-theme="guest" className="min-h-[100dvh] bg-background text-foreground flex flex-col">

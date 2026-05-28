@@ -34,6 +34,8 @@ export interface Club {
   capacity: number
   /** Tailwind gradient `from-…-via-…-to-…` for the card hero. */
   gradient: string
+  /** Hero photo URL. Unsplash for the demo — swap to hosted images later. */
+  image: string
   /** One-line vibe. */
   tagline: string
   /** "From X EGP" entry — display price; per-night may override. */
@@ -102,6 +104,7 @@ export const CLUBS: Club[] = [
     mood: 'NIGHTCLUB',
     capacity: 1200,
     gradient: 'from-fuchsia-500 via-purple-600 to-indigo-700',
+    image: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=1200&q=70',
     tagline: 'Sharm’s biggest dance floor. Open-air rooftop, international DJs every weekend.',
     priceFrom: 600,
     minAge: 21,
@@ -114,6 +117,7 @@ export const CLUBS: Club[] = [
     mood: 'LOUNGE',
     capacity: 600,
     gradient: 'from-amber-400 via-rose-500 to-pink-600',
+    image: 'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=1200&q=70',
     tagline: 'Live bands, shisha, the famous dancing fountain. Mixed crowd, dress smart.',
     priceFrom: 350,
     minAge: 18,
@@ -126,6 +130,7 @@ export const CLUBS: Club[] = [
     mood: 'NIGHTCLUB',
     capacity: 800,
     gradient: 'from-rose-500 via-red-600 to-orange-700',
+    image: 'https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?auto=format&fit=crop&w=1200&q=70',
     tagline: 'Burgers, rock & pop covers, then DJ sets till 4am.',
     priceFrom: 450,
     minAge: 18,
@@ -138,6 +143,7 @@ export const CLUBS: Club[] = [
     mood: 'CULTURAL',
     capacity: 200,
     gradient: 'from-amber-600 via-orange-700 to-rose-900',
+    image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1200&q=70',
     tagline: 'Traditional dinner under the stars, camel ride, telescope astronomy session.',
     priceFrom: 950,
     minAge: 18,

@@ -230,6 +230,7 @@ export const en = {
       eyebrow: 'Guest access',
       title: 'Choose your hotel',
       subtitle: 'Pick where you\'re staying to see today\'s activities and tonight\'s club nights.',
+      enterCta: 'Enter',
     },
     shell: {
       eyebrow: 'Guest concierge',
@@ -249,7 +250,9 @@ export const en = {
       },
     },
     clubs: {
-      heading: 'Upcoming club nights',
+      heading: 'Tonight & the next few nights',
+      subheading: 'Skip the door queue. Pay here, show the QR.',
+      perTicket: '/ ticket',
       dateLabel: 'Date',
       doorsLabel: 'Doors',
       priceLabel: 'Price',
@@ -273,6 +276,7 @@ export const en = {
         cash:   'Cash',
         room:   'Room charge',
       },
+      currency: 'Currency',
       totalLabel: 'Total',
       confirmCta: 'Confirm purchase',
       processing: 'Processing…',

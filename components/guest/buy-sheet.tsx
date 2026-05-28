@@ -18,14 +18,15 @@ import { useTranslation } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import {
   CLUBS,
-  formatEgp,
   sellTicket,
   type ClubNight,
   type PaymentMethod,
   type Ticket,
 } from '@/lib/club-tickets'
+import { formatPrice } from '@/lib/currency'
 import { guestSellerUserId } from '@/lib/guest-session'
 import { TicketCard } from '@/components/modules/tickets/ticket-card'
+import { CurrencySwitcher, useCurrency } from '@/components/guest/currency-switcher'
 
 interface BuySheetProps {
   night: ClubNight
@@ -43,6 +44,7 @@ const PAY_METHODS: { value: PaymentMethod; icon: React.ElementType; key: string 
 
 export function BuySheet({ night, hotelId, onClose, onViewTickets }: BuySheetProps): React.ReactElement {
   const { t } = useTranslation()
+  const currency = useCurrency()
   const club = CLUBS.find(c => c.id === night.clubId)
   const [name, setName] = useState('')
   const [room, setRoom] = useState('')
@@ -205,11 +207,19 @@ export function BuySheet({ night, hotelId, onClose, onViewTickets }: BuySheetPro
                 </div>
               </fieldset>
 
-              <div className="flex items-center justify-between pt-3 border-t border-border">
-                <span className="text-mini text-muted-foreground uppercase tracking-wide">
-                  {t('guest.buy.totalLabel')}
-                </span>
-                <span className="text-lg font-bold tabular-nums">{formatEgp(total)}</span>
+              <div className="space-y-2 pt-3 border-t border-border">
+                <div className="flex items-center justify-between">
+                  <span className="text-mini text-muted-foreground uppercase tracking-wide">
+                    {t('guest.buy.currency')}
+                  </span>
+                  <CurrencySwitcher />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-mini text-muted-foreground uppercase tracking-wide">
+                    {t('guest.buy.totalLabel')}
+                  </span>
+                  <span className="text-lg font-bold tabular-nums">{formatPrice(total, currency)}</span>
+                </div>
               </div>
 
               <Button type="submit" disabled={!canSubmit} className="w-full h-11 font-semibold">

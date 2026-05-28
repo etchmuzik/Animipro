@@ -220,6 +220,7 @@ export const ar: Messages = {
       eyebrow: 'دخول الضيوف',
       title: 'اختر فندقك',
       subtitle: 'حدد مكان إقامتك لرؤية أنشطة اليوم وليالي النوادي.',
+      enterCta: 'دخول',
     },
     shell: {
       eyebrow: 'كونسيرج الضيف',
@@ -239,7 +240,9 @@ export const ar: Messages = {
       },
     },
     clubs: {
-      heading: 'الليالي القادمة',
+      heading: 'الليلة والليالي القادمة',
+      subheading: 'تجاوز الطابور. ادفع هنا، أظهر رمز QR.',
+      perTicket: '/ تذكرة',
       dateLabel: 'التاريخ',
       doorsLabel: 'الأبواب',
       priceLabel: 'السعر',
@@ -263,6 +266,7 @@ export const ar: Messages = {
         cash:   'نقداً',
         room:   'على الغرفة',
       },
+      currency: 'العملة',
       totalLabel: 'الإجمالي',
       confirmCta: 'تأكيد الشراء',
       processing: 'جارٍ المعالجة…',

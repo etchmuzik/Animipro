@@ -218,6 +218,7 @@ export const ru: Messages = {
       eyebrow: 'Гостевой доступ',
       title: 'Выберите ваш отель',
       subtitle: 'Выберите, где вы остановились, чтобы увидеть сегодняшние активности и клубные вечера.',
+      enterCta: 'Войти',
     },
     shell: {
       eyebrow: 'Гостевой консьерж',
@@ -237,7 +238,9 @@ export const ru: Messages = {
       },
     },
     clubs: {
-      heading: 'Ближайшие клубные вечера',
+      heading: 'Сегодня и ближайшие вечера',
+      subheading: 'Без очереди на входе. Оплатите тут — покажите QR.',
+      perTicket: '/ билет',
       dateLabel: 'Дата',
       doorsLabel: 'Двери',
       priceLabel: 'Цена',
@@ -261,6 +264,7 @@ export const ru: Messages = {
         cash:   'Наличные',
         room:   'На номер',
       },
+      currency: 'Валюта',
       totalLabel: 'Итого',
       confirmCta: 'Подтвердить покупку',
       processing: 'Обработка…',
