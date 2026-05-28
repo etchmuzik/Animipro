@@ -146,7 +146,7 @@ export function ScanPanel({ currentUser }: ScanPanelProps): React.ReactElement {
   }, [currentUser.id, currentUser.name, handleResult])
 
   return (
-    <div className="grid lg:grid-cols-[1fr_1.1fr] gap-6 max-w-5xl">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-6 max-w-5xl">
       {/* Left: scanner */}
       <div className="space-y-4">
         <div className="flex gap-2">

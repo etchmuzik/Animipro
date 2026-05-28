@@ -150,7 +150,7 @@ export function Topbar({
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -8 }}
                     transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                    className="absolute end-0 top-full mt-2 z-50 w-72 bg-zinc-800 border border-white/10 rounded-xl shadow-lg shadow-black/30 overflow-hidden"
+                    className="absolute end-0 top-full mt-2 z-50 w-72 max-w-[calc(100vw-1.5rem)] bg-zinc-800 border border-white/10 rounded-xl shadow-lg shadow-black/30 overflow-hidden"
                   >
                     <div className="px-3 py-2.5 bg-white/5 border-b border-white/10 flex items-center gap-2">
                       <Users className="w-3.5 h-3.5 text-white/60" />

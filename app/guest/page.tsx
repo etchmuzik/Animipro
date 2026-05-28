@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { MapPin, Star, ArrowRight } from 'lucide-react'
 import { ALL_HOTELS } from '@/lib/mock-data'
 import { useTranslation } from '@/lib/i18n'
+import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
 
 export default function GuestHotelPicker(): React.ReactElement {
   const { t } = useTranslation()
@@ -52,6 +53,7 @@ export default function GuestHotelPicker(): React.ReactElement {
           ))}
         </ul>
       </main>
+      <PWAInstallPrompt />
     </div>
   )
 }

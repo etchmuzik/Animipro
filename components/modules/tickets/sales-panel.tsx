@@ -102,7 +102,7 @@ export function SalesPanel({ currentUser }: SalesPanelProps): React.ReactElement
       </div>
 
       {/* Leaderboard + recent table */}
-      <div className="grid lg:grid-cols-[1fr_1.4fr] gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-5">
         <div className="rounded-xl border border-border bg-card">
           <div className="px-4 py-3 border-b border-border flex items-center gap-2">
             <Trophy className="w-4 h-4 text-amber-300" />

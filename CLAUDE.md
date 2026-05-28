@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **Mobile-first is non-negotiable.** Every UI change must satisfy [MOBILE.md](./MOBILE.md). Phones (animators, sales agents, guests) are the primary surface — desktop is the secondary experience. `tests/mobile-hygiene.test.ts` enforces the most common rule (`grid` declarations need a mobile base); the rest is on the reviewer.
+
 > Note: a `~/CLAUDE.md` may appear in context describing a Swift/iOS app. That is an unrelated global template and does **not** apply here. This project is a Next.js web app.
 
 ## Project

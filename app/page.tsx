@@ -116,34 +116,65 @@ const FEATURES = [
   },
 ]
 
-const PRICING_TIERS = [
+// Approx FX used for EGP-equivalent display below the USD price.
+// Update once if the rate moves significantly; the marketing copy isn't a
+// real quote — checkout pulls the live amount.
+const USD_TO_EGP = 49
+
+interface PricingTier {
+  id: string
+  name: string
+  desc: string
+  monthlyUsd: number     // per hotel / month
+  annualUsd: number      // per hotel / year — sold as "2 months free"
+  oneTimeUsd: number     // one-time licence (self-hosted)
+  highlight: boolean
+  badge?: string
+  features: string[]
+  // Annual-only bonuses shown ONLY when Annual is the active mode — these
+  // are why someone picks annual over monthly. Treat them as a "what you get
+  // free with annual" pack, with dollar values to anchor the perceived gain.
+  annualBonuses?: { label: string; valueUsd?: number }[]
+  // Lifetime-specific perks for the Own-forever mode.
+  oneTimePerks?: string[]
+}
+
+const PRICING_TIERS: PricingTier[] = [
   {
     id: 'single',
     name: 'Single Hotel',
-    price: '1,000',
-    currency: 'USD',
-    usd: '~50,000 EGP',
-    desc: 'One property, one animation team. Own it forever.',
+    desc: 'One property, small team. Perfect for a boutique resort.',
+    monthlyUsd: 149,
+    annualUsd: 1490,       // = 149 × 10 → 2 months free
+    oneTimeUsd: 1990,
     highlight: false,
     features: [
       'One hotel property',
-      'Up to 50 animators',
+      'Up to 20 animators',
       'All 4 languages (EN / AR / RU / IT)',
       'Smart schedule builder',
       'Attendance, leave & announcements',
       'TripAdvisor live dashboard',
       'Guest feedback & ratings',
-      '12 months support',
     ],
-    cta: 'Buy Now',
+    annualBonuses: [
+      { label: 'Live 1:1 onboarding call', valueUsd: 200 },
+      { label: 'Free data migration from your sheets', valueUsd: 150 },
+      { label: '90-day money-back guarantee' },
+    ],
+    oneTimePerks: [
+      'Yours forever — no recurring fee',
+      'Optional hosted add-on from $29/mo',
+      '12 months free updates',
+    ],
   },
   {
     id: 'group',
     name: 'Hotel Group',
-    price: '75,000',
-    currency: 'EGP',
-    usd: '~$1,500',
-    desc: 'Multiple hotels, one platform.',
+    desc: 'Multiple hotels, one platform. The sweet spot for chains.',
+    monthlyUsd: 399,
+    annualUsd: 3990,
+    oneTimeUsd: 4990,
     highlight: true,
     badge: 'Most Popular',
     features: [
@@ -154,31 +185,98 @@ const PRICING_TIERS = [
       'Company-level reports',
       'Role-based access control',
       'Custom branding pack included',
-      '18 months priority support',
     ],
-    cta: 'Buy Now',
+    annualBonuses: [
+      { label: '2-hour onboarding workshop for your chiefs', valueUsd: 600 },
+      { label: 'White-glove data migration', valueUsd: 400 },
+      { label: 'Custom subdomain (yourchain.animapro.io)', valueUsd: 250 },
+      { label: 'Quarterly review with our team' },
+    ],
+    oneTimePerks: [
+      'Yours forever — no recurring fee',
+      'Optional hosted add-on from $79/mo',
+      '18 months free updates',
+    ],
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    price: '150,000',
-    currency: 'EGP',
-    usd: '~$3,000',
-    desc: 'For the largest resort chains.',
+    desc: 'Unlimited hotels, dedicated support, on-site setup.',
+    monthlyUsd: 999,
+    annualUsd: 9990,
+    oneTimeUsd: 12990,
     highlight: false,
     features: [
       'Unlimited hotels & animators',
       'Everything in Hotel Group',
       'Dedicated onboarding manager',
       '2-day on-site setup & training',
-      'Phone & WhatsApp SLA (4h response)',
       'Custom integrations available',
-      'Annual on-call SLA included',
-      '24 months support',
     ],
-    cta: 'Buy Now',
+    annualBonuses: [
+      { label: '2-day on-site training (your team flies us)', valueUsd: 3000 },
+      { label: 'Phone + WhatsApp SLA — 1h response', valueUsd: 1200 },
+      { label: 'Custom domain + SSL + Arabic localisation review', valueUsd: 800 },
+      { label: '24/7 on-call for outages' },
+    ],
+    oneTimePerks: [
+      'Yours forever — no recurring fee',
+      'Optional hosted add-on from $149/mo',
+      '24 months free updates',
+    ],
   },
 ]
+
+// ─── Billing modes ─────────────────────────────────────────────────────────
+//
+// Three pill options shown above the pricing grid. Each tier carries the
+// price for all three; the active mode just picks which price to render.
+
+type BillingMode = 'monthly' | 'annual' | 'oneTime'
+
+interface BillingOption {
+  id: BillingMode
+  label: string
+  hint?: string  // e.g. "save 17%"
+  badge?: string // little corner badge
+}
+
+// Order matters — Annual is the recommended default and renders first.
+const BILLING_OPTIONS: BillingOption[] = [
+  { id: 'annual',  label: 'Annual',      hint: 'best value · 2 months free' },
+  { id: 'monthly', label: 'Monthly',     hint: 'no commitment' },
+  { id: 'oneTime', label: 'Own forever', hint: 'pay once' },
+]
+
+function getTierPriceUsd(tier: PricingTier, mode: BillingMode): number {
+  switch (mode) {
+    case 'monthly': return tier.monthlyUsd
+    case 'annual':  return tier.annualUsd
+    case 'oneTime': return tier.oneTimeUsd
+  }
+}
+
+function getTierPeriodLabel(mode: BillingMode): string {
+  switch (mode) {
+    case 'monthly': return '/ hotel / month · cancel anytime'
+    case 'annual':  return '/ hotel / year · billed yearly'
+    case 'oneTime': return 'one-time · self-host'
+  }
+}
+
+/** Total $ value of the annual bonus stack. Shown as a "+ $X value" tag. */
+function getAnnualBonusValue(tier: PricingTier): number {
+  return (tier.annualBonuses ?? []).reduce((s, b) => s + (b.valueUsd ?? 0), 0)
+}
+
+function formatUsd(n: number): string {
+  return '$' + n.toLocaleString('en')
+}
+
+function formatEgpApprox(usd: number): string {
+  const egp = Math.round(usd * USD_TO_EGP / 100) * 100
+  return '≈ ' + egp.toLocaleString('en') + ' EGP'
+}
 
 const TESTIMONIALS = [
   {
@@ -212,9 +310,11 @@ const TODAY_LABEL = new Date().toLocaleDateString('en-GB', {
 
 function CheckoutModal({
   tier,
+  mode,
   onClose,
 }: {
-  tier: (typeof PRICING_TIERS)[0] | null
+  tier: PricingTier | null
+  mode: BillingMode
   onClose: () => void
 }) {
   const [step, setStep] = useState<'form' | 'payment' | 'done'>('form')
@@ -242,11 +342,13 @@ function CheckoutModal({
           <div>
             <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-1">Order Summary</p>
             <p className="text-white font-black text-xl leading-tight">{tier.name}</p>
-            <p className="text-white/40 text-xs mt-1">Licence — yours forever</p>
+            <p className="text-white/40 text-xs mt-1">
+              {mode === 'oneTime' ? 'Licence — yours forever' : mode === 'annual' ? 'Annual subscription · 2 months free' : 'Monthly subscription · cancel anytime'}
+            </p>
           </div>
           <div className="text-right">
-            <p className="text-white font-black text-2xl tabular-nums">{tier.price}</p>
-            <p className="text-white/50 text-sm font-semibold">{tier.currency} <span className="text-white/30">({tier.usd})</span></p>
+            <p className="text-white font-black text-2xl tabular-nums">{formatUsd(getTierPriceUsd(tier, mode))}</p>
+            <p className="text-white/50 text-sm font-semibold">USD <span className="text-white/30">({formatEgpApprox(getTierPriceUsd(tier, mode))})</span></p>
           </div>
           <button
             onClick={onClose}
@@ -396,12 +498,14 @@ function CheckoutModal({
               <div className="bg-[#f8fafc] border border-border rounded-xl p-4 mb-6 text-left space-y-1.5">
                 <p className="text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">Order Details</p>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Licence</span>
+                  <span className="text-muted-foreground">Plan</span>
                   <span className="font-bold text-brand-navy">{tier.name}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">One-off</span>
-                  <span className="font-bold text-brand-navy tabular-nums">{tier.price} {tier.currency}</span>
+                  <span className="text-muted-foreground">
+                    {mode === 'oneTime' ? 'One-off' : mode === 'annual' ? 'Annual' : 'Monthly'}
+                  </span>
+                  <span className="font-bold text-brand-navy tabular-nums">{formatUsd(getTierPriceUsd(tier, mode))} USD</span>
                 </div>
                 <div className="flex justify-between text-sm pt-1.5 border-t border-border/60">
                   <span className="text-muted-foreground">Hosting</span>
@@ -568,7 +672,7 @@ function Hero({ onBuy }: { onBuy: () => void }) {
       />
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-28 pb-20 sm:pt-36 sm:pb-28 lg:pt-40 lg:pb-36 relative z-10">
-        <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-x-12 gap-y-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-x-12 gap-y-16 items-center">
           {/* ── Left: the message ───────────────────────────────────────────── */}
           <div className="max-w-2xl">
             {/* Live status — a real signal, not a tracked-caps label */}
@@ -833,7 +937,7 @@ function AnimatorWorkflowSection() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-16 items-center">
           {/* Left: workflow steps */}
           <motion.ol
             className="space-y-5"
@@ -936,7 +1040,7 @@ function FeaturesSection() {
           viewport={{ once: true }}
         >
           {/* Row 1: Left wide */}
-          <div className="grid lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <motion.div
               variants={itemVariants}
               className="lg:col-span-2 bg-white border border-border rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
@@ -961,7 +1065,7 @@ function FeaturesSection() {
           </div>
 
           {/* Row 2: Right wide */}
-          <div className="grid lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <motion.div
               variants={itemVariants}
               className="bg-white border border-border rounded-2xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all"
@@ -986,7 +1090,7 @@ function FeaturesSection() {
           </div>
 
           {/* Row 3: 3-col equal */}
-          <div className="grid lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {FEATURES.slice(4).map((f) => (
               <motion.div
                 key={f.title}
@@ -1313,7 +1417,12 @@ function TestimonialsSection() {
 
 // ─── PRICING ──────────────────────────────────────────────────────────────────
 
-function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) => void }) {
+interface PricingSectionProps {
+  onBuy: (tier: PricingTier, mode: BillingMode) => void
+}
+
+function PricingSection({ onBuy }: PricingSectionProps) {
+  const [billingMode, setBillingMode] = useState<BillingMode>('annual')
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -1367,7 +1476,7 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-5xl sm:text-6xl font-black text-brand-navy leading-tight tracking-tighter text-balance mb-6"
           >
-            Own your licence forever.
+            Pricing that fits your shape.
           </motion.h2>
           <motion.p
             variants={headingVariants}
@@ -1377,8 +1486,48 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-muted-foreground text-lg font-medium"
           >
-            Buy once. Host it yourself, or let us run it for you.
+            Pay monthly to start, switch to annual and get two months free, or buy the licence forever.
           </motion.p>
+        </motion.div>
+
+        {/* ── Billing-mode pill toggle ─────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-wrap items-center gap-2 mb-10 p-1.5 bg-slate-100 rounded-2xl w-fit"
+          role="tablist"
+          aria-label="Choose how you pay"
+        >
+          {BILLING_OPTIONS.map(opt => {
+            const isActive = billingMode === opt.id
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setBillingMode(opt.id)}
+                className={cn(
+                  'group relative inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-bold transition-all',
+                  isActive
+                    ? 'bg-white text-brand-navy shadow-sm ring-1 ring-slate-200'
+                    : 'text-muted-foreground hover:text-brand-navy',
+                )}
+              >
+                {opt.label}
+                {opt.hint && (
+                  <span className={cn(
+                    'hidden sm:inline text-mini font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md',
+                    isActive ? 'bg-primary/10 text-primary' : 'bg-slate-200 text-slate-600 group-hover:bg-primary/10 group-hover:text-primary'
+                  )}>
+                    {opt.hint}
+                  </span>
+                )}
+              </button>
+            )
+          })}
         </motion.div>
 
         {/* Asymmetric pricing grid: 2fr 1fr emphasis */}
@@ -1389,150 +1538,190 @@ function PricingSection({ onBuy }: { onBuy: (tier: (typeof PRICING_TIERS)[0]) =>
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {PRICING_TIERS.map(tier => (
-            <motion.div
-              key={tier.id}
-              variants={itemVariants}
-              className={cn(
-                'relative rounded-2xl p-8 flex flex-col transition-all',
-                tier.highlight
-                  ? 'bg-brand-navy text-white ring-2 ring-primary shadow-[0_20px_40px_-15px_rgba(14,116,144,0.2)]'
-                  : 'bg-white border border-border shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]'
-              )}
-            >
-              {tier.badge && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-mini font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg whitespace-nowrap">
-                  {tier.badge}
-                </div>
-              )}
-
-              <div className="mb-8">
-                <p className={cn('text-xs font-black uppercase tracking-widest mb-3', tier.highlight ? 'text-primary' : 'text-slate-400')}>
-                  {tier.name}
-                </p>
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className={cn('text-5xl font-black tabular-nums', tier.highlight ? 'text-white' : 'text-brand-navy')}>
-                    {tier.price}
-                  </span>
-                  <span className={cn('text-sm font-semibold', tier.highlight ? 'text-white/50' : 'text-slate-400')}>
-                    {tier.currency}
-                  </span>
-                </div>
-                <p className={cn('text-sm', tier.highlight ? 'text-white/60' : 'text-muted-foreground')}>
-                  {tier.desc}
-                </p>
-              </div>
-
-              <ul className="space-y-3.5 flex-1 mb-8">
-                {tier.features.map(f => (
-                  <li key={f} className="flex items-start gap-3 text-sm">
-                    <Check className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
-                    <span className={tier.highlight ? 'text-white/80' : 'text-slate-700'}>{f}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <button
-                onClick={() => onBuy(tier)}
+          {PRICING_TIERS.map(tier => {
+            const priceUsd = getTierPriceUsd(tier, billingMode)
+            const periodLabel = getTierPeriodLabel(billingMode)
+            const bonusValueUsd = getAnnualBonusValue(tier)
+            const monthlyAnnualSaving = tier.monthlyUsd * 12 - tier.annualUsd
+            const ctaLabel = billingMode === 'oneTime' ? 'Buy licence' : billingMode === 'annual' ? 'Start annual plan' : 'Start monthly'
+            return (
+              <motion.div
+                key={tier.id}
+                variants={itemVariants}
                 className={cn(
-                  'w-full py-4 rounded-xl font-black text-sm transition-all active:scale-[0.98]',
+                  'relative rounded-2xl p-8 flex flex-col transition-all',
                   tier.highlight
-                    ? 'bg-primary text-white hover:bg-primary/90 shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)]'
-                    : 'bg-brand-navy text-white hover:bg-brand-navy-elev1'
+                    ? 'bg-brand-navy text-white ring-2 ring-primary shadow-[0_20px_40px_-15px_rgba(14,116,144,0.2)]'
+                    : 'bg-white border border-border shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]'
                 )}
               >
-                {tier.cta} <span className="tabular-nums">— {tier.price} {tier.currency}</span>
-              </button>
-            </motion.div>
-          ))}
+                {tier.badge && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-mini font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg whitespace-nowrap">
+                    {tier.badge}
+                  </div>
+                )}
+
+                <div className="mb-6">
+                  <p className={cn('text-xs font-black uppercase tracking-widest mb-3', tier.highlight ? 'text-primary' : 'text-slate-400')}>
+                    {tier.name}
+                  </p>
+
+                  {/* Price headline */}
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className={cn('font-black tabular-nums', tier.highlight ? 'text-white' : 'text-brand-navy', billingMode === 'annual' ? 'text-6xl' : 'text-5xl')}>
+                      {formatUsd(priceUsd)}
+                    </span>
+                    <span className={cn('text-sm font-semibold', tier.highlight ? 'text-white/60' : 'text-slate-400')}>
+                      USD
+                    </span>
+                  </div>
+                  <p className={cn('text-mini font-semibold', tier.highlight ? 'text-white/60' : 'text-slate-500')}>
+                    {periodLabel} · <span className="tabular-nums">{formatEgpApprox(priceUsd)}</span>
+                  </p>
+
+                  {/* ── Annual mode — big "save" callout + tiny monthly compare ─ */}
+                  {billingMode === 'annual' && monthlyAnnualSaving > 0 && (
+                    <>
+                      <div className={cn(
+                        'mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-mini font-black uppercase tracking-wide',
+                        tier.highlight ? 'bg-primary/20 text-primary' : 'bg-green-100 text-green-700'
+                      )}>
+                        ✨ Save {formatUsd(monthlyAnnualSaving)} · 2 months free
+                      </div>
+                      <p className={cn('text-mini mt-2', tier.highlight ? 'text-white/40' : 'text-slate-400')}>
+                        Or pay monthly: <span className="font-bold tabular-nums">{formatUsd(tier.monthlyUsd)}/mo</span>
+                      </p>
+                    </>
+                  )}
+
+                  {/* ── Monthly mode — nudge toward annual ─────────────────────── */}
+                  {billingMode === 'monthly' && (
+                    <button
+                      type="button"
+                      onClick={() => setBillingMode('annual')}
+                      className={cn(
+                        'mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-mini font-bold transition-colors',
+                        tier.highlight ? 'bg-white/10 text-white hover:bg-white/15' : 'bg-amber-50 text-amber-800 hover:bg-amber-100'
+                      )}
+                    >
+                      💡 Switch to annual → save {formatUsd(monthlyAnnualSaving)}/yr
+                    </button>
+                  )}
+
+                  {/* ── Own-forever mode — tiny annual compare ────────────────── */}
+                  {billingMode === 'oneTime' && (
+                    <p className={cn('text-mini mt-3', tier.highlight ? 'text-white/40' : 'text-slate-400')}>
+                      Pays back in {Math.ceil(tier.oneTimeUsd / tier.annualUsd * 12)} months vs annual hosted.
+                    </p>
+                  )}
+
+                  <p className={cn('text-sm mt-4', tier.highlight ? 'text-white/70' : 'text-muted-foreground')}>
+                    {tier.desc}
+                  </p>
+                </div>
+
+                {/* ── Annual-only bonuses (this is what makes annual cool) ───── */}
+                {billingMode === 'annual' && tier.annualBonuses && tier.annualBonuses.length > 0 && (
+                  <div className={cn(
+                    'rounded-xl p-3 mb-5',
+                    tier.highlight ? 'bg-white/[0.08] ring-1 ring-primary/30' : 'bg-amber-50 ring-1 ring-amber-200',
+                  )}>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className={cn('text-tiny font-black uppercase tracking-widest', tier.highlight ? 'text-primary' : 'text-amber-700')}>
+                        🎁 Free with annual
+                      </p>
+                      {bonusValueUsd > 0 && (
+                        <span className={cn('text-tiny font-bold tabular-nums', tier.highlight ? 'text-white/70' : 'text-amber-700')}>
+                          + {formatUsd(bonusValueUsd)} value
+                        </span>
+                      )}
+                    </div>
+                    <ul className="space-y-1.5">
+                      {tier.annualBonuses.map(b => (
+                        <li key={b.label} className={cn(
+                          'flex items-start gap-2 text-13 font-semibold',
+                          tier.highlight ? 'text-white/85' : 'text-brand-navy',
+                        )}>
+                          <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
+                          <span>{b.label}{b.valueUsd ? ` (${formatUsd(b.valueUsd)})` : ''}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* ── Own-forever perks ──────────────────────────────────────── */}
+                {billingMode === 'oneTime' && tier.oneTimePerks && tier.oneTimePerks.length > 0 && (
+                  <ul className={cn(
+                    'rounded-xl p-3 mb-5 space-y-1.5',
+                    tier.highlight ? 'bg-white/[0.06]' : 'bg-slate-50',
+                  )}>
+                    {tier.oneTimePerks.map(f => (
+                      <li key={f} className={cn(
+                        'flex items-start gap-2 text-13 font-semibold',
+                        tier.highlight ? 'text-white/85' : 'text-brand-navy',
+                      )}>
+                        <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {/* ── Always-on feature list ─────────────────────────────────── */}
+                <ul className="space-y-3 flex-1 mb-8">
+                  {tier.features.map(f => (
+                    <li key={f} className="flex items-start gap-3 text-sm">
+                      <Check className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
+                      <span className={tier.highlight ? 'text-white/75' : 'text-slate-700'}>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => onBuy(tier, billingMode)}
+                  className={cn(
+                    'w-full py-4 rounded-xl font-black text-sm transition-all active:scale-[0.98]',
+                    tier.highlight
+                      ? 'bg-primary text-white hover:bg-primary/90 shadow-[0_20px_40px_-15px_rgba(14,116,144,0.3)]'
+                      : 'bg-brand-navy text-white hover:bg-brand-navy-elev1'
+                  )}
+                >
+                  {ctaLabel} <span className="tabular-nums">— {formatUsd(priceUsd)}</span>
+                </button>
+              </motion.div>
+            )
+          })}
         </motion.div>
 
-        {/* ── Hosted Edition strip ────────────────────────────────────────────
-            The licence is forever. Hosting is an opt-in convenience: keep your
-            data in sync across devices, get push notifications, and skip the
-            DevOps. Per-hotel monthly fee. */}
+        {/* ── What's in every plan (replaces the old Hosted Edition strip) ── */}
         <motion.div
-          className="mt-20"
+          className="mt-16 max-w-5xl"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <p className="text-xs font-black uppercase tracking-[0.15em] text-primary mb-3">Optional — Hosted Edition</p>
-            <h3 className="text-3xl sm:text-4xl font-black text-brand-navy tracking-tight text-balance">
-              Host it yourself, or let us run it for you.
-            </h3>
-            <p className="text-muted-foreground text-base mt-4 leading-relaxed">
-              Your licence above is yours forever. Want multi-device sync, daily backups, and push notifications without the DevOps? Pick a hosted plan, billed per hotel per month.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              {
-                icon: HardDrive,
-                name: 'Self-hosted',
-                price: 'Free',
-                priceSub: 'with any licence',
-                desc: 'Run it on your own server or static host. You own the data, you handle the backups.',
-                features: ['Full offline / single-tenant', 'Localhost or your hosting', 'No recurring fee, ever'],
-                tone: 'border-border',
-                accent: 'text-muted-foreground',
-              },
-              {
-                icon: Cloud,
-                name: 'Hosted Starter',
-                price: '750',
-                priceSub: 'EGP / hotel / month',
-                desc: 'We host it on our cloud. Multi-device sync and daily backups out of the box.',
-                features: ['Multi-device sync', 'Daily backups', '10 GB media storage', 'Email support'],
-                tone: 'border-primary/30 ring-1 ring-primary/20',
-                accent: 'text-primary',
-              },
-              {
-                icon: Server,
-                name: 'Hosted Pro',
-                price: '1,500',
-                priceSub: 'EGP / hotel / month',
-                desc: 'Everything in Starter, plus push notifications that survive a closed tab and a 99.5% uptime SLA.',
-                features: ['Everything in Starter', 'Push notifications', '50 GB media storage', 'Priority support + 99.5% SLA'],
-                tone: 'border-border',
-                accent: 'text-primary',
-              },
-            ].map(plan => (
-              <div
-                key={plan.name}
-                className={cn(
-                  'bg-white border rounded-2xl p-6 flex flex-col',
-                  plan.tone,
-                )}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center bg-primary/10', plan.accent)}>
-                    <plan.icon className="w-4 h-4" />
-                  </div>
-                  <p className="font-black text-brand-navy text-base">{plan.name}</p>
+              { icon: Cloud,    title: 'Hosted on your domain',  desc: 'A subdomain (yourhotel.animapro.io) or your own custom one. Zero DevOps.' },
+              { icon: Zap,      title: 'Updates auto-deploy',    desc: 'New features and fixes land in your tenant the moment they ship.' },
+              { icon: Shield,   title: 'Daily backups',          desc: 'Point-in-time restore on request. We keep 30 days rolling.' },
+              { icon: Phone,    title: 'WhatsApp + email support', desc: '4-hour response on business days. 24/7 on Enterprise.' },
+            ].map(item => (
+              <div key={item.title} className="rounded-xl bg-slate-50 border border-border p-4">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 grid place-items-center text-primary mb-2.5">
+                  <item.icon className="w-4 h-4" />
                 </div>
-                <div className="flex items-baseline gap-1.5 mb-2">
-                  <span className="text-3xl font-black text-brand-navy tabular-nums">{plan.price}</span>
-                  <span className="text-xs text-slate-400 font-semibold">{plan.priceSub}</span>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-5">{plan.desc}</p>
-                <ul className="space-y-2 text-sm">
-                  {plan.features.map(f => (
-                    <li key={f} className="flex items-start gap-2 text-slate-700">
-                      <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
+                <p className="font-bold text-brand-navy text-sm mb-1">{item.title}</p>
+                <p className="text-mini text-muted-foreground leading-snug">{item.desc}</p>
               </div>
             ))}
           </div>
-
-          <p className="text-center text-slate-400 text-xs mt-6">
-            Annual hosted plans save 15%. Group of 10+ hotels? <Link href="/partners" className="text-primary font-bold hover:underline">Talk to us about partner pricing →</Link>
+          <p className="text-center text-slate-500 text-13 mt-5">
+            <span className="font-bold text-brand-navy">Included in every Monthly &amp; Annual plan.</span>{' '}
+            On <span className="font-semibold">Own forever</span>, hosting is an optional add-on. Group of 10+ hotels?{' '}
+            <Link href="/partners" className="text-primary font-bold hover:underline">Talk to us about partner pricing →</Link>
           </p>
         </motion.div>
 
@@ -1785,10 +1974,13 @@ function Footer() {
 // ─── PAGE ──────────────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
-  const [checkoutTier, setCheckoutTier] = useState<(typeof PRICING_TIERS)[0] | null>(null)
+  const [checkoutTier, setCheckoutTier] = useState<PricingTier | null>(null)
+  const [checkoutMode, setCheckoutMode] = useState<BillingMode>('annual')
 
-  const openCheckout = (tier?: (typeof PRICING_TIERS)[0]) =>
+  const openCheckout = (tier?: PricingTier, mode: BillingMode = 'annual') => {
     setCheckoutTier(tier ?? PRICING_TIERS[1])
+    setCheckoutMode(mode)
+  }
 
   return (
     <div className="min-h-screen">
@@ -1807,7 +1999,7 @@ export default function LandingPage() {
       </main>
       <Footer />
       {checkoutTier && (
-        <CheckoutModal tier={checkoutTier} onClose={() => setCheckoutTier(null)} />
+        <CheckoutModal tier={checkoutTier} mode={checkoutMode} onClose={() => setCheckoutTier(null)} />
       )}
       <PWAInstallPrompt />
     </div>

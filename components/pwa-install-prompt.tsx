@@ -16,6 +16,23 @@ export function PWAInstallPrompt() {
   const [showIOSGuide, setShowIOSGuide] = useState(false)
   const [isStandalone, setIsStandalone] = useState(false)
 
+  // Register the service worker once per session. Lives here because
+  // PWAInstallPrompt is already mounted on every top-level route and we don't
+  // want to duplicate registration code in 6 layouts.
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return
+    // Defer to idle so it never blocks the first paint or the install prompt.
+    const reg = (): void => {
+      navigator.serviceWorker.register('/sw.js').catch(() => { /* silent — SW is best-effort */ })
+    }
+    const ric = (window as Window & { requestIdleCallback?: (cb: () => void) => void }).requestIdleCallback
+    if (ric) {
+      ric(reg)
+    } else {
+      window.setTimeout(reg, 2000)
+    }
+  }, [])
+
   useEffect(() => {
     // Check if already installed as standalone
     // `navigator.standalone` is a non-standard iOS Safari flag not in lib.dom.

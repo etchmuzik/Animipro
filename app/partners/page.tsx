@@ -332,7 +332,7 @@ export default function PartnersPage() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
+        <div className="mt-10 grid gap-4 grid-cols-1 md:grid-cols-3">
           {TIERS.map(tier => {
             const featuresList = t(tier.featuresKey).split(' · ')
             return (

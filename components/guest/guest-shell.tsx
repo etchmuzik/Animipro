@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils'
 import { TodayFeed } from '@/components/guest/today-feed'
 import { ClubsBrowser } from '@/components/guest/clubs-browser'
 import { MyTickets } from '@/components/guest/my-tickets'
+import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
 
 type Tab = 'today' | 'clubs' | 'tickets'
 
@@ -71,6 +72,7 @@ export function GuestShell({ hotelId, hotelName }: GuestShellProps): React.React
       <footer className="border-t border-border py-4 text-center text-tiny text-muted-foreground">
         {t('guest.footer.poweredBy')} <Link href="/" className="text-primary hover:underline">AnimaPro</Link>
       </footer>
+      <PWAInstallPrompt />
     </div>
   )
 }

@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Users, Calendar, Star, TrendingUp, TrendingDown, Minus, CheckCircle2, MessageSquare, Award, AlertCircle } from 'lucide-react'
+import { Users, Calendar, Star, TrendingUp, TrendingDown, Minus, CheckCircle2, MessageSquare, Award, AlertCircle, ChevronRight } from 'lucide-react'
 import { getFeedbackSummary, subscribe as subscribeFeedback } from '@/lib/feedback'
 import { getBrand, subscribe as subscribeBrand } from '@/lib/brand-store'
 import { stagger, fadeInUp } from '@/lib/motion-presets'
+import { useIsDesktop } from '@/lib/use-media-query'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -69,22 +70,22 @@ function StatCard({ icon: Icon, label, value, sub, trend, color = 'teal', gridSp
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className={cn('rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden', gridSpan)}
+      className={cn('rounded-2xl border border-white/10 bg-zinc-900 p-4 sm:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden', gridSpan)}
     >
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-xs text-zinc-300 font-semibold uppercase tracking-tight leading-relaxed">{label}</p>
-          <p className="text-3xl tabular-nums font-bold text-white mt-2">{value}</p>
-          {sub && <p className="text-sm text-zinc-300 leading-relaxed mt-1">{sub}</p>}
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex-1 min-w-0">
+          <p className="text-tiny sm:text-xs text-zinc-300 font-semibold uppercase tracking-tight leading-tight line-clamp-2">{label}</p>
+          <p className="text-2xl sm:text-3xl tabular-nums font-bold text-white mt-1 sm:mt-2">{value}</p>
+          {sub && <p className="text-mini sm:text-sm text-zinc-300 leading-snug mt-0.5 sm:mt-1 line-clamp-2">{sub}</p>}
         </div>
-        <div className={cn('p-3 rounded-xl shrink-0', iconBg)}>
-          <Icon className={cn('w-5 h-5', iconColor)} />
+        <div className={cn('p-2 sm:p-3 rounded-xl shrink-0', iconBg)}>
+          <Icon className={cn('w-4 h-4 sm:w-5 sm:h-5', iconColor)} />
         </div>
       </div>
       {trend && (
-        <div className={cn('mt-4 flex items-center gap-2 px-3 py-2 rounded-lg w-fit', trendBg)}>
-          <TrendingUp className={cn('w-3.5 h-3.5', trendColor)} />
-          <span className={cn('text-xs font-semibold', trendColor)}>{trend}</span>
+        <div className={cn('mt-2 sm:mt-4 flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-2 rounded-lg w-fit', trendBg)}>
+          <TrendingUp className={cn('w-3 h-3 sm:w-3.5 sm:h-3.5', trendColor)} />
+          <span className={cn('text-mini sm:text-xs font-semibold', trendColor)}>{trend}</span>
         </div>
       )}
     </motion.div>
@@ -132,6 +133,19 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
     refresh()
     return subscribeBrand(refresh)
   }, [])
+
+  // Mobile vs desktop layout signal. Drives chart margins + which chart cards
+  // start collapsed. SSR-safe: false during first paint → mobile-first defaults.
+  const isDesktop = useIsDesktop()
+  const chartMargin = isDesktop
+    ? { top: 5, right: 10, left: -20, bottom: 5 }
+    : { top: 5, right: 6, left: -28, bottom: 5 }
+  const yAxisWidth = isDesktop ? 40 : 32
+  const teamChartYAxisWidth = isDesktop ? 80 : 56
+  const teamChartMargin = isDesktop
+    ? { top: 5, right: 15, left: 80, bottom: 5 }
+    : { top: 5, right: 8, left: 0, bottom: 5 }
+
   const guestAvg = feedback.count > 0 ? feedback.average : DASHBOARD_STATS.guestFeedbackAvg
   const schedule              = getHotelSchedule(hotelId)
   const animators             = getHotelAnimators(hotelId)
@@ -153,10 +167,10 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
       {hotel && (
         <motion.div
           variants={fadeInUp}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
         >
           {/* TripAdvisor */}
-          <div className="rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] flex flex-col">
+          <div className="rounded-2xl border border-white/10 bg-zinc-900 p-4 sm:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] flex flex-col">
             <div className="flex items-start justify-between mb-4">
               <div className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: brandHex }}>
                 <svg viewBox="0 0 48 48" className="w-6 h-6 fill-white"><circle cx="12" cy="26" r="8"/><circle cx="36" cy="26" r="8"/><path d="M4 18c0-11 36-11 40 0"/><circle cx="12" cy="26" r="3.5" fill="#ffffff"/><circle cx="36" cy="26" r="3.5" fill="#ffffff"/></svg>
@@ -169,7 +183,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             </div>
             <p className="text-xs text-zinc-300 font-semibold uppercase tracking-tight mb-1">TripAdvisor</p>
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl tabular-nums font-bold text-white">{hotel.tripAdvisorRating.toFixed(1)}</span>
+              <span className="text-2xl sm:text-3xl tabular-nums font-bold text-white">{hotel.tripAdvisorRating.toFixed(1)}</span>
               <StarRating rating={hotel.tripAdvisorRating} size="md" />
             </div>
             <p className="text-sm text-zinc-300 leading-relaxed mb-3">{hotel.tripAdvisorReviews.toLocaleString()} reviews</p>
@@ -182,7 +196,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
           </div>
 
           {/* Google Rating */}
-          <div className="rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] flex flex-col">
+          <div className="rounded-2xl border border-white/10 bg-zinc-900 p-4 sm:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] flex flex-col">
             <div className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center bg-zinc-800 border border-zinc-700 shadow-sm mb-4">
               <svg viewBox="0 0 48 48" className="w-6 h-6">
                 <path fill="#4285F4" d="M44.5 20H24v8.5h11.7C34.3 33.1 29.7 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l6-6C34.5 6.5 29.6 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5c11 0 20.5-8 20.5-19.5 0-1.3-.1-2.7-.5-4z"/>
@@ -193,7 +207,7 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
             </div>
             <p className="text-xs text-zinc-300 font-semibold uppercase tracking-tight mb-1">Google</p>
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl tabular-nums font-bold text-white">{hotel.googleRating.toFixed(1)}</span>
+              <span className="text-2xl sm:text-3xl tabular-nums font-bold text-white">{hotel.googleRating.toFixed(1)}</span>
               <StarRating rating={hotel.googleRating} size="md" />
             </div>
             <p className="text-sm text-zinc-300 leading-relaxed mb-3">Based on guest reviews</p>
@@ -204,13 +218,13 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
           </div>
 
           {/* Booking.com Rating */}
-          <div className="rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] flex flex-col">
+          <div className="rounded-2xl border border-white/10 bg-zinc-900 p-4 sm:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] flex flex-col">
             <div className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ background: '#003580' }}>
               <span className="text-white font-black text-sm">B</span>
             </div>
             <p className="text-xs text-primary font-semibold uppercase tracking-tight mb-1">Booking.com</p>
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl tabular-nums font-bold text-white">{hotel.bookingRating.toFixed(1)}</span>
+              <span className="text-2xl sm:text-3xl tabular-nums font-bold text-white">{hotel.bookingRating.toFixed(1)}</span>
               <span className="text-xs text-zinc-400">/ 10</span>
             </div>
             <span className={cn(
@@ -232,69 +246,59 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
         </motion.div>
       )}
 
-      {/* KPI Stats - Bento 2.0 Asymmetric Layout */}
-      <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-max">
-        <StatCard icon={Users} label="Total Animators" value={DASHBOARD_STATS.totalAnimators} sub={`${DASHBOARD_STATS.activeToday} active today`} trend="+2 this season" color="teal" gridSpan="lg:col-span-1" />
-        <StatCard icon={Calendar} label="Today's Activities" value={DASHBOARD_STATS.activitiesScheduled} sub={`${DASHBOARD_STATS.activitiesCompleted} completed`} color="blue" gridSpan="lg:col-span-1" />
-        <StatCard icon={Star} label="Avg Performance" value={`${DASHBOARD_STATS.avgPerformance}%`} sub="This week" trend="+3% vs last week" color="amber" gridSpan="lg:col-span-1" />
-        <StatCard icon={CheckCircle2} label="Attendance Rate" value={`${DASHBOARD_STATS.avgAttendance}%`} sub="Today" color="green" gridSpan="lg:col-span-1" />
-        <StatCard icon={MessageSquare} label="Guest Feedback" value={`${guestAvg}/5`} sub={feedback.count > 0 ? `${feedback.count} guest ratings` : 'This month'} trend="↑ 0.2 vs last month" color="teal" gridSpan="md:col-span-2 lg:col-span-1" />
+      {/* KPI Stats — 2-col on phone (clean 2x2 + a full-width 5th), 4-col on desktop. */}
+      <motion.div variants={fadeInUp} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 auto-rows-max">
+        <StatCard icon={Users} label="Total Animators" value={DASHBOARD_STATS.totalAnimators} sub={`${DASHBOARD_STATS.activeToday} active today`} trend="+2 this season" color="teal" />
+        <StatCard icon={Calendar} label="Today's Activities" value={DASHBOARD_STATS.activitiesScheduled} sub={`${DASHBOARD_STATS.activitiesCompleted} completed`} color="blue" />
+        <StatCard icon={Star} label="Avg Performance" value={`${DASHBOARD_STATS.avgPerformance}%`} sub="This week" trend="+3% vs last week" color="amber" />
+        <StatCard icon={CheckCircle2} label="Attendance Rate" value={`${DASHBOARD_STATS.avgAttendance}%`} sub="Today" color="green" />
+        <StatCard icon={MessageSquare} label="Guest Feedback" value={`${guestAvg}/5`} sub={feedback.count > 0 ? `${feedback.count} guest ratings` : 'This month'} trend="↑ 0.2 vs last month" color="teal" gridSpan="col-span-2 lg:col-span-1" />
       </motion.div>
 
       <motion.div variants={fadeInUp} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Activity Chart */}
-        <div className="lg:col-span-2 rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
-          <div className="p-6 pb-4 border-b border-white/10">
-            <h3 className="text-sm font-semibold tracking-tight text-white">Weekly Activity Overview</h3>
+        {/* Activity Chart — collapsible on mobile */}
+        <ChartSection title="Weekly Activity Overview" defaultOpen={isDesktop} className="lg:col-span-2">
+          <ResponsiveContainer width="100%" height={isDesktop ? 220 : 200}>
+            <AreaChart data={WEEKLY_ACTIVITY_DATA} margin={chartMargin}>
+              <defs>
+                <linearGradient id="gActivities" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={brandHex} stopOpacity={0.2} />
+                  <stop offset="95%" stopColor={brandHex} stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="gGuests" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.15} />
+                  <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="0" stroke="rgb(63, 63, 70)" strokeOpacity={0.4} vertical={false} />
+              <XAxis dataKey="day" tick={{ fontSize: isDesktop ? 12 : 10, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} />
+              <YAxis yAxisId="left" tick={{ fontSize: isDesktop ? 12 : 10, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={yAxisWidth} />
+              <YAxis yAxisId="right" orientation="right" tick={{ fontSize: isDesktop ? 12 : 10, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={yAxisWidth} />
+              <Tooltip
+                contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }}
+              />
+              <Area yAxisId="left" type="monotone" dataKey="activities" stroke={brandHex} fill="url(#gActivities)" strokeWidth={2.5} name="Activities" dot={false} />
+              <Area yAxisId="right" type="monotone" dataKey="guests" stroke="#7c3aed" fill="url(#gGuests)" strokeWidth={2.5} name="Guests" dot={false} />
+            </AreaChart>
+          </ResponsiveContainer>
+          <div className="flex items-center gap-4 sm:gap-6 mt-3 sm:mt-4 px-2 flex-wrap">
+            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-primary" /><span className="text-mini sm:text-xs text-zinc-300">Activities</span></div>
+            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full" style={{ background: '#7c3aed' }} /><span className="text-mini sm:text-xs text-zinc-300">Guests</span></div>
           </div>
-          <div className="px-4 pb-4 pt-2">
-            <ResponsiveContainer width="100%" height={220}>
-              <AreaChart data={WEEKLY_ACTIVITY_DATA} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
-                <defs>
-                  <linearGradient id="gActivities" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={brandHex} stopOpacity={0.2} />
-                    <stop offset="95%" stopColor={brandHex} stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="gGuests" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.15} />
-                    <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="0" stroke="rgb(63, 63, 70)" strokeOpacity={0.4} vertical={false} />
-                <XAxis dataKey="day" tick={{ fontSize: 12, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} />
-                <YAxis yAxisId="left" tick={{ fontSize: 12, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={40} />
-                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={40} />
-                <Tooltip
-                  contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }}
-                />
-                <Area yAxisId="left" type="monotone" dataKey="activities" stroke={brandHex} fill="url(#gActivities)" strokeWidth={2.5} name="Activities" dot={false} />
-                <Area yAxisId="right" type="monotone" dataKey="guests" stroke="#7c3aed" fill="url(#gGuests)" strokeWidth={2.5} name="Guests" dot={false} />
-              </AreaChart>
-            </ResponsiveContainer>
-            <div className="flex items-center gap-6 mt-4 px-2">
-              <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-primary" /><span className="text-xs text-zinc-300">Activities</span></div>
-              <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full" style={{ background: '#7c3aed' }} /><span className="text-xs text-zinc-300">Guests</span></div>
-            </div>
-          </div>
-        </div>
+        </ChartSection>
 
-        {/* Feedback Trend */}
-        <div className="rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
-          <div className="p-6 pb-4 border-b border-white/10">
-            <h3 className="text-sm font-semibold tracking-tight text-white">Guest Feedback Trend</h3>
-          </div>
-          <div className="px-4 pb-4 pt-2">
-            <ResponsiveContainer width="100%" height={220}>
-              <LineChart data={FEEDBACK_TREND_DATA} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="0" stroke="rgb(63, 63, 70)" strokeOpacity={0.4} vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} />
-                <YAxis domain={[3.5, 5]} tick={{ fontSize: 12, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={40} />
-                <Tooltip contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }} />
-                <Line type="monotone" dataKey="rating" stroke={brandHex} strokeWidth={3} dot={{ r: 4, fill: brandHex, strokeWidth: 0 }} name="Rating" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        {/* Feedback Trend — collapsible on mobile */}
+        <ChartSection title="Guest Feedback Trend" defaultOpen={isDesktop}>
+          <ResponsiveContainer width="100%" height={isDesktop ? 220 : 200}>
+            <LineChart data={FEEDBACK_TREND_DATA} margin={chartMargin}>
+              <CartesianGrid strokeDasharray="0" stroke="rgb(63, 63, 70)" strokeOpacity={0.4} vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: isDesktop ? 12 : 10, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} />
+              <YAxis domain={[3.5, 5]} tick={{ fontSize: isDesktop ? 12 : 10, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={yAxisWidth} />
+              <Tooltip contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }} />
+              <Line type="monotone" dataKey="rating" stroke={brandHex} strokeWidth={3} dot={{ r: 4, fill: brandHex, strokeWidth: 0 }} name="Rating" />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartSection>
       </motion.div>
 
       <motion.div variants={fadeInUp} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -325,23 +329,18 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
           </div>
         </div>
 
-        {/* Team Performance */}
-        <div className="rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
-          <div className="p-6 pb-4 border-b border-white/10">
-            <h3 className="text-sm font-semibold tracking-tight text-white">Team Performance</h3>
-          </div>
-          <div className="px-2 pb-4 pt-2">
-            <ResponsiveContainer width="100%" height={230}>
-              <BarChart data={TEAM_PERFORMANCE_DATA} layout="vertical" margin={{ top: 5, right: 15, left: 80, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="0" stroke="rgb(63, 63, 70)" strokeOpacity={0.4} vertical={false} />
-                <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} />
-                <YAxis dataKey="team" type="category" tick={{ fontSize: 11, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={80} />
-                <Tooltip contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }} />
-                <Bar dataKey="performance" fill={brandHex} radius={[0, 6, 6, 0]} name="Performance %" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        {/* Team Performance — collapsible on mobile */}
+        <ChartSection title="Team Performance" defaultOpen={isDesktop} bodyClassName="px-2 pb-4 pt-2">
+          <ResponsiveContainer width="100%" height={isDesktop ? 230 : 220}>
+            <BarChart data={TEAM_PERFORMANCE_DATA} layout="vertical" margin={teamChartMargin}>
+              <CartesianGrid strokeDasharray="0" stroke="rgb(63, 63, 70)" strokeOpacity={0.4} vertical={false} />
+              <XAxis type="number" domain={[0, 100]} tick={{ fontSize: isDesktop ? 11 : 10, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} />
+              <YAxis dataKey="team" type="category" tick={{ fontSize: isDesktop ? 11 : 10, fill: 'rgb(161, 161, 170)' }} axisLine={false} tickLine={false} width={teamChartYAxisWidth} />
+              <Tooltip contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }} />
+              <Bar dataKey="performance" fill={brandHex} radius={[0, 6, 6, 0]} name="Performance %" />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartSection>
 
         {/* Top Performers */}
         <div className="rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
@@ -433,5 +432,49 @@ export function DashboardModule({ hotelId }: { hotelId: string }) {
         </div>
       </motion.div>
     </motion.div>
+  )
+}
+
+// ─── ChartSection — collapsible on phone, always-open on desktop ────────────
+//
+// Uses a native <details> so we get free keyboard support + screen-reader
+// "expanded/collapsed" announcements with zero JS state. `defaultOpen` is fed
+// from useIsDesktop() so phones see collapsed-by-default and desktop sees the
+// chart already expanded. The summary doubles as the existing card header.
+function ChartSection({
+  title,
+  defaultOpen,
+  className,
+  bodyClassName,
+  children,
+}: {
+  title: string
+  defaultOpen: boolean
+  className?: string
+  bodyClassName?: string
+  children: React.ReactNode
+}): React.ReactElement {
+  return (
+    <details
+      // Re-key on the desktop flag so it picks up the new default after hydration
+      // (details ignores prop changes to `open` on subsequent renders otherwise).
+      key={defaultOpen ? 'open' : 'closed'}
+      open={defaultOpen}
+      className={cn(
+        'group rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] overflow-hidden',
+        className,
+      )}
+    >
+      <summary className="flex items-center justify-between gap-2 p-4 sm:p-6 sm:pb-4 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden min-h-11 border-b border-white/10 group-open:border-white/10">
+        <h3 className="text-sm font-semibold tracking-tight text-white">{title}</h3>
+        <ChevronRight
+          className="w-4 h-4 text-zinc-400 transition-transform group-open:rotate-90 md:hidden"
+          aria-hidden="true"
+        />
+      </summary>
+      <div className={cn('px-4 pb-4 pt-2', bodyClassName)}>
+        {children}
+      </div>
+    </details>
   )
 }

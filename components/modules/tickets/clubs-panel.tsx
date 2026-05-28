@@ -16,7 +16,7 @@ export function ClubsPanel(): React.ReactElement {
         Partner clubs with negotiated allocations. Hotel admins will be able to add/edit clubs and per-night pricing in a future release — for now this is the seeded Sharm catalog.
       </p>
 
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {CLUBS.map(club => {
           const nights = getNightsForClub(club.id)
           return (

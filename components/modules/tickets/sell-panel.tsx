@@ -98,7 +98,7 @@ export function SellPanel({ currentUser }: SellPanelProps): React.ReactElement {
 
   // ─── Layout: night list (left) → form (right) ─────────────────────────────
   return (
-    <div className="grid lg:grid-cols-[1.1fr_1fr] gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6">
       {/* Left: pick night */}
       <div>
         <p className="text-eyebrow mb-2">Step 1 — pick a club night</p>

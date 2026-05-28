@@ -371,7 +371,7 @@ export function Sidebar(props: SidebarProps) {
             exit={{ x: drawerOffset }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             className={cn(
-              'fixed top-0 h-full w-72 z-50 bg-hsl(228, 14%, 8%) text-white flex flex-col md:hidden shadow-xl shadow-black/30',
+              'fixed top-0 h-full w-72 max-w-[85vw] z-50 bg-hsl(228, 14%, 8%) text-white flex flex-col md:hidden shadow-xl shadow-black/30',
               isRtl ? 'right-0' : 'left-0',
             )}
           >

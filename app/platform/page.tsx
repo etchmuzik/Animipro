@@ -143,8 +143,11 @@ export default function AnimaProApp() {
             onSectionChange={handleSectionChange}
           />
 
-          {/* Scrollable content — add pb-16 on mobile to clear the bottom nav */}
-          <main id="main" className="flex-1 overflow-y-auto scrollbar-thin p-3 sm:p-5 pb-20 md:pb-5 bg-zinc-950/40">
+          {/* Scrollable content — pb-24 + safe-area on phone (60px nav + ~34px notch). */}
+          <main
+            id="main"
+            className="flex-1 overflow-y-auto scrollbar-thin p-3 sm:p-5 pb-[max(6rem,calc(env(safe-area-inset-bottom)+5rem))] md:pb-5 bg-zinc-950/40"
+          >
             <div key={activeSection} className="page-enter">
               {renderModule()}
             </div>
