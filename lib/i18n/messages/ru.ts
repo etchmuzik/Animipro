@@ -71,6 +71,7 @@ export const ru: Messages = {
     notifications: 'Уведомления',
     switchUser: 'Сменить роль / пользователя',
     switchHint: 'Смена роли меняет навигацию и уровни доступа.',
+    signOut: 'Выйти',
   },
 
   sidebar: {

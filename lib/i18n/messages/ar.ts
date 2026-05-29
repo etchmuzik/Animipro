@@ -73,6 +73,7 @@ export const ar: Messages = {
     notifications: 'الإشعارات',
     switchUser: 'تبديل الدور / المستخدم',
     switchHint: 'تبديل الأدوار يغيّر التنقل ومستويات الصلاحية.',
+    signOut: 'تسجيل الخروج',
   },
 
   sidebar: {

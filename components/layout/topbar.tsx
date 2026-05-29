@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Building2, ChevronDown, Check, Users, Menu, X } from 'lucide-react'
+import { Search, Building2, ChevronDown, Check, Users, Menu, X, LogOut } from 'lucide-react'
+import { signOut } from '@/app/login/actions'
 import { Badge, type BadgeTone } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
@@ -184,8 +185,17 @@ export function Topbar({
                         )
                       })}
                     </div>
-                    <div className="px-3 py-2 bg-white/5 border-t border-white/10">
+                    <div className="px-3 py-2 bg-white/5 border-t border-white/10 space-y-2">
                       <p className="text-mini text-white/50">{t('topbar.switchHint')}</p>
+                      <form action={signOut}>
+                        <button
+                          type="submit"
+                          className="flex items-center gap-2 w-full text-13 font-semibold text-white/80 hover:text-white transition-colors"
+                        >
+                          <LogOut className="w-3.5 h-3.5" />
+                          {t('topbar.signOut')}
+                        </button>
+                      </form>
                     </div>
                   </motion.div>
                 </>

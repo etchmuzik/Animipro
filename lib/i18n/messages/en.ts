@@ -78,6 +78,7 @@ export const en = {
     notifications: 'Notifications',
     switchUser: 'Switch Role / User',
     switchHint: 'Switching roles filters navigation and access levels.',
+    signOut: 'Sign out',
   },
 
   sidebar: {

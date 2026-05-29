@@ -71,6 +71,7 @@ export const it: Messages = {
     notifications: 'Notifiche',
     switchUser: 'Cambia ruolo / utente',
     switchHint: 'Cambiare ruolo filtra la navigazione e i livelli di accesso.',
+    signOut: 'Esci',
   },
 
   sidebar: {
