@@ -1,17 +1,27 @@
 # Animipro — Mobile App Guide
 
-## Strategy: Capacitor hosted-URL shell
+## Strategy: Capacitor bundled app
 
-The iOS and Android apps are thin [Capacitor](https://capacitorjs.com/) shells
-that load the **live deployed site** (`https://animipro.online/`) in a native
-webview. The Next.js server (server components, middleware, Supabase SSR auth)
-runs unchanged on its existing deployment — the native layer only adds plugins
-(SplashScreen, StatusBar).
+The iOS and Android apps **bundle the app's own UI** (a static export of the
+`/platform` workspace + login) and run it locally, authenticating against Supabase
+via the browser SDK. This is a real installed app — not a webview pointed at the
+website. The marketing site stays separate on `animipro.online`.
 
-> This replaces the earlier static-export plan (where Capacitor bundled the compiled
-> `out/` directory), which became incompatible once the app gained server components
-> + server-side Supabase auth.
-> Design rationale: `docs/superpowers/specs/2026-06-07-capacitor-native-wrapper-design.md`.
+> One codebase, two build targets. `NEXT_PUBLIC_NATIVE=1` switches the build to
+> static export + client auth (no server components / middleware / server
+> actions). The web build is unchanged. Spec:
+> `docs/superpowers/specs/2026-06-07-native-app-shell-design.md`.
+
+### Build the native app
+
+```bash
+npm run build:native      # native static export + cap sync
+npm run cap:ios           # open Xcode → Run
+npm run cap:android       # open Android Studio → Run (needs JDK 17/21)
+```
+
+Unlike the old hosted-URL model, you DO rebuild (`build:native`) to ship UI
+changes — the app runs bundled assets, not the live site.
 
 ## App identity
 
@@ -46,23 +56,23 @@ npm run cap:ios       # Xcode
 npm run cap:android   # Android Studio
 ```
 
-Because the app loads a hosted URL, **you do not rebuild the web app to see
-changes** — deploy to `animipro.online` and the native apps pick it up on next
-launch. `npm run cap:sync` is only needed when `capacitor.config.ts`, plugins, or
-the `mobile-shell` fallback change.
+Because the app bundles its own UI, **you must run `npm run build:native` to ship
+UI changes** — the native apps run the bundled `out/` snapshot, not the live site.
+`npm run cap:sync` is only needed when `capacitor.config.ts` or plugins change
+without a UI rebuild.
 
 ### Testing against a local dev server
 
-To run against `npm run dev` on a physical device, edit `capacitor.config.ts`:
-set `server.url` to `http://<your-LAN-IP>:3000` and add `cleartext: true`, then
-`npm run cap:sync`. Revert before shipping — never ship cleartext.
+For quick iteration on a physical device, run `npm run dev` and point the device's
+browser at `http://<your-LAN-IP>:3000`. The bundled app itself does not hot-reload
+from the dev server — use the browser for development, then `build:native` for a
+native build.
 
 ## Offline behavior
 
-If the live URL is unreachable, the webview shows `mobile-shell/index.html`
-(a branded "Connecting…" splash). True offline app behavior (caching pages for
-use without a network) is **not** implemented here; it would require wiring the
-existing `public/sw.js` service worker into the bundled shell. Out of scope.
+Because the app runs bundled assets locally, the UI loads without a network
+connection. API calls to Supabase still require connectivity. True offline data
+access (caching query results) is **not** implemented; out of scope.
 
 ## Building for the stores
 
@@ -78,12 +88,11 @@ upload to Google Play Console.
 
 ### ⚠️ Apple Guideline 4.2 (Minimum Functionality)
 
-Apple can reject apps that are "just a website in a wrapper." Mitigations already
-in place: native plugins (SplashScreen, StatusBar) and a real backend (Supabase
-auth/DB live on the hosted site). If rejected, the durable fix is the
-static-export / client-data mobile variant (see the design doc's rejected
-alternatives) — more native behavior, less wrapper. Google Play is far more
-lenient on this point.
+Apple can reject apps that are "just a website in a wrapper." The bundled-app
+approach significantly mitigates this risk: the app ships its own UI assets,
+uses native plugins (SplashScreen, StatusBar), and authenticates directly against
+Supabase via the browser SDK rather than loading a remote URL. Google Play is far
+more lenient on this point.
 
 ## Cost summary
 

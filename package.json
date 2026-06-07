@@ -13,6 +13,7 @@
     "cap:sync": "cap sync",
     "cap:ios": "cap open ios",
     "cap:android": "cap open android",
+    "build:native": "node scripts/build-native.js && cap sync",
     "test": "TZ=Africa/Cairo vitest run",
     "test:watch": "TZ=Africa/Cairo vitest",
     "test:coverage": "TZ=Africa/Cairo vitest run --coverage",
