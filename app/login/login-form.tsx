@@ -6,7 +6,6 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { IS_NATIVE } from '@/lib/native'
 import { signInClient } from './sign-in-client'
 
 export function LoginForm() {
@@ -25,33 +24,19 @@ export function LoginForm() {
     const email = String(form.get('email') ?? '')
     const password = String(form.get('password') ?? '')
 
-    if (IS_NATIVE) {
-      // Native: client SDK sign-in, then client navigation.
-      const result = await signInClient(email, password)
-      setPending(false)
-      if (result.error) {
-        setError(result.error)
-        return
-      }
-      router.push(next)
-    } else {
-      // Web: server action, loaded dynamically so the 'use server' module is
-      // NOT in the static graph (which would break the native export).
-      try {
-        const { signIn } = await import('./actions')
-        const result = await signIn({}, form)
-        setPending(false)
-        if (result?.error) {
-          setError(result.error)
-          return
-        }
-        router.push(next)
-      } catch (err) {
-        // A Next redirect() throws a special error on success — let it propagate
-        // to the framework; only treat real errors as failures.
-        throw err
-      }
+    // Use the browser-SDK sign-in for both native and web builds.
+    // For native: no server, client SDK is the only option.
+    // For web: supabase.auth.signInWithPassword() sets the session cookie via
+    // the browser client; the middleware's updateSession() picks it up on the
+    // next request. Avoids any reference to './actions' ('use server') which
+    // blocks the static export.
+    const result = await signInClient(email, password)
+    setPending(false)
+    if (result.error) {
+      setError(result.error)
+      return
     }
+    router.push(next)
   }
 
   return (
