@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom/vitest'
 // Test setup: provide a real IndexedDB implementation (jsdom has none) and
 // reset all browser-storage state between tests so each spec starts clean.
 import 'fake-indexeddb/auto'

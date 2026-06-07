@@ -13,12 +13,19 @@
 import { PlatformShell } from './platform-shell'
 import { getCurrentUser } from '@/lib/auth'
 import { DEMO_USERS, type AppUser } from '@/lib/roles'
+import { IS_NATIVE } from '@/lib/native'
+import { PlatformNative } from './platform-native'
 
 const SUPABASE_CONFIGURED = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL)
 const DEMO_FALLBACK_USER: AppUser =
   DEMO_USERS.find(u => u.role === 'ANIMATION_CHIEF') ?? DEMO_USERS[0]
 
 export default async function PlatformPage() {
+  // Native (bundled) build: resolve the user client-side. No server work runs.
+  if (IS_NATIVE) {
+    return <PlatformNative />
+  }
+
   // Real path: authenticated user from Supabase.
   if (SUPABASE_CONFIGURED) {
     const user = await getCurrentUser()

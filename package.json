@@ -10,12 +10,22 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "cap:sync": "cap sync",
+    "cap:ios": "cap open ios",
+    "cap:android": "cap open android",
+    "build:native": "node scripts/build-native.js && cap sync",
     "test": "TZ=Africa/Cairo vitest run",
     "test:watch": "TZ=Africa/Cairo vitest",
     "test:coverage": "TZ=Africa/Cairo vitest run --coverage",
     "deploy": "npm run build && netlify deploy --prod --dir=out --message=\"manual deploy from local build\""
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.0",
+    "@capacitor/cli": "^8.4.0",
+    "@capacitor/core": "^8.4.0",
+    "@capacitor/ios": "^8.4.0",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.2",
     "@radix-ui/react-progress": "^1.1.8",
     "@radix-ui/react-slot": "^1.1.0",
     "@supabase/ssr": "^0.10.3",
@@ -36,6 +46,10 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^20.0.0",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19.0.0",

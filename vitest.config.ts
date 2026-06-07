@@ -14,7 +14,7 @@ export default defineConfig({
     // test exercises the real near-midnight boundary the bug occurred at.
     env: { TZ: 'Africa/Cairo' },
     setupFiles: ['./vitest.setup.ts'],
-    include: ['lib/**/*.test.ts', 'tests/**/*.test.ts'],
+    include: ['lib/**/*.test.ts', 'tests/**/*.test.ts', 'app/**/*.test.ts', 'components/**/*.test.tsx'],
     coverage: {
       provider: 'v8',
       include: ['lib/task-state.ts', 'lib/media-store.ts', 'lib/reminders.ts'],

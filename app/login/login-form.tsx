@@ -1,23 +1,47 @@
 // ─── Animipro — Login form (client) ──────────────────────────────────────────
 'use client'
 
-import { useActionState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { signIn, type AuthActionState } from './actions'
+import { signInClient } from './sign-in-client'
 
 export function LoginForm() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const next = searchParams.get('next') ?? '/platform'
-  const [state, formAction, pending] = useActionState<AuthActionState, FormData>(
-    signIn,
-    {},
-  )
+
+  const [error, setError] = useState<string | undefined>()
+  const [pending, setPending] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setError(undefined)
+    setPending(true)
+    const form = new FormData(e.currentTarget)
+    const email = String(form.get('email') ?? '')
+    const password = String(form.get('password') ?? '')
+
+    // One client-side auth path for both web and native builds.
+    // supabase.auth.signInWithPassword() (via signInClient) sets the session
+    // cookie in the browser; on web, the middleware's updateSession() picks it
+    // up on the next request, so server components still see the session. The
+    // native (static-export) build has no server, so the client SDK is the only
+    // option — unifying on it keeps a single code path and a static-export-safe
+    // graph (no 'use server' modules).
+    const result = await signInClient(email, password)
+    setPending(false)
+    if (result.error) {
+      setError(result.error)
+      return
+    }
+    router.push(next)
+  }
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <input type="hidden" name="next" value={next} />
 
       <div className="space-y-1.5">
@@ -48,9 +72,9 @@ export function LoginForm() {
         />
       </div>
 
-      {state.error && (
+      {error && (
         <p className="text-13 text-destructive font-medium" role="alert">
-          {state.error}
+          {error}
         </p>
       )}
 

@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Building2, ChevronDown, Check, Users, Menu, X, LogOut } from 'lucide-react'
-import { signOut } from '@/app/login/actions'
+import { signOutClient } from '@/app/login/sign-in-client'
 import { Badge, type BadgeTone } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
@@ -31,8 +32,20 @@ export function Topbar({
   hotelId, hotelName, companyName, currentUser, onUserChange, onMenuOpen, onSectionChange,
 }: TopbarProps) {
   const { t, locale } = useTranslation()
+  const router = useRouter()
   const [roleMenuOpen, setRoleMenuOpen]       = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+
+  async function handleSignOut() {
+    // One client-side auth path for both web and native builds.
+    // supabase.auth.signOut() (via signOutClient) clears the browser session;
+    // on web the middleware's updateSession() clears the server cookie on the
+    // next request. The native (static-export) build has no server, so the
+    // client SDK is the only option — unifying on it keeps the module graph
+    // static-export-safe (no 'use server' modules).
+    await signOutClient()
+    router.push('/')
+  }
 
   // Live white-label brand name (fallback title for unknown sections).
   const [brandName, setBrandName] = useState(() => getBrand().appName)
@@ -187,15 +200,14 @@ export function Topbar({
                     </div>
                     <div className="px-3 py-2 bg-white/5 border-t border-white/10 space-y-2">
                       <p className="text-mini text-white/50">{t('topbar.switchHint')}</p>
-                      <form action={signOut}>
-                        <button
-                          type="submit"
-                          className="flex items-center gap-2 w-full text-13 font-semibold text-white/80 hover:text-white transition-colors"
-                        >
-                          <LogOut className="w-3.5 h-3.5" />
-                          {t('topbar.signOut')}
-                        </button>
-                      </form>
+                      <button
+                        type="button"
+                        onClick={handleSignOut}
+                        className="flex items-center gap-2 w-full text-13 font-semibold text-white/80 hover:text-white transition-colors"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        {t('topbar.signOut')}
+                      </button>
                     </div>
                   </motion.div>
                 </>
