@@ -8,12 +8,11 @@
 'use client'
 
 import { getSupabaseBrowserClient } from '@/lib/supabase/client'
-import type { AppUser } from '@/lib/roles'
-import type { UserRole } from '@/lib/mock-data'
+import { mapProfileToAppUser, type AuthedUser } from '@/lib/auth-shared'
 
-export interface AuthedUser extends AppUser {
-  email: string
-}
+// Re-exported for existing importers; the canonical definition lives in
+// lib/auth-shared.ts (shared with the server resolver).
+export type { AuthedUser }
 
 export async function getCurrentUserClient(): Promise<AuthedUser | null> {
   const supabase = getSupabaseBrowserClient()
@@ -29,25 +28,5 @@ export async function getCurrentUserClient(): Promise<AuthedUser | null> {
 
   if (!profile) return null
 
-  // Derive initials if the profile didn't store them.
-  const initials =
-    profile.initials ||
-    profile.full_name
-      .split(' ')
-      .map((p: string) => p[0])
-      .slice(0, 2)
-      .join('')
-      .toUpperCase() ||
-    (user.email?.[0]?.toUpperCase() ?? '?')
-
-  return {
-    id: profile.id,
-    name: profile.full_name || (user.email ?? 'User'),
-    initials,
-    role: profile.role as UserRole,
-    hotelId: profile.hotel_id ?? '',
-    companyId: profile.company_id ?? '',
-    teamId: profile.team_id ?? undefined,
-    email: user.email ?? '',
-  }
+  return mapProfileToAppUser(profile, user.email)
 }
