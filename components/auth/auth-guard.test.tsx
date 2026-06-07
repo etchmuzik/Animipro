@@ -33,4 +33,11 @@ describe('AuthGuard', () => {
     await waitFor(() => expect(screen.getByText('secret')).toBeInTheDocument())
     expect(mockPush).not.toHaveBeenCalled()
   })
+
+  it('redirects to /login when the session check fails', async () => {
+    mockGetSession.mockRejectedValue(new Error('network down'))
+    render(<AuthGuard><div>secret</div></AuthGuard>)
+    await waitFor(() => expect(mockPush).toHaveBeenCalledWith('/login'))
+    expect(screen.queryByText('secret')).not.toBeInTheDocument()
+  })
 })

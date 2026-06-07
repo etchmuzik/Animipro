@@ -21,15 +21,23 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let active = true
     const supabase = getSupabaseBrowserClient()
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!active) return
-      if (session) {
-        setState('authed')
-      } else {
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        if (!active) return
+        if (session) {
+          setState('authed')
+        } else {
+          setState('redirecting')
+          router.push('/login')
+        }
+      })
+      .catch(() => {
+        // Session check failed (e.g. network/token error). Fail safe: treat as
+        // unauthenticated and send the user to login rather than hang on the spinner.
+        if (!active) return
         setState('redirecting')
         router.push('/login')
-      }
-    })
+      })
     return () => { active = false }
   }, [router])
 
