@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-[100dvh] grid lg:grid-cols-2 bg-background text-foreground">
+    <div className="min-h-[100dvh] grid grid-cols-1 lg:grid-cols-2 bg-background text-foreground">
       {/* Brand panel — hidden on mobile */}
       <div className="relative hidden lg:flex flex-col justify-between p-10 overflow-hidden">
         <img
