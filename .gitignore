@@ -45,9 +45,19 @@ public/worker-*.js
 public/worker-*.js.map
 public/fallback-*.js
 
-# Capacitor (if added later)
-/ios
-/android
+# Capacitor — track native project source, ignore generated build artifacts
+ios/App/Pods
+ios/App/build
+ios/App/App/public
+ios/DerivedData
+android/.gradle
+android/build
+android/app/build
+android/app/src/main/assets/public
+android/local.properties
+android/.idea
+android/captures
+*.iml
 
 # Local Netlify folder
 .netlify
