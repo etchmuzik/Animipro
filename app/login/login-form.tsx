@@ -1,23 +1,61 @@
 // ─── Animipro — Login form (client) ──────────────────────────────────────────
 'use client'
 
-import { useActionState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { signIn, type AuthActionState } from './actions'
+import { IS_NATIVE } from '@/lib/native'
+import { signInClient } from './sign-in-client'
 
 export function LoginForm() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const next = searchParams.get('next') ?? '/platform'
-  const [state, formAction, pending] = useActionState<AuthActionState, FormData>(
-    signIn,
-    {},
-  )
+
+  const [error, setError] = useState<string | undefined>()
+  const [pending, setPending] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setError(undefined)
+    setPending(true)
+    const form = new FormData(e.currentTarget)
+    const email = String(form.get('email') ?? '')
+    const password = String(form.get('password') ?? '')
+
+    if (IS_NATIVE) {
+      // Native: client SDK sign-in, then client navigation.
+      const result = await signInClient(email, password)
+      setPending(false)
+      if (result.error) {
+        setError(result.error)
+        return
+      }
+      router.push(next)
+    } else {
+      // Web: server action, loaded dynamically so the 'use server' module is
+      // NOT in the static graph (which would break the native export).
+      try {
+        const { signIn } = await import('./actions')
+        const result = await signIn({}, form)
+        setPending(false)
+        if (result?.error) {
+          setError(result.error)
+          return
+        }
+        router.push(next)
+      } catch (err) {
+        // A Next redirect() throws a special error on success — let it propagate
+        // to the framework; only treat real errors as failures.
+        throw err
+      }
+    }
+  }
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <input type="hidden" name="next" value={next} />
 
       <div className="space-y-1.5">
@@ -48,9 +86,9 @@ export function LoginForm() {
         />
       </div>
 
-      {state.error && (
+      {error && (
         <p className="text-13 text-destructive font-medium" role="alert">
-          {state.error}
+          {error}
         </p>
       )}
 
