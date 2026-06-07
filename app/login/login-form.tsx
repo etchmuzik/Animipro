@@ -24,12 +24,13 @@ export function LoginForm() {
     const email = String(form.get('email') ?? '')
     const password = String(form.get('password') ?? '')
 
-    // Use the browser-SDK sign-in for both native and web builds.
-    // For native: no server, client SDK is the only option.
-    // For web: supabase.auth.signInWithPassword() sets the session cookie via
-    // the browser client; the middleware's updateSession() picks it up on the
-    // next request. Avoids any reference to './actions' ('use server') which
-    // blocks the static export.
+    // One client-side auth path for both web and native builds.
+    // supabase.auth.signInWithPassword() (via signInClient) sets the session
+    // cookie in the browser; on web, the middleware's updateSession() picks it
+    // up on the next request, so server components still see the session. The
+    // native (static-export) build has no server, so the client SDK is the only
+    // option — unifying on it keeps a single code path and a static-export-safe
+    // graph (no 'use server' modules).
     const result = await signInClient(email, password)
     setPending(false)
     if (result.error) {

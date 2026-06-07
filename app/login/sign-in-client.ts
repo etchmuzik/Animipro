@@ -1,9 +1,10 @@
-// ─── Animipro — Client auth (native build) ───────────────────────────────────
+// ─── Animipro — Client auth ──────────────────────────────────────────────────
 //
-// Browser-SDK twin of app/login/actions.ts. The native (static-export) build has
-// no server, so it can't use server actions. Same Zod validation and generic
-// error as the server action; navigation is left to the caller (no server-only
-// redirect()).
+// The single auth path for both web and native builds. Uses the Supabase
+// browser SDK to sign in/out client-side, which keeps the module graph
+// static-export-safe (no 'use server' modules — required for the native
+// Capacitor build). Zod-validates inputs and returns a generic error;
+// navigation is left to the caller.
 
 'use client'
 

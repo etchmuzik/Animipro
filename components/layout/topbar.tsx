@@ -37,12 +37,12 @@ export function Topbar({
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
 
   async function handleSignOut() {
-    // Use the browser-SDK sign-out for both native and web builds.
-    // For native: no server, client SDK is the only option.
-    // For web: supabase.auth.signOut() clears the browser session; the
-    // middleware's updateSession() clears the server cookie on the next
-    // request, so no server action is needed here. Avoids any reference to
-    // '@/app/login/actions' ('use server') which blocks static export.
+    // One client-side auth path for both web and native builds.
+    // supabase.auth.signOut() (via signOutClient) clears the browser session;
+    // on web the middleware's updateSession() clears the server cookie on the
+    // next request. The native (static-export) build has no server, so the
+    // client SDK is the only option — unifying on it keeps the module graph
+    // static-export-safe (no 'use server' modules).
     await signOutClient()
     router.push('/')
   }
