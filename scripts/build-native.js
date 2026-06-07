@@ -22,8 +22,12 @@ const MW = path.join(ROOT, 'middleware.ts')
 const MW_BAK = path.join(ROOT, 'middleware.web.ts.bak')
 const MW_NATIVE = path.join(ROOT, 'middleware.native.ts')
 
+// Track whether THIS run successfully wrote the backup so restore() never
+// copies a stale/foreign file into middleware.ts.
+let backupWritten = false
+
 function restore() {
-  if (fs.existsSync(MW_BAK)) {
+  if (backupWritten && fs.existsSync(MW_BAK)) {
     fs.copyFileSync(MW_BAK, MW)
     fs.unlinkSync(MW_BAK)
     console.log('[build-native] middleware.ts restored.')
@@ -37,8 +41,16 @@ process.on('SIGTERM', () => process.exit(1))
 process.on('uncaughtException', (err) => { console.error(err); process.exit(1) })
 
 try {
+  if (fs.existsSync(MW_BAK)) {
+    console.error(`[build-native] A stale backup exists at ${MW_BAK}.`)
+    console.error('[build-native] A previous native build likely did not clean up.')
+    console.error(`[build-native] Recover: ensure middleware.ts is correct, then 'rm ${MW_BAK}', then retry.`)
+    process.exit(1)
+  }
+
   console.log('[build-native] Swapping in empty-matcher middleware for native build…')
   fs.copyFileSync(MW, MW_BAK)
+  backupWritten = true
   fs.copyFileSync(MW_NATIVE, MW)
 
   console.log('[build-native] Running: NEXT_PUBLIC_NATIVE=1 next build')
