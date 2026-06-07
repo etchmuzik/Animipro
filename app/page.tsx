@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -19,6 +20,7 @@ import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
 import { HomepageDemo } from '@/components/homepage-demo'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { useTranslation } from '@/lib/i18n'
+import { IS_NATIVE } from '@/lib/native'
 
 // ─── STATIC DATA ──────────────────────────────────────────────────────────────
 
@@ -1878,12 +1880,26 @@ function Footer() {
 // ─── PAGE ──────────────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    if (IS_NATIVE) {
+      router.replace('/login')
+    }
+  }, [router])
+
   const [checkoutTier, setCheckoutTier] = useState<PricingTier | null>(null)
   const [checkoutMode, setCheckoutMode] = useState<BillingMode>('annual')
 
   const openCheckout = (tier?: PricingTier, mode: BillingMode = 'annual') => {
     setCheckoutTier(tier ?? PRICING_TIERS[1])
     setCheckoutMode(mode)
+  }
+
+  // In the native app, redirect to /login immediately (AuthGuard handles authed users).
+  // This avoids flashing the marketing homepage before the router replaces the route.
+  if (IS_NATIVE) {
+    return null
   }
 
   return (
